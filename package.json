@@ -1,0 +1,44 @@
+{
+  "name": "voidsketch",
+  "productName": "VOIDSKETCH",
+  "version": "0.1.0",
+  "description": "A pixel art editor for making creepy, grainy, monochrome, low-res masterpieces",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "package": "electron-packager . --overwrite --platform=darwin,win32,linux --arch=x64 --icon=src/assets/images/icon --prune=true --out=release-builds"
+  },
+  "keywords": [
+    "pixel art",
+    "animation",
+    "glitch",
+    "uno moralez",
+    "lain",
+    "morrowind"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0",
+    "electron-packager": "^17.1.1"
+  },
+  "dependencies": {
+    "file-saver": "^2.0.5",
+    "gif.js": "^0.2.0",
+    "voidsketch": "file:"
+  },
+  "build": {
+    "appId": "com.yourname.voidsketch",
+    "mac": {
+      "category": "public.app-category.graphics-design"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

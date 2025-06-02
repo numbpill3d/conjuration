@@ -1,0 +1,202 @@
+/* Tools Component Styles */
+
+.tool-section {
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-size: 12px;
+  color: var(--accent-color);
+  margin-bottom: 5px;
+  border-bottom: 1px solid var(--panel-border);
+  padding-bottom: 3px;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.tool-button {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: var(--button-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.tool-button:hover {
+  background-color: var(--button-hover);
+}
+
+.tool-button.active {
+  background-color: var(--accent-color);
+  border-color: var(--highlight-color);
+}
+
+.tool-icon {
+  font-size: 16px;
+}
+
+/* Palette Selector */
+.palette-selector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.palette-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid var(--panel-border);
+  background-color: var(--button-bg);
+  cursor: pointer;
+}
+
+.palette-option:hover {
+  background-color: var(--button-hover);
+}
+
+.palette-option.active {
+  border-color: var(--accent-color);
+  background-color: rgba(138, 43, 226, 0.2);
+}
+
+.palette-preview {
+  width: 100%;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+.palette-preview.monochrome {
+  background: linear-gradient(to right, #000000, #ffffff);
+}
+
+.palette-preview.lain {
+  background: linear-gradient(to right, #000000, #8a2be2, #d8bfd8);
+}
+
+.palette-preview.red {
+  background: linear-gradient(to right, #000000, #8b0000, #ff0000);
+}
+
+.palette-preview.green {
+  background: linear-gradient(to right, #000000, #006400, #00ff00);
+}
+
+.palette-name {
+  font-size: 12px;
+}
+
+/* Effect Options */
+.effect-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.effect-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.effect-name {
+  font-size: 12px;
+}
+
+.effect-intensity {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.intensity-label {
+  font-size: 12px;
+}
+
+input[type="range"] {
+  width: 100%;
+  background-color: var(--button-bg);
+  -webkit-appearance: none;
+  height: 5px;
+  border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Brush Size Control */
+.brush-size-control {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.brush-size-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.brush-size-value {
+  color: var(--accent-color);
+}
+
+/* Color Picker */
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.color-swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+
+.color-swatch {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--panel-border);
+  cursor: pointer;
+}
+
+.color-swatch.active {
+  border: 2px solid var(--highlight-color);
+}
+
+.color-swatch.primary {
+  background-color: #ffffff;
+}
+
+.color-swatch.secondary {
+  background-color: #000000;
+}
+
+.color-swatch.transparent {
+  background-image: linear-gradient(45deg, #444 25%, transparent 25%),
+                    linear-gradient(-45deg, #444 25%, transparent 25%),
+                    linear-gradient(45deg, transparent 75%, #444 75%),
+                    linear-gradient(-45deg, transparent 75%, #444 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}

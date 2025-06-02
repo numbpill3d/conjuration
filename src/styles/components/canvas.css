@@ -1,0 +1,127 @@
+/* Canvas Component Styles */
+
+#canvas-wrapper {
+  border: 1px solid var(--panel-border);
+  background-color: #000;
+  cursor: crosshair;
+}
+
+#pixel-canvas {
+  background-color: #000;
+}
+
+/* Zoom Controls */
+#zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#zoom-controls button {
+  width: 20px;
+  height: 20px;
+  background-color: var(--button-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#zoom-controls button:hover {
+  background-color: var(--button-hover);
+}
+
+#zoom-level {
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Canvas Grid */
+.grid-line {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+/* Selection Overlay */
+.selection-overlay {
+  stroke: var(--accent-color);
+  stroke-width: 1;
+  stroke-dasharray: 4 2;
+  fill: rgba(138, 43, 226, 0.1);
+  animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -6;
+  }
+}
+
+/* Cursor Position Display */
+#cursor-position {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+/* Canvas Size Display */
+#canvas-size {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+/* Rulers */
+.ruler {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.ruler-horizontal {
+  height: 15px;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.ruler-vertical {
+  width: 15px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.ruler-mark {
+  position: absolute;
+  background-color: var(--panel-border);
+}
+
+.ruler-mark-horizontal {
+  width: 1px;
+  height: 5px;
+  bottom: 0;
+}
+
+.ruler-mark-vertical {
+  height: 1px;
+  width: 5px;
+  right: 0;
+}
+
+.ruler-text {
+  position: absolute;
+  color: var(--text-color);
+  font-size: 8px;
+  font-family: 'Courier New', monospace;
+}
+
+.ruler-text-horizontal {
+  bottom: 5px;
+  transform: translateX(-50%);
+}
+
+.ruler-text-vertical {
+  right: 5px;
+  transform: translateY(-50%);
+}

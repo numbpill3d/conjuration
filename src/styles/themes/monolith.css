@@ -1,0 +1,205 @@
+/* Monolith Theme - Minimalist Black and White */
+
+.theme-monolith {
+  --bg-color: #000000;
+  --text-color: #ffffff;
+  --accent-color: #ffffff;
+  --secondary-color: #888888;
+  --highlight-color: #ffffff;
+  --error-color: #ffffff;
+  --success-color: #ffffff;
+  
+  --panel-bg: #0a0a0a;
+  --panel-border: #333333;
+  --button-bg: #1a1a1a;
+  --button-hover: #2a2a2a;
+  --button-active: #ffffff;
+  
+  font-family: 'Courier New', monospace;
+}
+
+.theme-monolith #title-bar {
+  background-color: #0a0a0a;
+  border-bottom: 1px solid #333333;
+}
+
+.theme-monolith #title-bar-text {
+  color: #ffffff;
+}
+
+.theme-monolith .panel-title {
+  color: #ffffff;
+}
+
+.theme-monolith #canvas-wrapper {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  border: 1px solid #333333;
+}
+
+.theme-monolith .tool-button.active {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.theme-monolith .menu-button.active {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.theme-monolith input[type="range"]::-webkit-slider-thumb {
+  background-color: #ffffff;
+}
+
+.theme-monolith input[type="checkbox"]:checked {
+  background-color: #ffffff;
+}
+
+.theme-monolith .frame-item.active {
+  border-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-monolith .modal-title {
+  color: #ffffff;
+}
+
+.theme-monolith .modal-button.primary {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.theme-monolith .modal-button.primary:hover {
+  background-color: #dddddd;
+}
+
+.theme-monolith .toast {
+  border-left: 4px solid #ffffff;
+}
+
+/* Custom Scrollbar for Monolith Theme */
+.theme-monolith ::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+.theme-monolith ::-webkit-scrollbar-thumb {
+  background: #333333;
+}
+
+.theme-monolith ::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+
+/* High Contrast Elements */
+.theme-monolith .tool-button,
+.theme-monolith .menu-button,
+.theme-monolith .menu-item,
+.theme-monolith .control-button {
+  border: 1px solid #333333;
+}
+
+.theme-monolith .tool-button:hover,
+.theme-monolith .menu-button:hover,
+.theme-monolith .menu-item:hover,
+.theme-monolith .control-button:hover {
+  border-color: #ffffff;
+}
+
+/* Stark Typography */
+.theme-monolith {
+  letter-spacing: 0.05em;
+}
+
+.theme-monolith .panel-title,
+.theme-monolith .section-title,
+.theme-monolith .menu-button {
+  letter-spacing: 0.1em;
+}
+
+/* Minimalist UI Elements */
+.theme-monolith .menu-separator {
+  height: 1px;
+  background-color: #333333;
+}
+
+.theme-monolith .panel-header {
+  border-bottom: 1px solid #333333;
+}
+
+.theme-monolith .section-title {
+  border-bottom: 1px solid #333333;
+}
+
+/* Stark Modal Dialog */
+.theme-monolith .modal-dialog {
+  background-color: #0a0a0a;
+  border: 1px solid #333333;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.theme-monolith .modal-header {
+  border-bottom: 1px solid #333333;
+}
+
+.theme-monolith .modal-footer {
+  border-top: 1px solid #333333;
+}
+
+/* Monochrome Form Elements */
+.theme-monolith .form-input {
+  background-color: #1a1a1a;
+  border: 1px solid #333333;
+  color: #ffffff;
+}
+
+.theme-monolith .form-input:focus {
+  border-color: #ffffff;
+}
+
+/* Clean Canvas Area */
+.theme-monolith #canvas-container {
+  background-color: #000000;
+}
+
+.theme-monolith #canvas-info {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #333333;
+}
+
+/* Monochrome Timeline */
+.theme-monolith .frame-item {
+  background-color: #1a1a1a;
+  border: 1px solid #333333;
+}
+
+.theme-monolith .frame-number {
+  color: #ffffff;
+}
+
+/* Stark Toast Notifications */
+.theme-monolith .toast {
+  background-color: #0a0a0a;
+  border: 1px solid #333333;
+  border-left: 4px solid #ffffff;
+}
+
+/* Monochrome Palette */
+.theme-monolith .palette-preview.monochrome {
+  background: linear-gradient(to right, #000000, #ffffff);
+}
+
+.theme-monolith .palette-preview.lain,
+.theme-monolith .palette-preview.red,
+.theme-monolith .palette-preview.green {
+  background: linear-gradient(to right, #000000, #888888, #ffffff);
+}
+
+/* Clean Menu Dropdowns */
+.theme-monolith .menu-dropdown {
+  background-color: #0a0a0a;
+  border: 1px solid #333333;
+}
+
+/* Minimalist Animation Controls */
+.theme-monolith .animation-controls {
+  border-top: 1px solid #333333;
+}

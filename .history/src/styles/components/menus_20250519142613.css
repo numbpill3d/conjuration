@@ -1,0 +1,310 @@
+/* Menu Component Styles */
+
+/* Menu Bar */
+#menu-bar {
+  display: flex;
+  align-items: center;
+  height: var(--menu-bar-height);
+  background-color: var(--panel-bg);
+  border-bottom: 1px solid var(--panel-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add scanline effect to menu bar */
+#menu-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.05) 50%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.menu-button {
+  height: 100%;
+  padding: 0 15px;
+  background-color: transparent;
+  border: none;
+  color: var(--text-color);
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  text-shadow: var(--text-glow);
+  transition: all 0.2s ease;
+}
+
+.menu-button:hover {
+  background-color: var(--button-hover);
+  text-shadow: var(--highlight-glow);
+}
+
+.menu-button.active {
+  background-color: var(--button-active);
+  color: var(--highlight-color);
+  text-shadow: var(--highlight-glow);
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
+/* Dropdown Menus */
+.menu-dropdown {
+  position: absolute;
+  top: var(--menu-bar-height);
+  left: 0;
+  min-width: 200px;
+  background-color: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 0 5px var(--accent-color);
+  animation: glitchIn 0.2s ease-out;
+  overflow: hidden;
+}
+
+@keyframes glitchIn {
+  0% {
+    transform: translateY(10px) skewX(5deg);
+    opacity: 0;
+  }
+  25% {
+    transform: translateY(-5px) skewX(-2deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(3px) skewX(1deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0) skewX(0);
+    opacity: 1;
+  }
+}
+
+/* Add scanline effect to dropdown */
+.menu-dropdown::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.03) 50%,
+    rgba(0, 0, 0, 0.03) 100%
+  );
+  background-size: 100% 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.menu-dropdown.visible {
+  display: flex;
+}
+
+.menu-item {
+  padding: 8px 15px;
+  background-color: transparent;
+  border: none;
+  color: var(--text-color);
+  text-align: left;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  text-shadow: var(--text-glow);
+  transition: all 0.15s ease;
+}
+
+.menu-item:hover {
+  background-color: var(--button-hover);
+  text-shadow: var(--highlight-glow);
+  transform: translateX(2px);
+}
+
+.menu-item.disabled {
+  color: var(--secondary-color);
+  cursor: default;
+  text-shadow: none;
+}
+
+.menu-item.disabled:hover {
+  background-color: transparent;
+  transform: none;
+}
+
+.menu-separator {
+  height: 1px;
+  background-color: var(--panel-border);
+  margin: 5px 0;
+}
+
+.menu-shortcut {
+  margin-left: 20px;
+  color: var(--secondary-color);
+  font-size: 12px;
+}
+
+/* Context Menu */
+#context-menu {
+  position: fixed;
+  min-width: 150px;
+  background-color: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  z-index: 1000;
+  display: none;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#context-menu.visible {
+  display: flex;
+}
+
+/* Status Bar */
+#status-bar {
+  margin-left: auto;
+  padding: 0 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+#status-message {
+  color: var(--secondary-color);
+}
+
+/* Modal Dialogs */
+.modal-dialog {
+  background-color: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 15px;
+  min-width: 300px;
+  max-width: 80%;
+  max-height: 80%;
+  overflow: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.modal-close {
+  background-color: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: var(--error-color);
+}
+
+.modal-body {
+  margin-bottom: 15px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--panel-border);
+}
+
+.modal-button {
+  padding: 5px 15px;
+  background-color: var(--button-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background-color: var(--button-hover);
+}
+
+.modal-button.primary {
+  background-color: var(--accent-color);
+  color: var(--highlight-color);
+}
+
+.modal-button.primary:hover {
+  background-color: #7b27c7;
+}
+
+/* Form Elements in Modals */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+.form-input {
+  width: 100%;
+  padding: 5px;
+  background-color: var(--button-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text-color);
+}
+
+.form-input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+/* Toast Notifications */
+.toast {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  background-color: var(--panel-bg);
+  border-left: 4px solid var(--accent-color);
+  color: var(--text-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
+}

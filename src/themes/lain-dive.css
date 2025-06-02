@@ -1,0 +1,157 @@
+/* Lain Dive Theme - Serial Experiments Lain Inspired */
+
+.theme-lain-dive {
+  --primary-color: #6A1B9A;
+  --secondary-color: #9C27B0;
+  --accent-color: #E1BEE7;
+  --background-color: #000000;
+  --background-light: #1A1A1A;
+  --text-color: #E1BEE7;
+  --text-dark: #B39DDB;
+  --border-color: #4A148C;
+  --highlight-color: #AA00FF;
+}
+
+/* Body with subtle scanlines */
+.theme-lain-dive body:before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(71, 0, 117, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 2000;
+}
+
+/* CRT flicker effect on main title */
+.theme-lain-dive #title-bar-text {
+  animation: textGlitch 10s infinite;
+}
+
+/* Terminal-style text effects */
+.theme-lain-dive .panel-title {
+  text-shadow: 0 0 5px var(--highlight-color);
+  position: relative;
+}
+
+.theme-lain-dive .panel-title:after {
+  content: '_';
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Canvas styling */
+.theme-lain-dive #canvas-wrapper {
+  box-shadow: 0 0 20px rgba(170, 0, 255, 0.3);
+}
+
+/* Custom CRT effect */
+.theme-lain-dive #canvas-container:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 90%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Status bar glow */
+.theme-lain-dive #status-message {
+  text-shadow: 0 0 5px var(--highlight-color);
+}
+
+/* Tool icons light glow */
+.theme-lain-dive .tool-icon {
+  text-shadow: 0 0 5px var(--highlight-color);
+}
+
+/* Button hover effects */
+.theme-lain-dive .tool-button:hover,
+.theme-lain-dive .control-button:hover,
+.theme-lain-dive .menu-button:hover {
+  text-shadow: 0 0 5px var(--highlight-color);
+  box-shadow: 0 0 8px rgba(170, 0, 255, 0.4);
+}
+
+/* Active elements */
+.theme-lain-dive .tool-button.active,
+.theme-lain-dive .control-button.active,
+.theme-lain-dive .menu-button.active,
+.theme-lain-dive .frame-thumbnail.active {
+  box-shadow: 0 0 12px rgba(170, 0, 255, 0.6);
+}
+
+/* Menu styling */
+.theme-lain-dive .menu-dropdown {
+  box-shadow: 0 5px 15px rgba(106, 27, 154, 0.5);
+}
+
+/* Modal styling */
+.theme-lain-dive #modal-content {
+  box-shadow: 0 0 30px rgba(170, 0, 255, 0.4);
+  border: 1px solid var(--highlight-color);
+}
+
+/* Toast styling */
+.theme-lain-dive .toast {
+  box-shadow: 0 0 15px rgba(170, 0, 255, 0.3);
+}
+
+/* Stylized scrollbars */
+.theme-lain-dive ::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  box-shadow: 0 0 5px var(--highlight-color);
+}
+
+.theme-lain-dive ::-webkit-scrollbar-thumb:hover {
+  background: var(--highlight-color);
+}
+
+/* Input field styling */
+.theme-lain-dive input[type="text"]:focus,
+.theme-lain-dive input[type="number"]:focus,
+.theme-lain-dive select:focus,
+.theme-lain-dive textarea:focus {
+  box-shadow: 0 0 8px var(--highlight-color);
+}
+
+/* Timeline frames container */
+.theme-lain-dive #frames-container {
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* CRT flicker effect on the entire app */
+.theme-lain-dive #app-container {
+  animation: flicker 60s infinite;
+}
+
+/* Status bar retro-terminal style */
+.theme-lain-dive #menu-bar {
+  border-top: 1px solid var(--highlight-color);
+}
+
+/* Custom selection color */
+.theme-lain-dive ::selection {
+  background-color: var(--highlight-color);
+  color: #000000;
+}

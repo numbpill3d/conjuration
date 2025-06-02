@@ -1,0 +1,184 @@
+/* Morrowind Glyph Theme - Inspired by Elder Scrolls III: Morrowind */
+
+.theme-morrowind-glyph {
+  --bg-color: #1a1208;
+  --text-color: #d8c3a5;
+  --accent-color: #c2853a;
+  --secondary-color: #7a6a56;
+  --highlight-color: #f0e6d2;
+  --error-color: #a83232;
+  --success-color: #5a8a42;
+  
+  --panel-bg: #221a12;
+  --panel-border: #3a2e1c;
+  --button-bg: #2a2218;
+  --button-hover: #3a2e1c;
+  --button-active: #c2853a;
+  
+  font-family: 'Courier New', monospace;
+}
+
+.theme-morrowind-glyph #title-bar {
+  background-color: #221a12;
+  border-bottom: 1px solid #3a2e1c;
+}
+
+.theme-morrowind-glyph #title-bar-text {
+  color: #c2853a;
+  text-shadow: 0 0 5px rgba(194, 133, 58, 0.7);
+}
+
+.theme-morrowind-glyph .panel-title {
+  color: #c2853a;
+  text-shadow: 0 0 5px rgba(194, 133, 58, 0.7);
+}
+
+.theme-morrowind-glyph #canvas-wrapper {
+  box-shadow: 0 0 20px rgba(194, 133, 58, 0.3);
+  border: 1px solid #3a2e1c;
+}
+
+.theme-morrowind-glyph .tool-button.active {
+  background-color: #c2853a;
+  box-shadow: 0 0 10px rgba(194, 133, 58, 0.5);
+}
+
+.theme-morrowind-glyph .menu-button.active {
+  background-color: #c2853a;
+  box-shadow: 0 0 10px rgba(194, 133, 58, 0.5);
+}
+
+.theme-morrowind-glyph input[type="range"]::-webkit-slider-thumb {
+  background-color: #c2853a;
+  box-shadow: 0 0 5px rgba(194, 133, 58, 0.7);
+}
+
+.theme-morrowind-glyph input[type="checkbox"]:checked {
+  background-color: #c2853a;
+  box-shadow: 0 0 5px rgba(194, 133, 58, 0.7);
+}
+
+.theme-morrowind-glyph .frame-item.active {
+  border-color: #c2853a;
+  background-color: rgba(194, 133, 58, 0.2);
+  box-shadow: 0 0 5px rgba(194, 133, 58, 0.3);
+}
+
+.theme-morrowind-glyph .modal-title {
+  color: #c2853a;
+  text-shadow: 0 0 5px rgba(194, 133, 58, 0.7);
+}
+
+.theme-morrowind-glyph .modal-button.primary {
+  background-color: #c2853a;
+  box-shadow: 0 0 5px rgba(194, 133, 58, 0.7);
+}
+
+.theme-morrowind-glyph .modal-button.primary:hover {
+  background-color: #b37a35;
+}
+
+.theme-morrowind-glyph .toast {
+  border-left: 4px solid #c2853a;
+}
+
+/* Custom Scrollbar for Morrowind Theme */
+.theme-morrowind-glyph ::-webkit-scrollbar-track {
+  background: #221a12;
+}
+
+.theme-morrowind-glyph ::-webkit-scrollbar-thumb {
+  background: #3a2e1c;
+}
+
+.theme-morrowind-glyph ::-webkit-scrollbar-thumb:hover {
+  background: #c2853a;
+}
+
+/* Parchment Texture Background */
+.theme-morrowind-glyph #app-container {
+  background-image: url('data:image/png;base64,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');
+  background-repeat: repeat;
+}
+
+/* Glyph Decorations */
+.theme-morrowind-glyph .panel-header::before,
+.theme-morrowind-glyph .panel-header::after {
+  content: "≈";
+  color: #c2853a;
+  margin: 0 5px;
+}
+
+.theme-morrowind-glyph .section-title::before,
+.theme-morrowind-glyph .section-title::after {
+  content: "•";
+  color: #c2853a;
+  margin: 0 5px;
+}
+
+.theme-morrowind-glyph .menu-button::before {
+  content: "[";
+  margin-right: 5px;
+  color: #c2853a;
+}
+
+.theme-morrowind-glyph .menu-button::after {
+  content: "]";
+  margin-left: 5px;
+  color: #c2853a;
+}
+
+/* Parchment-like Modal */
+.theme-morrowind-glyph .modal-dialog {
+  background-color: #f0e6d2;
+  color: #3a2e1c;
+  border: 2px solid #c2853a;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.theme-morrowind-glyph .modal-title {
+  color: #8b5a2b;
+}
+
+.theme-morrowind-glyph .modal-button {
+  background-color: #d8c3a5;
+  color: #3a2e1c;
+  border: 1px solid #8b5a2b;
+}
+
+.theme-morrowind-glyph .modal-button:hover {
+  background-color: #e6d6bc;
+}
+
+.theme-morrowind-glyph .modal-button.primary {
+  background-color: #c2853a;
+  color: #f0e6d2;
+}
+
+.theme-morrowind-glyph .modal-button.primary:hover {
+  background-color: #d9a35f;
+}
+
+/* Aged Paper Effect for Panels */
+.theme-morrowind-glyph .side-panel {
+  background-color: #221a12;
+  border-color: #3a2e1c;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Ink-like Tool Buttons */
+.theme-morrowind-glyph .tool-button {
+  background-color: #2a2218;
+  border: 1px solid #3a2e1c;
+  color: #d8c3a5;
+}
+
+.theme-morrowind-glyph .tool-button:hover {
+  background-color: #3a2e1c;
+}
+
+/* Sepia-toned Canvas */
+.theme-morrowind-glyph #canvas-wrapper {
+  border: 1px solid #8b5a2b;
+  box-shadow: 0 0 20px rgba(139, 90, 43, 0.5);
+}

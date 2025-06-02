@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VOIDSKETCH</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/themes/lain-dive.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="styles/components/canvas.css">
+  <link rel="stylesheet" href="styles/components/timeline.css">
+  <link rel="stylesheet" href="styles/components/tools.css">
+  <link rel="stylesheet" href="styles/components/menus.css">
+</head>
+<body class="theme-lain-dive">
+  <div id="app-container">
+    <!-- Custom Window Frame -->
+    <div id="title-bar">
+      <div id="title-bar-text">VOIDSKETCH</div>
+      <div id="title-bar-controls">
+        <button id="minimize-button" class="title-bar-button">_</button>
+        <button id="maximize-button" class="title-bar-button">[]</button>
+        <button id="close-button" class="title-bar-button">x</button>
+      </div>
+    </div>
+
+    <!-- Main App Interface -->
+    <div id="app-content">
+      <!-- Left Panel: Tools -->
+      <div id="tools-panel" class="side-panel">
+        <div class="panel-content">
+          <div class="panel-header">
+            <span class="panel-title">TOOLS</span>
+          </div>
+
+          <div class="tool-section">
+            <div class="section-title">BRUSH</div>
+            <div class="tool-grid">
+              <button class="tool-button" id="brush-pencil" title="Pencil">
+                <span class="tool-icon">+</span>
+              </button>
+              <button class="tool-button" id="brush-brush" title="Brush">
+                <span class="tool-icon">B</span>
+              </button>
+              <button class="tool-button" id="brush-spray" title="Spray">
+                <span class="tool-icon">S</span>
+              </button>
+              <button class="tool-button" id="brush-pixel" title="Pixel">
+                <span class="tool-icon">P</span>
+              </button>
+              <button class="tool-button" id="brush-line" title="Line">
+                <span class="tool-icon">/</span>
+              </button>
+              <button class="tool-button" id="brush-rect" title="Rectangle">
+                <span class="tool-icon">[]</span>
+              </button>
+              <button class="tool-button" id="brush-ellipse" title="Ellipse">
+                <span class="tool-icon">O</span>
+              </button>
+              <button class="tool-button" id="brush-dither" title="Dither">
+                <span class="tool-icon">D</span>
+              </button>
+              <button class="tool-button" id="brush-pattern" title="Pattern">
+                <span class="tool-icon">@</span>
+              </button>
+              <button class="tool-button" id="brush-glitch" title="Glitch">
+                <span class="tool-icon">%</span>
+              </button>
+              <button class="tool-button" id="brush-static" title="Static">
+                <span class="tool-icon">#</span>
+              </button>
+              <button class="tool-button" id="brush-eraser" title="Eraser">
+                <span class="tool-icon">X</span>
+              </button>
+              <button class="tool-button" id="brush-fill" title="Fill">
+                <span class="tool-icon">■</span>
+              </button>
+            </div>
+
+            <div class="brush-size-control">
+              <div class="brush-size-label">
+                <span>Brush Size</span>
+                <span class="brush-size-value" id="brush-size-value">1</span>
+              </div>
+              <input type="range" id="brush-size" min="1" max="10" value="1">
+            </div>
+          </div>
+
+          <div class="tool-section">
+            <div class="section-title">SYMMETRY</div>
+            <div class="tool-grid">
+              <button class="tool-button" id="symmetry-none" title="No Symmetry">
+                <span class="tool-icon">1</span>
+              </button>
+              <button class="tool-button" id="symmetry-horizontal" title="Horizontal Mirror">
+                <span class="tool-icon">-</span>
+              </button>
+              <button class="tool-button" id="symmetry-vertical" title="Vertical Mirror">
+                <span class="tool-icon">|</span>
+              </button>
+              <button class="tool-button" id="symmetry-quad" title="Quadrant">
+                <span class="tool-icon">+</span>
+              </button>
+              <button class="tool-button" id="symmetry-octal" title="Octal">
+                <span class="tool-icon">*</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="tool-section">
+            <div class="section-title">PALETTE</div>
+            <div class="palette-selector">
+              <div class="palette-option" id="palette-monochrome">
+                <span class="palette-preview monochrome"></span>
+                <span class="palette-name">MONO</span>
+              </div>
+              <div class="palette-option" id="palette-lain">
+                <span class="palette-preview lain"></span>
+                <span class="palette-name">LAIN</span>
+              </div>
+              <div class="palette-option" id="palette-red">
+                <span class="palette-preview red"></span>
+                <span class="palette-name">RED</span>
+              </div>
+              <div class="palette-option" id="palette-green">
+                <span class="palette-preview green"></span>
+                <span class="palette-name">GREEN</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="tool-section">
+            <div class="section-title">EFFECTS</div>
+            <div class="effect-options">
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-grain">
+                <span class="effect-name">Grain</span>
+              </label>
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-static">
+                <span class="effect-name">Static</span>
+              </label>
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-glitch">
+                <span class="effect-name">Glitch</span>
+              </label>
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-crt">
+                <span class="effect-name">CRT</span>
+              </label>
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-scanlines">
+                <span class="effect-name">Scanlines</span>
+              </label>
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-vignette">
+                <span class="effect-name">Vignette</span>
+              </label>
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-noise">
+                <span class="effect-name">Noise</span>
+              </label>
+              <label class="effect-checkbox">
+                <input type="checkbox" id="effect-pixelate">
+                <span class="effect-name">Pixelate</span>
+              </label>
+            </div>
+            <div class="effect-intensity">
+              <span class="intensity-label">Intensity</span>
+              <input type="range" id="effect-intensity" min="0" max="100" value="50">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Canvas Area -->
+      <div id="canvas-container">
+        <div id="canvas-wrapper">
+          <canvas id="pixel-canvas"></canvas>
+          <canvas id="effects-canvas" class="overlay-canvas"></canvas>
+          <canvas id="ui-canvas" class="overlay-canvas"></canvas>
+        </div>
+        <div id="canvas-info">
+          <div id="zoom-controls">
+            <button id="zoom-out">-</button>
+            <span id="zoom-level">100%</span>
+            <button id="zoom-in">+</button>
+          </div>
+          <div id="canvas-size">64x64</div>
+          <div id="cursor-position">X: 0 Y: 0</div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Timeline & Animation -->
+      <div id="timeline-panel" class="side-panel">
+        <div class="panel-content">
+          <div class="panel-header">
+            <span class="panel-title">FRAMES</span>
+          </div>
+
+          <div class="timeline-controls">
+            <button id="add-frame" class="control-button">
+              <span class="button-icon">+</span>
+            </button>
+            <button id="duplicate-frame" class="control-button">
+              <span class="button-icon">D</span>
+            </button>
+            <button id="delete-frame" class="control-button">
+              <span class="button-icon">-</span>
+            </button>
+          </div>
+
+          <div id="frames-container">
+            <!-- Frame thumbnails will be added here by JavaScript -->
+          </div>
+
+          <div class="animation-controls">
+            <div class="section-title">ANIMATION</div>
+            <div class="control-group">
+              <button id="play-animation" class="control-button">
+                <span class="button-icon">▶</span>
+              </button>
+              <button id="stop-animation" class="control-button">
+                <span class="button-icon">■</span>
+              </button>
+              <button id="loop-animation" class="control-button toggle-button">
+                <span class="button-icon">↻</span>
+              </button>
+            </div>
+            <div class="control-group">
+              <label for="frame-delay">Delay (ms)</label>
+              <input type="number" id="frame-delay" min="10" max="1000" step="10" value="100">
+            </div>
+            <div class="control-group">
+              <label for="onion-skin">Onion Skin</label>
+              <input type="checkbox" id="onion-skin">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Bar -->
+    <div id="menu-bar">
+      <button id="file-menu-button" class="menu-button">FILE</button>
+      <button id="edit-menu-button" class="menu-button">EDIT</button>
+      <button id="view-menu-button" class="menu-button">VIEW</button>
+      <button id="export-menu-button" class="menu-button">EXPORT</button>
+      <button id="lore-menu-button" class="menu-button">LORE</button>
+      <div id="status-bar">
+        <span id="status-message">READY</span>
+      </div>
+    </div>
+
+    <!-- Drop-down Menus -->
+    <div id="file-menu" class="menu-dropdown">
+      <button class="menu-item" id="new-project">New Project</button>
+      <button class="menu-item" id="open-project">Open Project</button>
+      <button class="menu-item" id="save-project">Save Project</button>
+      <button class="menu-item" id="save-project-as">Save Project As</button>
+      <div class="menu-separator"></div>
+      <button class="menu-item" id="exit-app">Exit</button>
+    </div>
+
+    <div id="edit-menu" class="menu-dropdown">
+      <button class="menu-item" id="undo">Undo</button>
+      <button class="menu-item" id="redo">Redo</button>
+      <div class="menu-separator"></div>
+      <button class="menu-item" id="cut">Cut</button>
+      <button class="menu-item" id="copy">Copy</button>
+      <button class="menu-item" id="paste">Paste</button>
+      <div class="menu-separator"></div>
+      <button class="menu-item" id="select-all">Select All</button>
+      <button class="menu-item" id="deselect">Deselect</button>
+    </div>
+
+    <div id="view-menu" class="menu-dropdown">
+      <button class="menu-item" id="theme-lain-dive">Lain Dive Theme</button>
+      <button class="menu-item" id="theme-morrowind-glyph">Morrowind Glyph Theme</button>
+      <button class="menu-item" id="theme-monolith">Monolith Theme</button>
+      <div class="menu-separator"></div>
+      <button class="menu-item" id="toggle-grid">Toggle Grid</button>
+      <button class="menu-item" id="toggle-rulers">Toggle Rulers</button>
+    </div>
+
+    <div id="export-menu" class="menu-dropdown">
+      <button class="menu-item" id="export-png">Export Current Frame (PNG)</button>
+      <button class="menu-item" id="export-gif">Export Animation (GIF)</button>
+      <button class="menu-item" id="export-sprite-sheet">Export Sprite Sheet</button>
+    </div>
+
+    <div id="lore-menu" class="menu-dropdown">
+      <button class="menu-item" id="toggle-lore-layer">Toggle Lore Layer</button>
+      <button class="menu-item" id="edit-metadata">Edit Metadata Ritual</button>
+      <button class="menu-item" id="add-sigil">Add Hidden Sigil</button>
+      <button class="menu-item" id="glitch-inject">Inject Glitch</button>
+    </div>
+
+    <!-- Modal Dialogs -->
+    <div id="modal-container" class="hidden">
+      <div id="modal-content"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container"></div>
+  </div>
+
+  <!-- Load Scripts -->
+  <script src="scripts/canvas/PixelCanvas.js"></script>
+  <script src="scripts/canvas/dithering.js"></script>
+  <script src="scripts/canvas/effects.js"></script>
+  <script src="scripts/animation/Timeline.js"></script>
+  <script src="scripts/animation/Frame.js"></script>
+  <script src="scripts/animation/GifExporter.js"></script>
+  <script src="scripts/tools/BrushEngine.js"></script>
+  <script src="scripts/tools/SymmetryTools.js"></script>
+  <script src="scripts/tools/PaletteTool.js"></script>
+  <script src="scripts/tools/GlitchTool.js"></script>
+  <script src="scripts/ui/UIManager.js"></script>
+  <script src="scripts/ui/ThemeManager.js"></script>
+  <script src="scripts/ui/MenuSystem.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>
