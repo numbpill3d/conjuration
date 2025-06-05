@@ -8,9 +8,8 @@ class PaletteTool {
    * Create a new PaletteTool
    * @param {PixelCanvas} canvas - The PixelCanvas instance
    */
-  constructor(canvas, brushEngine) {
+  constructor(canvas) {
     this.canvas = canvas;
-    this.brushEngine = brushEngine;
     this.currentPalette = 'monochrome';
     
     // Define palettes
@@ -44,9 +43,9 @@ class PaletteTool {
     const palette = this.palettes[paletteName];
     
     // Update the brush engine colors
-    if (this.brushEngine) {
-      this.brushEngine.setPrimaryColor(palette[1]);
-      this.brushEngine.setSecondaryColor(palette[0]);
+    if (window.brushEngine) {
+      window.brushEngine.setPrimaryColor(palette[1]);
+      window.brushEngine.setSecondaryColor(palette[0]);
     }
     
     // Update the color swatches in the UI

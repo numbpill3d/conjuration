@@ -446,25 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
       menuSystem.closeAllMenus();
     });
 
-    // Lore menu items
-    document.getElementById('lore-option1').addEventListener('click', () => {
-      themeManager.setTheme('lain-dive');
-      menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Lain Dive activated', 'success');
-    });
-
-    document.getElementById('lore-option2').addEventListener('click', () => {
-      themeManager.setTheme('morrowind-glyph');
-      menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Morrowind Glyph activated', 'success');
-    });
-
-    document.getElementById('lore-option3').addEventListener('click', () => {
-      themeManager.setTheme('monolith');
-      menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Monolith activated', 'success');
-    });
-
     // Tool buttons
     document.querySelectorAll('.tool-button').forEach(button => {
       button.addEventListener('click', () => {

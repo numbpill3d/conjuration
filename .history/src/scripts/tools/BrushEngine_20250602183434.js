@@ -748,7 +748,7 @@ class BrushEngine {
     // Select a pattern based on brush size
     const patternIndex = (this.brushSize - 1) % patterns.length;
     const pattern = patterns[patternIndex];
-    const patSize = pattern.length;
+    const patternSize = pattern.length;
 
     // Apply the pattern
     const radius = this.brushSize;
@@ -763,12 +763,12 @@ class BrushEngine {
         if (distance > radius) continue;
 
         // Get pattern coordinates using modulo to wrap around
-        const patternX = (x + i) % patSize;
-        const patternY = (y + j) % patSize;
+        const patternX = (x + i) % patternSize;
+        const patternY = (y + j) % patternSize;
 
         // Ensure positive indices
-        const px = patternX < 0 ? patSize + patternX : patternX;
-        const py = patternY < 0 ? patSize + patternY : patternY;
+        const px = patternX < 0 ? patternSize + patternX : patternX;
+        const py = patternY < 0 ? patternSize + patternY : patternY;
 
         // Draw the pixel based on pattern
         if (pattern[py][px]) {
