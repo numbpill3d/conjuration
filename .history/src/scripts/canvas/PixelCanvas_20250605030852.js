@@ -357,22 +357,19 @@ class PixelCanvas {
     // This avoids the overhead of shift() operations
     const stack = [{x, y}];
 
-    // Create a visited array for efficient tracking
-    const visited = new Uint8Array(this.width * this.height);
-    const index = y * this.width + x;
-
-    // Check starting pixel
-    if (index < 0 || index >= visited.length) return;
+    // Create a visited map to avoid checking the same pixel multiple times
+    const visited = new Set();
+    const getKey = (x, y) => `${x},${y}`;
 
     while (stack.length > 0) {
       const {x, y} = stack.pop();
-      const index = y * this.width + x;
+      const key = getKey(x, y);
 
       // Skip if already visited
-      if (visited[index]) continue;
+      if (visited.has(key)) continue;
 
       // Mark as visited
-      visited[index] = 1;
+      visited.add(key);
 
       // Check if this pixel is the target color
       if (this.getPixel(x, y) === targetColor) {
