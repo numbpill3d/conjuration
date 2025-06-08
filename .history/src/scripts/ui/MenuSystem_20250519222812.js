@@ -355,7 +355,7 @@ class MenuSystem {
   removeMenuItem(menuItemId) {
     const menuItem = document.getElementById(menuItemId);
 
-    if (menuItem && menuItem.parentNode) {
+    if (menuItem?.parentNode) {
       menuItem.parentNode.removeChild(menuItem);
     }
   }
