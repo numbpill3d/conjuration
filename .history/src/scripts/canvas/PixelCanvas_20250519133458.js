@@ -1,6 +1,6 @@
 /**
  * PixelCanvas Class
- * 
+ *
  * Handles the main drawing canvas, pixel manipulation, and rendering.
  */
 class PixelCanvas {
@@ -19,53 +19,53 @@ class PixelCanvas {
     this.canvas = document.getElementById(options.canvasId);
     this.effectsCanvas = document.getElementById(options.effectsCanvasId);
     this.uiCanvas = document.getElementById(options.uiCanvasId);
-    
+
     // Canvas contexts
-    this.ctx = this.canvas.getContext('2d');
-    this.effectsCtx = this.effectsCanvas.getContext('2d');
-    this.uiCtx = this.uiCanvas.getContext('2d');
-    
+    this.ctx = this.canvas.getContext("2d");
+    this.effectsCtx = this.effectsCanvas.getContext("2d");
+    this.uiCtx = this.uiCanvas.getContext("2d");
+
     // Canvas dimensions
     this.width = options.width || 64;
     this.height = options.height || 64;
     this.pixelSize = options.pixelSize || 8;
-    
+
     // Zoom level
     this.zoom = 1;
-    
+
     // Pixel data
-    this.pixels = new Array(this.width * this.height).fill('#000000');
-    
+    this.pixels = new Array(this.width * this.height).fill("#000000");
+
     // Effects settings
     this.effects = {
       grain: false,
       static: false,
       glitch: false,
       crt: false,
-      intensity: 0.5
+      intensity: 0.5,
     };
-    
+
     // Animation frame for effects
     this.effectsAnimationFrame = null;
-    
+
     // Mouse state
     this.isDrawing = false;
     this.lastX = 0;
     this.lastY = 0;
-    
+
     // Grid display
     this.showGrid = true;
-    
+
     // Initialize the canvas
     this.initCanvas();
-    
+
     // Set up event listeners
     this.setupEventListeners();
-    
+
     // Start the effects animation loop
     this.animateEffects();
   }
-  
+
   /**
    * Initialize the canvas with the correct dimensions
    */
@@ -73,124 +73,140 @@ class PixelCanvas {
     // Set canvas dimensions
     this.canvas.width = this.width * this.pixelSize * this.zoom;
     this.canvas.height = this.height * this.pixelSize * this.zoom;
-    
+
     // Set effects canvas dimensions
     this.effectsCanvas.width = this.canvas.width;
     this.effectsCanvas.height = this.canvas.height;
-    
+
     // Set UI canvas dimensions
     this.uiCanvas.width = this.canvas.width;
     this.uiCanvas.height = this.canvas.height;
-    
+
     // Set rendering options for pixel art
     this.ctx.imageSmoothingEnabled = false;
     this.effectsCtx.imageSmoothingEnabled = false;
     this.uiCtx.imageSmoothingEnabled = false;
-    
+
     // Clear the canvas
     this.clear();
-    
+
     // Draw the initial grid
     if (this.showGrid) {
       this.drawGrid();
     }
   }
-  
+
   /**
    * Set up event listeners for mouse/touch interaction
    */
   setupEventListeners() {
     // Mouse events
-    this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
-    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
-    
+    this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    document.addEventListener("mousemove", this.handleMouseMove.bind(this));
+    document.addEventListener("mouseup", this.handleMouseUp.bind(this));
+
     // Prevent context menu on right-click
-    this.canvas.addEventListener('contextmenu', (e) => {
+    this.canvas.addEventListener("contextmenu", (e) => {
       e.preventDefault();
     });
-    
+
     // Update cursor position display
-    this.canvas.addEventListener('mousemove', this.updateCursorPosition.bind(this));
-    
+    this.canvas.addEventListener(
+      "mousemove",
+      this.updateCursorPosition.bind(this),
+    );
+
     // Mouse leave
-    this.canvas.addEventListener('mouseleave', () => {
-      document.getElementById('cursor-position').textContent = 'X: - Y: -';
+    this.canvas.addEventListener("mouseleave", () => {
+      document.getElementById("cursor-position").textContent = "X: - Y: -";
     });
   }
-  
+
   /**
    * Handle mouse down event
    * @param {MouseEvent} e - Mouse event
    */
   handleMouseDown(e) {
     this.isDrawing = true;
-    
+
     // Get pixel coordinates
     const rect = this.canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (this.pixelSize * this.zoom));
+    const x = Math.floor(
+      (e.clientX - rect.left) / (this.pixelSize * this.zoom),
+    );
     const y = Math.floor((e.clientY - rect.top) / (this.pixelSize * this.zoom));
-    
+
     // Store last position
     this.lastX = x;
     this.lastY = y;
-    
+
     // Draw a single pixel
-    this.drawPixel(x, y, e.buttons === 2 ? '#000000' : '#ffffff');
-    
+    this.drawPixel(x, y, e.buttons === 2 ? "#000000" : "#ffffff");
+
     // Render the canvas
     this.render();
   }
-  
+
   /**
    * Handle mouse move event
    * @param {MouseEvent} e - Mouse event
    */
   handleMouseMove(e) {
     if (!this.isDrawing) return;
-    
+
     // Get pixel coordinates
     const rect = this.canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (this.pixelSize * this.zoom));
+    const x = Math.floor(
+      (e.clientX - rect.left) / (this.pixelSize * this.zoom),
+    );
     const y = Math.floor((e.clientY - rect.top) / (this.pixelSize * this.zoom));
-    
+
     // Only draw if the position has changed
     if (x !== this.lastX || y !== this.lastY) {
       // Draw a line from last position to current position
-      this.drawLine(this.lastX, this.lastY, x, y, e.buttons === 2 ? '#000000' : '#ffffff');
-      
+      this.drawLine(
+        this.lastX,
+        this.lastY,
+        x,
+        y,
+        e.buttons === 2 ? "#000000" : "#ffffff",
+      );
+
       // Update last position
       this.lastX = x;
       this.lastY = y;
-      
+
       // Render the canvas
       this.render();
     }
   }
-  
+
   /**
    * Handle mouse up event
    */
   handleMouseUp() {
     this.isDrawing = false;
   }
-  
+
   /**
    * Update the cursor position display
    * @param {MouseEvent} e - Mouse event
    */
   updateCursorPosition(e) {
     const rect = this.canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (this.pixelSize * this.zoom));
+    const x = Math.floor(
+      (e.clientX - rect.left) / (this.pixelSize * this.zoom),
+    );
     const y = Math.floor((e.clientY - rect.top) / (this.pixelSize * this.zoom));
-    
+
     if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
-      document.getElementById('cursor-position').textContent = `X: ${x} Y: ${y}`;
+      document.getElementById("cursor-position").textContent =
+        `X: ${x} Y: ${y}`;
     } else {
-      document.getElementById('cursor-position').textContent = 'X: - Y: -';
+      document.getElementById("cursor-position").textContent = "X: - Y: -";
     }
   }
-  
+
   /**
    * Draw a single pixel
    * @param {number} x - X coordinate
@@ -203,7 +219,7 @@ class PixelCanvas {
       this.pixels[index] = color;
     }
   }
-  
+
   /**
    * Draw a line using Bresenham's algorithm
    * @param {number} x0 - Starting X coordinate
@@ -218,12 +234,12 @@ class PixelCanvas {
     const sx = x0 < x1 ? 1 : -1;
     const sy = y0 < y1 ? 1 : -1;
     let err = dx - dy;
-    
+
     while (true) {
       this.drawPixel(x0, y0, color);
-      
+
       if (x0 === x1 && y0 === y1) break;
-      
+
       const e2 = 2 * err;
       if (e2 > -dy) {
         err -= dy;
@@ -235,7 +251,7 @@ class PixelCanvas {
       }
     }
   }
-  
+
   /**
    * Draw a rectangle
    * @param {number} x - X coordinate of top-left corner
@@ -258,7 +274,7 @@ class PixelCanvas {
         this.drawPixel(i, y, color);
         this.drawPixel(i, y + height - 1, color);
       }
-      
+
       // Draw vertical lines
       for (let j = y; j < y + height; j++) {
         this.drawPixel(x, j, color);
@@ -266,7 +282,7 @@ class PixelCanvas {
       }
     }
   }
-  
+
   /**
    * Draw an ellipse
    * @param {number} xc - X coordinate of center
@@ -281,12 +297,12 @@ class PixelCanvas {
     let a2 = a * a;
     let b2 = b * b;
     let d = b2 - a2 * b + a2 / 4;
-    
+
     this.drawPixel(xc + x, yc + y, color);
     this.drawPixel(xc - x, yc + y, color);
     this.drawPixel(xc + x, yc - y, color);
     this.drawPixel(xc - x, yc - y, color);
-    
+
     while (a2 * (y - 0.5) > b2 * (x + 1)) {
       if (d < 0) {
         d += b2 * (2 * x + 3);
@@ -295,15 +311,15 @@ class PixelCanvas {
         y--;
       }
       x++;
-      
+
       this.drawPixel(xc + x, yc + y, color);
       this.drawPixel(xc - x, yc + y, color);
       this.drawPixel(xc + x, yc - y, color);
       this.drawPixel(xc - x, yc - y, color);
     }
-    
+
     d = b2 * (x + 0.5) * (x + 0.5) + a2 * (y - 1) * (y - 1) - a2 * b2;
-    
+
     while (y > 0) {
       if (d < 0) {
         d += b2 * (2 * x + 2) + a2 * (-2 * y + 3);
@@ -312,14 +328,14 @@ class PixelCanvas {
         d += a2 * (-2 * y + 3);
       }
       y--;
-      
+
       this.drawPixel(xc + x, yc + y, color);
       this.drawPixel(xc - x, yc + y, color);
       this.drawPixel(xc + x, yc - y, color);
       this.drawPixel(xc - x, yc - y, color);
     }
   }
-  
+
   /**
    * Fill an area with a color (flood fill)
    * @param {number} x - Starting X coordinate
@@ -328,29 +344,29 @@ class PixelCanvas {
    */
   floodFill(x, y, fillColor) {
     const targetColor = this.getPixel(x, y);
-    
+
     // Don't fill if the target color is the same as the fill color
     if (targetColor === fillColor) return;
-    
-    const queue = [{x, y}];
-    
+
+    const queue = [{ x, y }];
+
     while (queue.length > 0) {
-      const {x, y} = queue.shift();
-      
+      const { x, y } = queue.shift();
+
       // Check if this pixel is the target color
       if (this.getPixel(x, y) === targetColor) {
         // Set the pixel to the fill color
         this.drawPixel(x, y, fillColor);
-        
+
         // Add adjacent pixels to the queue
-        if (x > 0) queue.push({x: x - 1, y});
-        if (x < this.width - 1) queue.push({x: x + 1, y});
-        if (y > 0) queue.push({x, y: y - 1});
-        if (y < this.height - 1) queue.push({x, y: y + 1});
+        if (x > 0) queue.push({ x: x - 1, y });
+        if (x < this.width - 1) queue.push({ x: x + 1, y });
+        if (y > 0) queue.push({ x, y: y - 1 });
+        if (y < this.height - 1) queue.push({ x, y: y + 1 });
       }
     }
   }
-  
+
   /**
    * Get the color of a pixel
    * @param {number} x - X coordinate
@@ -364,65 +380,70 @@ class PixelCanvas {
     }
     return null;
   }
-  
+
   /**
    * Clear the canvas
    */
   clear() {
     // Clear pixel data
-    this.pixels.fill('#000000');
-    
+    this.pixels.fill("#000000");
+
     // Clear canvas
-    this.ctx.fillStyle = '#000000';
+    this.ctx.fillStyle = "#000000";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Clear effects canvas
-    this.effectsCtx.clearRect(0, 0, this.effectsCanvas.width, this.effectsCanvas.height);
-    
+    this.effectsCtx.clearRect(
+      0,
+      0,
+      this.effectsCanvas.width,
+      this.effectsCanvas.height,
+    );
+
     // Clear UI canvas
     this.uiCtx.clearRect(0, 0, this.uiCanvas.width, this.uiCanvas.height);
   }
-  
+
   /**
    * Render the canvas
    */
   render() {
     // Clear canvas
-    this.ctx.fillStyle = '#000000';
+    this.ctx.fillStyle = "#000000";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Draw pixels
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         const index = y * this.width + x;
         const color = this.pixels[index];
-        
+
         this.ctx.fillStyle = color;
         this.ctx.fillRect(
           x * this.pixelSize * this.zoom,
           y * this.pixelSize * this.zoom,
           this.pixelSize * this.zoom,
-          this.pixelSize * this.zoom
+          this.pixelSize * this.zoom,
         );
       }
     }
-    
+
     // Draw grid if enabled
     if (this.showGrid) {
       this.drawGrid();
     }
   }
-  
+
   /**
    * Draw the grid
    */
   drawGrid() {
     this.uiCtx.clearRect(0, 0, this.uiCanvas.width, this.uiCanvas.height);
-    
+
     if (this.zoom >= 4) {
-      this.uiCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      this.uiCtx.strokeStyle = "rgba(255, 255, 255, 0.1)";
       this.uiCtx.lineWidth = 1;
-      
+
       // Draw vertical lines
       for (let x = 0; x <= this.width; x++) {
         this.uiCtx.beginPath();
@@ -430,7 +451,7 @@ class PixelCanvas {
         this.uiCtx.lineTo(x * this.pixelSize * this.zoom, this.canvas.height);
         this.uiCtx.stroke();
       }
-      
+
       // Draw horizontal lines
       for (let y = 0; y <= this.height; y++) {
         this.uiCtx.beginPath();
@@ -440,54 +461,61 @@ class PixelCanvas {
       }
     }
   }
-  
+
   /**
    * Set the effects settings
    * @param {Object} effects - Effects settings
    */
   setEffects(effects) {
-    this.effects = {...this.effects, ...effects};
+    this.effects = { ...this.effects, ...effects };
   }
-  
+
   /**
    * Animate the effects
    */
   animateEffects() {
     // Clear effects canvas
-    this.effectsCtx.clearRect(0, 0, this.effectsCanvas.width, this.effectsCanvas.height);
-    
+    this.effectsCtx.clearRect(
+      0,
+      0,
+      this.effectsCanvas.width,
+      this.effectsCanvas.height,
+    );
+
     // Apply grain effect
     if (this.effects.grain) {
       this.applyGrainEffect();
     }
-    
+
     // Apply static effect
     if (this.effects.static) {
       this.applyStaticEffect();
     }
-    
+
     // Apply glitch effect
     if (this.effects.glitch) {
       this.applyGlitchEffect();
     }
-    
+
     // Apply CRT effect
     if (this.effects.crt) {
       this.applyCRTEffect();
     }
-    
+
     // Request next frame
-    this.effectsAnimationFrame = requestAnimationFrame(this.animateEffects.bind(this));
+    this.effectsAnimationFrame = requestAnimationFrame(
+      this.animateEffects.bind(this),
+    );
   }
-  
+
   /**
    * Apply grain effect
    */
   applyGrainEffect() {
     const intensity = this.effects.intensity * 0.1;
-    
-    this.effectsCtx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-    
+
+    this.effectsCtx.fillStyle = "rgba(0, 0, 0, 0.5)";
+
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         if (Math.random() < intensity) {
@@ -495,91 +523,100 @@ class PixelCanvas {
             x * this.pixelSize * this.zoom,
             y * this.pixelSize * this.zoom,
             this.pixelSize * this.zoom,
-            this.pixelSize * this.zoom
+            this.pixelSize * this.zoom,
           );
         }
       }
     }
   }
-  
+
   /**
    * Apply static effect
    */
   applyStaticEffect() {
     const intensity = this.effects.intensity * 0.05;
-    
-    this.effectsCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-    
+
+    this.effectsCtx.fillStyle = "rgba(255, 255, 255, 0.1)";
+
     for (let y = 0; y < this.canvas.height; y += 2) {
       if (Math.random() < intensity) {
         this.effectsCtx.fillRect(0, y, this.canvas.width, 1);
       }
     }
   }
-  
+
   /**
    * Apply glitch effect
    */
   applyGlitchEffect() {
     const intensity = this.effects.intensity;
-    
+
     // Only apply glitch occasionally
     if (Math.random() < intensity * 0.1) {
       // Random offset for a few rows
       const numRows = Math.floor(Math.random() * 5) + 1;
-      
+
       for (let i = 0; i < numRows; i++) {
         const y = Math.floor(Math.random() * this.height);
         const offset = (Math.random() - 0.5) * 10 * intensity;
-        
+
         // Create a temporary canvas to hold the row
-        const tempCanvas = document.createElement('canvas');
+        const tempCanvas = document.createElement("canvas");
         tempCanvas.width = this.canvas.width;
         tempCanvas.height = this.pixelSize * this.zoom;
-        const tempCtx = tempCanvas.getContext('2d');
-        
+        const tempCtx = tempCanvas.getContext("2d");
+
         // Copy the row from the main canvas
         tempCtx.drawImage(
           this.canvas,
-          0, y * this.pixelSize * this.zoom,
-          this.canvas.width, this.pixelSize * this.zoom,
-          0, 0,
-          this.canvas.width, this.pixelSize * this.zoom
+          0,
+          y * this.pixelSize * this.zoom,
+          this.canvas.width,
+          this.pixelSize * this.zoom,
+          0,
+          0,
+          this.canvas.width,
+          this.pixelSize * this.zoom,
         );
-        
+
         // Draw the row with offset
         this.effectsCtx.drawImage(
           tempCanvas,
-          offset * this.pixelSize * this.zoom, y * this.pixelSize * this.zoom
+          offset * this.pixelSize * this.zoom,
+          y * this.pixelSize * this.zoom,
         );
       }
     }
   }
-  
+
   /**
    * Apply CRT effect
    */
   applyCRTEffect() {
     const intensity = this.effects.intensity;
-    
+
     // Scanlines
-    this.effectsCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+    this.effectsCtx.fillStyle = "rgba(0, 0, 0, 0.1)";
     for (let y = 0; y < this.canvas.height; y += 2) {
       this.effectsCtx.fillRect(0, y, this.canvas.width, 1);
     }
-    
+
     // Vignette
     const gradient = this.effectsCtx.createRadialGradient(
-      this.canvas.width / 2, this.canvas.height / 2, 0,
-      this.canvas.width / 2, this.canvas.height / 2, this.canvas.width / 1.5
+      this.canvas.width / 2,
+      this.canvas.height / 2,
+      0,
+      this.canvas.width / 2,
+      this.canvas.height / 2,
+      this.canvas.width / 1.5,
     );
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
     gradient.addColorStop(1, `rgba(0, 0, 0, ${intensity * 0.7})`);
-    
+
     this.effectsCtx.fillStyle = gradient;
     this.effectsCtx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
-  
+
   /**
    * Set canvas dimensions
    * @param {number} width - Width in pixels
@@ -588,10 +625,10 @@ class PixelCanvas {
   setDimensions(width, height) {
     this.width = width;
     this.height = height;
-    this.pixels = new Array(this.width * this.height).fill('#000000');
+    this.pixels = new Array(this.width * this.height).fill("#000000");
     this.initCanvas();
   }
-  
+
   /**
    * Zoom in
    */
@@ -602,7 +639,7 @@ class PixelCanvas {
       this.render();
     }
   }
-  
+
   /**
    * Zoom out
    */
@@ -613,7 +650,7 @@ class PixelCanvas {
       this.render();
     }
   }
-  
+
   /**
    * Get the current zoom level
    * @returns {number} Zoom level
@@ -621,7 +658,7 @@ class PixelCanvas {
   getZoom() {
     return this.zoom;
   }
-  
+
   /**
    * Toggle grid visibility
    */
@@ -629,33 +666,33 @@ class PixelCanvas {
     this.showGrid = !this.showGrid;
     this.render();
   }
-  
+
   /**
    * Export the canvas as a PNG data URL
    * @returns {string} PNG data URL
    */
   exportToPNG() {
     // Create a temporary canvas for export
-    const exportCanvas = document.createElement('canvas');
+    const exportCanvas = document.createElement("canvas");
     exportCanvas.width = this.width;
     exportCanvas.height = this.height;
-    const exportCtx = exportCanvas.getContext('2d');
-    
+    const exportCtx = exportCanvas.getContext("2d");
+
     // Draw pixels at 1:1 scale
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         const index = y * this.width + x;
         const color = this.pixels[index];
-        
+
         exportCtx.fillStyle = color;
         exportCtx.fillRect(x, y, 1, 1);
       }
     }
-    
+
     // Return data URL
-    return exportCanvas.toDataURL('image/png');
+    return exportCanvas.toDataURL("image/png");
   }
-  
+
   /**
    * Get the pixel data as an array
    * @returns {Array} Pixel data
@@ -663,7 +700,7 @@ class PixelCanvas {
   getPixelData() {
     return [...this.pixels];
   }
-  
+
   /**
    * Set the pixel data from an array
    * @param {Array} pixelData - Pixel data

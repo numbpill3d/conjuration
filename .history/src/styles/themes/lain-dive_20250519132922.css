@@ -8,7 +8,7 @@
   --highlight-color: #ffffff;
   --error-color: #ff3366;
   --success-color: #33ff99;
-  
+
   --panel-bg: #12121a;
   --panel-border: #2a2a3a;
   --button-bg: #1a1a24;
@@ -118,7 +118,9 @@
 
 .theme-lain-dive .glitch-text::after {
   left: -2px;
-  text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+  text-shadow:
+    -2px 0 #00fff9,
+    2px 2px #ff00c1;
   animation: glitch-anim2 1s infinite linear alternate-reverse;
 }
 

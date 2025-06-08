@@ -118,7 +118,9 @@
 
 .theme-lain-dive .glitch-text::after {
   left: -2px;
-  text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+  text-shadow:
+    -2px 0 #00fff9,
+    2px 2px #ff00c1;
   animation: glitch-anim2 1s infinite linear alternate-reverse;
 }
 

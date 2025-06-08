@@ -9,8 +9,8 @@ class MenuSystem {
    */
   constructor() {
     this.activeMenu = null;
-    this.menuButtons = document.querySelectorAll('.menu-button');
-    this.menuDropdowns = document.querySelectorAll('.menu-dropdown');
+    this.menuButtons = document.querySelectorAll(".menu-button");
+    this.menuDropdowns = document.querySelectorAll(".menu-dropdown");
 
     // Set up event listeners
     this.setupEventListeners();
@@ -21,15 +21,18 @@ class MenuSystem {
    */
   setupEventListeners() {
     // Close menus when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.menu-button') && !e.target.closest('.menu-dropdown')) {
+    document.addEventListener("click", (e) => {
+      if (
+        !e.target.closest(".menu-button") &&
+        !e.target.closest(".menu-dropdown")
+      ) {
         this.closeAllMenus();
       }
     });
 
     // Close menus when pressing Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
         this.closeAllMenus();
       }
     });
@@ -42,79 +45,82 @@ class MenuSystem {
    * Set up keyboard shortcuts
    */
   setupKeyboardShortcuts() {
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener("keydown", (e) => {
       // Only handle shortcuts when not in an input field
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
         return;
       }
 
       // Ctrl+N: New Project
-      if (e.ctrlKey && e.key === 'n') {
+      if (e.ctrlKey && e.key === "n") {
         e.preventDefault();
-        document.getElementById('new-project').click();
+        document.getElementById("new-project").click();
       }
 
       // Ctrl+O: Open Project
-      if (e.ctrlKey && e.key === 'o') {
+      if (e.ctrlKey && e.key === "o") {
         e.preventDefault();
-        document.getElementById('open-project').click();
+        document.getElementById("open-project").click();
       }
 
       // Ctrl+S: Save Project
-      if (e.ctrlKey && e.key === 's' && !e.shiftKey) {
+      if (e.ctrlKey && e.key === "s" && !e.shiftKey) {
         e.preventDefault();
-        document.getElementById('save-project').click();
+        document.getElementById("save-project").click();
       }
 
       // Ctrl+Shift+S: Save Project As
-      if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+      if (e.ctrlKey && e.shiftKey && e.key === "S") {
         e.preventDefault();
-        document.getElementById('save-project-as').click();
+        document.getElementById("save-project-as").click();
       }
 
       // Ctrl+Z: Undo
-      if (e.ctrlKey && e.key === 'z' && !e.shiftKey) {
+      if (e.ctrlKey && e.key === "z" && !e.shiftKey) {
         e.preventDefault();
-        document.getElementById('undo').click();
+        document.getElementById("undo").click();
       }
 
       // Ctrl+Y or Ctrl+Shift+Z: Redo
-      if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'Z')) {
+      if (
+        (e.ctrlKey && e.key === "y") ||
+        (e.ctrlKey && e.shiftKey && e.key === "Z")
+      ) {
         e.preventDefault();
-        document.getElementById('redo').click();
+        document.getElementById("redo").click();
       }
 
       // Ctrl+G: Toggle Grid
-      if (e.ctrlKey && e.key === 'g') {
+      if (e.ctrlKey && e.key === "g") {
         e.preventDefault();
-        document.getElementById('toggle-grid').click();
+        document.getElementById("toggle-grid").click();
       }
 
       // Tool shortcuts
       switch (e.key.toLowerCase()) {
-        case 'b': // Pencil Tool
-          document.getElementById('brush-pencil').click();
+        case "b": // Pencil Tool
+          document.getElementById("brush-pencil").click();
           break;
-        case 'e': // Eraser Tool
-          document.getElementById('brush-eraser').click();
+        case "e": // Eraser Tool
+          document.getElementById("brush-eraser").click();
           break;
-        case 'f': // Fill Tool
-          document.getElementById('brush-fill').click();
+        case "f": // Fill Tool
+          document.getElementById("brush-fill").click();
           break;
-        case 'l': // Line Tool
-          document.getElementById('brush-line').click();
+        case "l": // Line Tool
+          document.getElementById("brush-line").click();
           break;
-        case 'r': // Rectangle Tool
-          document.getElementById('brush-rect').click();
+        case "r": // Rectangle Tool
+          document.getElementById("brush-rect").click();
           break;
-        case 'o': // Ellipse Tool
-          document.getElementById('brush-ellipse').click();
+        case "o": // Ellipse Tool
+          document.getElementById("brush-ellipse").click();
           break;
-        case 'g': // Glitch Tool
-          document.getElementById('brush-glitch').click();
+        case "g": // Glitch Tool
+          document.getElementById("brush-glitch").click();
           break;
-        case 's': // Static Tool
-          document.getElementById('brush-static').click();
+        case "s": // Static Tool
+          document.getElementById("brush-static").click();
           break;
       }
     });
@@ -156,11 +162,11 @@ class MenuSystem {
     this.positionMenu(menu, button);
 
     // Show the menu
-    menu.style.display = 'flex';
-    menu.classList.add('visible');
+    menu.style.display = "flex";
+    menu.classList.add("visible");
 
     // Add active class to the button
-    button.classList.add('active');
+    button.classList.add("active");
 
     // Set as active menu
     this.activeMenu = menuId;
@@ -180,11 +186,11 @@ class MenuSystem {
     if (!menu || !button) return;
 
     // Hide the menu
-    menu.style.display = 'none';
-    menu.classList.remove('visible');
+    menu.style.display = "none";
+    menu.classList.remove("visible");
 
     // Remove active class from the button
-    button.classList.remove('active');
+    button.classList.remove("active");
 
     // Clear active menu
     this.activeMenu = null;
@@ -197,19 +203,19 @@ class MenuSystem {
    * Close all menus
    */
   closeAllMenus() {
-    this.menuDropdowns.forEach(menu => {
-      menu.style.display = 'none';
-      menu.classList.remove('visible');
+    this.menuDropdowns.forEach((menu) => {
+      menu.style.display = "none";
+      menu.classList.remove("visible");
     });
 
-    this.menuButtons.forEach(button => {
-      button.classList.remove('active');
+    this.menuButtons.forEach((button) => {
+      button.classList.remove("active");
     });
 
     this.activeMenu = null;
 
     // Log for debugging
-    console.log('Closing all menus');
+    console.log("Closing all menus");
   }
 
   /**
@@ -225,7 +231,7 @@ class MenuSystem {
     menu.style.top = `${buttonRect.bottom}px`;
 
     // Ensure the menu is visible by setting a high z-index
-    menu.style.zIndex = '2000';
+    menu.style.zIndex = "2000";
   }
 
   /**
@@ -241,36 +247,36 @@ class MenuSystem {
     this.closeAllMenus();
 
     // Create or get the context menu element
-    let contextMenu = document.getElementById('context-menu');
+    let contextMenu = document.getElementById("context-menu");
 
     if (!contextMenu) {
-      contextMenu = document.createElement('div');
-      contextMenu.id = 'context-menu';
-      contextMenu.className = 'menu-dropdown';
+      contextMenu = document.createElement("div");
+      contextMenu.id = "context-menu";
+      contextMenu.className = "menu-dropdown";
       document.body.appendChild(contextMenu);
     }
 
     // Clear the context menu
-    contextMenu.innerHTML = '';
+    contextMenu.innerHTML = "";
 
     // Add menu items
-    items.forEach(item => {
+    items.forEach((item) => {
       if (item.separator) {
         // Add separator
-        const separator = document.createElement('div');
-        separator.className = 'menu-separator';
+        const separator = document.createElement("div");
+        separator.className = "menu-separator";
         contextMenu.appendChild(separator);
       } else {
         // Add menu item
-        const menuItem = document.createElement('button');
-        menuItem.className = 'menu-item';
-        menuItem.type = 'button'; // Add type attribute
+        const menuItem = document.createElement("button");
+        menuItem.className = "menu-item";
+        menuItem.type = "button"; // Add type attribute
         menuItem.textContent = item.label;
 
         if (item.disabled) {
-          menuItem.classList.add('disabled');
+          menuItem.classList.add("disabled");
         } else {
-          menuItem.addEventListener('click', () => {
+          menuItem.addEventListener("click", () => {
             this.hideContextMenu();
             if (item.action) item.action();
           });
@@ -285,14 +291,14 @@ class MenuSystem {
     contextMenu.style.top = `${e.clientY}px`;
 
     // Show the context menu
-    contextMenu.style.display = 'flex';
+    contextMenu.style.display = "flex";
 
     // Bind the hideContextMenu method to this instance
     this._boundHideContextMenu = this.hideContextMenu.bind(this);
 
     // Add event listener to hide the context menu when clicking outside
     setTimeout(() => {
-      document.addEventListener('click', this._boundHideContextMenu);
+      document.addEventListener("click", this._boundHideContextMenu);
     }, 0);
   }
 
@@ -300,15 +306,15 @@ class MenuSystem {
    * Hide the context menu
    */
   hideContextMenu() {
-    const contextMenu = document.getElementById('context-menu');
+    const contextMenu = document.getElementById("context-menu");
 
     if (contextMenu) {
-      contextMenu.style.display = 'none';
+      contextMenu.style.display = "none";
     }
 
     // Remove the event listener using the bound method
     if (this._boundHideContextMenu) {
-      document.removeEventListener('click', this._boundHideContextMenu);
+      document.removeEventListener("click", this._boundHideContextMenu);
     }
   }
 
@@ -324,22 +330,22 @@ class MenuSystem {
     if (!menu) return;
 
     // Create the menu item
-    const menuItem = document.createElement('button');
-    menuItem.className = 'menu-item';
+    const menuItem = document.createElement("button");
+    menuItem.className = "menu-item";
     menuItem.id = item.id;
-    menuItem.type = 'button'; // Add type attribute
+    menuItem.type = "button"; // Add type attribute
     menuItem.textContent = item.label;
 
     if (item.disabled) {
-      menuItem.classList.add('disabled');
+      menuItem.classList.add("disabled");
     } else {
-      menuItem.addEventListener('click', item.action);
+      menuItem.addEventListener("click", item.action);
     }
 
     // Add shortcut text if provided
     if (item.shortcut) {
-      const shortcutSpan = document.createElement('span');
-      shortcutSpan.className = 'menu-shortcut';
+      const shortcutSpan = document.createElement("span");
+      shortcutSpan.className = "menu-shortcut";
       shortcutSpan.textContent = item.shortcut;
       menuItem.appendChild(shortcutSpan);
     }
@@ -374,9 +380,9 @@ class MenuSystem {
 
     if (menuItem) {
       if (enabled) {
-        menuItem.classList.remove('disabled');
+        menuItem.classList.remove("disabled");
       } else {
-        menuItem.classList.add('disabled');
+        menuItem.classList.add("disabled");
       }
     }
   }

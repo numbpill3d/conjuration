@@ -61,13 +61,13 @@
 
 /* Cursor Position Display */
 #cursor-position {
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 12px;
 }
 
 /* Canvas Size Display */
 #canvas-size {
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 12px;
 }
 
@@ -113,7 +113,7 @@
   position: absolute;
   color: var(--text-color);
   font-size: 8px;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
 }
 
 .ruler-text-horizontal {
