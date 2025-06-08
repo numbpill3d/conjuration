@@ -37,7 +37,7 @@
   background-color: transparent;
   border: none;
   color: var(--text-color);
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   cursor: pointer;
   position: relative;
   z-index: 2;
@@ -68,7 +68,9 @@
   z-index: 2000;
   display: none;
   flex-direction: column;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 0 5px var(--accent-color);
+  box-shadow:
+    0 0 15px rgba(0, 0, 0, 0.7),
+    0 0 5px var(--accent-color);
   animation: glitchIn 0.2s ease-out;
   overflow: hidden;
 }
@@ -123,7 +125,7 @@
   border: none;
   color: var(--text-color);
   text-align: left;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -296,16 +298,30 @@
   border-left: 4px solid var(--accent-color);
   color: var(--text-color);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+  animation:
+    fadeIn 0.3s,
+    fadeOut 0.3s 2.7s;
   animation-fill-mode: forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-20px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }

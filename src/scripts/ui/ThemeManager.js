@@ -1,63 +1,63 @@
 /**
  * ThemeManager Class
- * 
+ *
  * Handles theme switching and management.
  */
 class ThemeManager {
   /**
    * Create a new ThemeManager
    */
-  constructor() {
-    this.currentTheme = 'lain-dive';
-    this.themeStylesheet = document.getElementById('theme-stylesheet');
-    this.bodyElement = document.body;
-    
+  constructor () {
+    this.currentTheme = 'lain-dive'
+    this.themeStylesheet = document.getElementById('theme-stylesheet')
+    this.bodyElement = document.body
+
     // Initialize with the default theme
-    this.setTheme(this.currentTheme);
+    this.setTheme(this.currentTheme)
   }
-  
+
   /**
    * Set the current theme
    * @param {string} themeName - Name of the theme to set
    */
-  setTheme(themeName) {
+  setTheme (themeName) {
     // Update the theme stylesheet
-    this.themeStylesheet.href = `styles/themes/${themeName}.css`;
-    
+    this.themeStylesheet.href = `styles/themes/${themeName}.css`
+
     // Update the body class
-    this.bodyElement.className = `theme-${themeName}`;
-    
+    this.bodyElement.className = `theme-${themeName}`
+
     // Store the current theme
-    this.currentTheme = themeName;
-    
+    this.currentTheme = themeName
+
     // Save the theme preference to localStorage
-    localStorage.setItem('voidsketch-theme', themeName);
+    localStorage.setItem('voidsketch-theme', themeName)
   }
-  
+
   /**
    * Get the current theme
    * @returns {string} Name of the current theme
    */
-  getCurrentTheme() {
-    return this.currentTheme;
+  getCurrentTheme () {
+    return this.currentTheme
   }
-  
+
   /**
    * Load the theme preference from localStorage
    */
-  loadThemePreference() {
-    const savedTheme = localStorage.getItem('voidsketch-theme');
-    
+  loadThemePreference () {
+    const savedTheme = localStorage.getItem('voidsketch-theme')
+
     if (savedTheme) {
-      this.setTheme(savedTheme);
+      this.setTheme(savedTheme)
     }
   }
-  
+
   /**
    * Get all available themes
    * @returns {Array} Array of theme objects
    */
-  getAvailableThemes() {
+  getAvailableThemes () {
     return [
       {
         id: 'lain-dive',
@@ -74,39 +74,39 @@ class ThemeManager {
         name: 'Monolith',
         description: 'Minimalist black and white high contrast theme'
       }
-    ];
+    ]
   }
-  
+
   /**
    * Apply a glitch effect to the theme
    * @param {number} intensity - Intensity of the glitch effect (0-1)
    */
-  applyGlitchEffect(intensity = 0.5) {
+  applyGlitchEffect (intensity = 0.5) {
     // Create a style element for the glitch effect
-    let glitchStyle = document.getElementById('glitch-effect-style');
-    
+    let glitchStyle = document.getElementById('glitch-effect-style')
+
     if (!glitchStyle) {
-      glitchStyle = document.createElement('style');
-      glitchStyle.id = 'glitch-effect-style';
-      document.head.appendChild(glitchStyle);
+      glitchStyle = document.createElement('style')
+      glitchStyle.id = 'glitch-effect-style'
+      document.head.appendChild(glitchStyle)
     }
-    
+
     // Generate random CSS transforms
-    const transforms = [];
-    
+    const transforms = []
+
     for (let i = 0; i < 10; i++) {
-      const skewX = (Math.random() - 0.5) * intensity * 10;
-      const skewY = (Math.random() - 0.5) * intensity * 10;
-      const translateX = (Math.random() - 0.5) * intensity * 10;
-      const translateY = (Math.random() - 0.5) * intensity * 10;
-      
+      const skewX = (Math.random() - 0.5) * intensity * 10
+      const skewY = (Math.random() - 0.5) * intensity * 10
+      const translateX = (Math.random() - 0.5) * intensity * 10
+      const translateY = (Math.random() - 0.5) * intensity * 10
+
       transforms.push(`
         ${i * 10}% {
           transform: skew(${skewX}deg, ${skewY}deg) translate(${translateX}px, ${translateY}px);
         }
-      `);
+      `)
     }
-    
+
     // Create the keyframes animation
     const keyframes = `
       @keyframes glitch-transform {
@@ -115,8 +115,8 @@ class ThemeManager {
           transform: skew(0) translate(0);
         }
       }
-    `;
-    
+    `
+
     // Apply the glitch effect
     glitchStyle.textContent = `
       ${keyframes}
@@ -214,27 +214,31 @@ class ThemeManager {
           clip: rect(${Math.random() * 100}px, 9999px, ${Math.random() * 100}px, 0);
         }
       }
-    `;
-    
+    `
+
     // Add data-text attributes to elements
-    document.querySelectorAll('.tool-button, .menu-button, .panel-title, .section-title').forEach(element => {
-      element.setAttribute('data-text', element.textContent);
-    });
-    
+    document
+      .querySelectorAll(
+        '.tool-button, .menu-button, .panel-title, .section-title'
+      )
+      .forEach((element) => {
+        element.setAttribute('data-text', element.textContent)
+      })
+
     // Remove the effect after a short time
     setTimeout(() => {
-      glitchStyle.textContent = '';
-    }, 2000);
+      glitchStyle.textContent = ''
+    }, 2000)
   }
-  
+
   /**
    * Remove the glitch effect
    */
-  removeGlitchEffect() {
-    const glitchStyle = document.getElementById('glitch-effect-style');
-    
+  removeGlitchEffect () {
+    const glitchStyle = document.getElementById('glitch-effect-style')
+
     if (glitchStyle) {
-      glitchStyle.textContent = '';
+      glitchStyle.textContent = ''
     }
   }
 }

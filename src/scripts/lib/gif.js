@@ -1,104 +1,107 @@
 /**
  * GIF.js
- * 
+ *
  * A simple GIF encoder/decoder library
  * This is a placeholder implementation for the VOIDSKETCH application
  */
 
-(function(global) {
+(function (global) {
   // GIF constructor
-  var GIF = function(options) {
-    this.options = options || {};
-    this.frames = [];
-    this.events = {};
-    
+  const GIF = function (options) {
+    this.options = options || {}
+    this.frames = []
+    this.events = {}
+
     // Set default options
-    this.options.quality = this.options.quality || 10;
-    this.options.workers = this.options.workers || 2;
-    this.options.width = this.options.width || 64;
-    this.options.height = this.options.height || 64;
-    this.options.workerScript = this.options.workerScript || 'scripts/lib/gif.worker.js';
-    
+    this.options.quality = this.options.quality || 10
+    this.options.workers = this.options.workers || 2
+    this.options.width = this.options.width || 64
+    this.options.height = this.options.height || 64
+    this.options.workerScript =
+      this.options.workerScript || 'scripts/lib/gif.worker.js'
+
     // Create workers
-    this.workers = [];
-    for (var i = 0; i < this.options.workers; i++) {
-      this.workers.push(new Worker(this.options.workerScript));
+    this.workers = []
+    for (let i = 0; i < this.options.workers; i++) {
+      this.workers.push(new Worker(this.options.workerScript))
     }
-  };
-  
+  }
+
   // Add a frame to the GIF
-  GIF.prototype.addFrame = function(image, options) {
-    options = options || {};
-    
+  GIF.prototype.addFrame = function (image, options) {
+    options = options || {}
+
     // Add the frame to the queue
     this.frames.push({
-      image: image,
+      image,
       delay: options.delay || 100
-    });
-    
-    return this;
-  };
-  
+    })
+
+    return this
+  }
+
   // Start rendering the GIF
-  GIF.prototype.render = function() {
-    var self = this;
-    var framesProcessed = 0;
-    
+  GIF.prototype.render = function () {
+    const self = this
+    let framesProcessed = 0
+
     // Process each frame
-    for (var i = 0; i < this.frames.length; i++) {
-      (function(frame, index) {
+    for (let i = 0; i < this.frames.length; i++) {
+      (function (frame, index) {
         // Assign a worker to process this frame
-        var worker = self.workers[index % self.workers.length];
-        
+        const worker = self.workers[index % self.workers.length]
+
         // Set up the worker message handler
-        worker.onmessage = function(e) {
-          framesProcessed++;
-          
+        worker.onmessage = function (e) {
+          framesProcessed++
+
           // Trigger progress event
-          self.trigger('progress', framesProcessed / self.frames.length);
-          
+          self.trigger('progress', framesProcessed / self.frames.length)
+
           // Check if all frames are processed
           if (framesProcessed === self.frames.length) {
             // In a real implementation, this would combine all frames into a GIF
             // For now, just create a simple blob
-            var blob = new Blob(['GIF data would be here'], { type: 'image/gif' });
-            
+            const blob = new Blob(['GIF data would be here'], {
+              type: 'image/gif'
+            })
+
             // Trigger finished event
-            self.trigger('finished', blob);
+            self.trigger('finished', blob)
           }
-        };
-        
+        }
+
         // Send the frame to the worker
         worker.postMessage({
-          frame: frame,
-          index: index
-        });
-      })(this.frames[i], i);
+          frame,
+          index
+        })
+      })(this.frames[i], i)
     }
-  };
-  
+  }
+
   // Event handling
-  GIF.prototype.on = function(event, callback) {
+  GIF.prototype.on = function (event, callback) {
     if (!this.events[event]) {
-      this.events[event] = [];
+      this.events[event] = []
     }
-    
-    this.events[event].push(callback);
-    return this;
-  };
-  
-  GIF.prototype.trigger = function(event) {
+
+    this.events[event].push(callback)
+    return this
+  }
+
+  GIF.prototype.trigger = function (event) {
     if (this.events[event]) {
-      var args = Array.prototype.slice.call(arguments, 1);
-      
-      for (var i = 0; i < this.events[event].length; i++) {
-        this.events[event][i].apply(this, args);
+      const args = Array.prototype.slice.call(arguments, 1)
+
+      for (let i = 0; i < this.events[event].length; i++) {
+        this.events[event][i].apply(this, args)
       }
     }
-    
-    return this;
-  };
-  
+
+    return this
+  }
+
   // Export to global scope
-  global.GIF = GIF;
-})(window);
+  global.GIF = GIF
+})(window)

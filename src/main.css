@@ -2,8 +2,8 @@
 
 /* Custom Font Loading */
 @font-face {
-  font-family: 'VoidFont';
-  src: url('../assets/fonts/bitmap-font.ttf') format('truetype');
+  font-family: "VoidFont";
+  src: url("../assets/fonts/bitmap-font.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -18,30 +18,31 @@
 
 :root {
   /* Base Colors - Will be overridden by theme */
-  --primary-color: #6A1B9A;
-  --secondary-color: #9C27B0;
-  --accent-color: #E1BEE7;
+  --primary-color: #6a1b9a;
+  --secondary-color: #9c27b0;
+  --accent-color: #e1bee7;
   --background-color: #000000;
-  --background-light: #1A1A1A;
-  --text-color: #E1BEE7;
-  --text-dark: #B39DDB;
-  --border-color: #4A148C;
-  --highlight-color: #AA00FF;
-  
+  --background-light: #1a1a1a;
+  --text-color: #e1bee7;
+  --text-dark: #b39ddb;
+  --border-color: #4a148c;
+  --highlight-color: #aa00ff;
+
   /* UI Constants */
   --title-bar-height: 30px;
   --menu-bar-height: 25px;
   --side-panel-width: 220px;
-  
+
   /* Animation Durations */
   --transition-speed: 0.3s;
-  
+
   /* Global Styling */
-  font-family: 'VoidFont', monospace;
+  font-family: "VoidFont", monospace;
   font-size: 14px;
 }
 
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -74,7 +75,7 @@ html, body {
 }
 
 #title-bar:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -182,7 +183,7 @@ html, body {
 }
 
 .section-title:after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -261,19 +262,45 @@ html, body {
 }
 
 .palette-preview.monochrome {
-  background: linear-gradient(to right, #000000 0%, #000000 50%, #FFFFFF 50%, #FFFFFF 100%);
+  background: linear-gradient(
+    to right,
+    #000000 0%,
+    #000000 50%,
+    #ffffff 50%,
+    #ffffff 100%
+  );
 }
 
 .palette-preview.lain {
-  background: linear-gradient(to right, #000000 0%, #000000 33%, #6A1B9A 33%, #6A1B9A 66%, #E1BEE7 66%, #E1BEE7 100%);
+  background: linear-gradient(
+    to right,
+    #000000 0%,
+    #000000 33%,
+    #6a1b9a 33%,
+    #6a1b9a 66%,
+    #e1bee7 66%,
+    #e1bee7 100%
+  );
 }
 
 .palette-preview.red {
-  background: linear-gradient(to right, #000000 0%, #000000 50%, #FF1744 50%, #FF1744 100%);
+  background: linear-gradient(
+    to right,
+    #000000 0%,
+    #000000 50%,
+    #ff1744 50%,
+    #ff1744 100%
+  );
 }
 
 .palette-preview.green {
-  background: linear-gradient(to right, #000000 0%, #000000 50%, #00E676 50%, #00E676 100%);
+  background: linear-gradient(
+    to right,
+    #000000 0%,
+    #000000 50%,
+    #00e676 50%,
+    #00e676 100%
+  );
 }
 
 .palette-name {
@@ -401,11 +428,12 @@ canvas {
   padding: 0 15px;
   height: 100%;
   cursor: pointer;
-  font-family: 'VoidFont', monospace;
+  font-family: "VoidFont", monospace;
   transition: all var(--transition-speed);
 }
 
-.menu-button:hover, .menu-button.active {
+.menu-button:hover,
+.menu-button.active {
   background-color: var(--primary-color);
 }
 
@@ -454,7 +482,8 @@ canvas {
 }
 
 /* Timeline Panel Specifics */
-.timeline-controls, .animation-controls {
+.timeline-controls,
+.animation-controls {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
@@ -478,7 +507,8 @@ canvas {
   border-color: var(--highlight-color);
 }
 
-.control-button.active, .toggle-button.active {
+.control-button.active,
+.toggle-button.active {
   background-color: var(--primary-color);
   border-color: var(--highlight-color);
 }
@@ -593,15 +623,15 @@ canvas {
 }
 
 .toast.success {
-  border-left: 4px solid #00E676;
+  border-left: 4px solid #00e676;
 }
 
 .toast.error {
-  border-left: 4px solid #FF1744;
+  border-left: 4px solid #ff1744;
 }
 
 .toast.warning {
-  border-left: 4px solid #FFAB00;
+  border-left: 4px solid #ffab00;
 }
 
 /* CRT Flicker Animation */
@@ -679,19 +709,29 @@ canvas {
 /* Text glitch effect */
 @keyframes textGlitch {
   0% {
-    text-shadow: 2px 0 0 var(--highlight-color), -2px 0 0 var(--accent-color);
+    text-shadow:
+      2px 0 0 var(--highlight-color),
+      -2px 0 0 var(--accent-color);
   }
   25% {
-    text-shadow: -2px 0 0 var(--highlight-color), 2px 0 0 var(--accent-color);
+    text-shadow:
+      -2px 0 0 var(--highlight-color),
+      2px 0 0 var(--accent-color);
   }
   50% {
-    text-shadow: 1px 0 0 var(--highlight-color), -1px 0 0 var(--accent-color);
+    text-shadow:
+      1px 0 0 var(--highlight-color),
+      -1px 0 0 var(--accent-color);
   }
   75% {
-    text-shadow: -1px 0 0 var(--highlight-color), 1px 0 0 var(--accent-color);
+    text-shadow:
+      -1px 0 0 var(--highlight-color),
+      1px 0 0 var(--accent-color);
   }
   100% {
-    text-shadow: 2px 0 0 var(--highlight-color), -2px 0 0 var(--accent-color);
+    text-shadow:
+      2px 0 0 var(--highlight-color),
+      -2px 0 0 var(--accent-color);
   }
 }
 
@@ -715,21 +755,27 @@ canvas {
 }
 
 /* Form Controls */
-input[type="text"], input[type="number"], select, textarea {
+input[type="text"],
+input[type="number"],
+select,
+textarea {
   background-color: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--border-color);
   color: var(--text-color);
   padding: 5px;
-  font-family: 'VoidFont', monospace;
+  font-family: "VoidFont", monospace;
   outline: none;
 }
 
-input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
   border-color: var(--highlight-color);
 }
 
 button {
-  font-family: 'VoidFont', monospace;
+  font-family: "VoidFont", monospace;
   outline: none;
 }
 

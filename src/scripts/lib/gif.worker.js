@@ -4,16 +4,16 @@
 // or use a library like gif.js which provides this file
 
 // Simple implementation to avoid errors
-self.onmessage = function(e) {
+self.onmessage = function (e) {
   // Process the frame data
-  const frame = e.data.frame;
-  const index = e.data.index;
-  
+  const frame = e.data.frame
+  const index = e.data.index
+
   // In a real implementation, this would encode the frame as part of a GIF
   // For now, just send back a success message
   self.postMessage({
     type: 'progress',
-    index: index,
-    frame: frame
-  });
-};
+    index,
+    frame
+  })
+}
