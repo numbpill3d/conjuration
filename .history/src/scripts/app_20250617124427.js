@@ -3,7 +3,6 @@
  *
  * This is the main entry point for the application that initializes
  * all components and manages the application state.
-const voidAPI = require('./lib/voidAPI');
  */
 
 const voidAPI = require('./lib/voidAPI');
@@ -435,16 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
           uiManager.showToast('Failed to export PNG', 'error');
         }
       }).catch(error => {
-voidAPI.exportPng(pngDataUrl).then(result => {
-      if (result.success) {
-        menuSystem.closeAllMenus();
-        uiManager.showToast('PNG exported successfully', 'success');
-      } else {
-        uiManager.showToast('Failed to export PNG', 'error');
-      }
-    }).catch(error => {
-      uiManager.showToast(`PNG export failed: ${error.message}`, 'error');
-    });
         uiManager.showToast(`PNG export failed: ${error.message}`, 'error');
       });
     } catch (error) {
@@ -455,50 +444,6 @@ voidAPI.exportPng(pngDataUrl).then(result => {
   function handleExportGIF() {
     uiManager.showLoadingDialog('Generating GIF...');
     const frameDelay = parseInt(document.getElementById('frame-delay').value);
-try {
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
-          uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
-        }).catch(error => {
-          uiManager.hideLoadingDialog();
-          uiManager.showToast(`GIF export failed: ${error.message}`, 'error');
-        });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast(`GIF generation failed: ${error.message}`, 'error');
-      });
-    } catch (error) {
-      uiManager.hideLoadingDialog();
-      uiManager.showToast(`GIF export error: ${error.message}`, 'error');
-    }
-try {
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
-          uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
-        }).catch(error => {
-          uiManager.hideLoadingDialog();
-          uiManager.showToast(`GIF export failed: ${error.message}`, 'error');
-        });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast(`GIF generation failed: ${error.message}`, 'error');
-      });
-    } catch (error) {
-      uiManager.hideLoadingDialog();
-      uiManager.showToast(`GIF export error: ${error.message}`, 'error');
-    }
 
     try {
       gifExporter.generateGif(frameDelay).then(gifData => {
