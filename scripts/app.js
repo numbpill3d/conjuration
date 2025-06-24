@@ -7,6 +7,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize the application
     const app = new VoidSketchApp();
+    
+    // Expose app instance to window for Electron IPC
+    window.voidApp = {
+        hasUnsavedChanges: () => app.hasUnsavedChanges(),
+        saveProject: () => app.saveProject()
+    };
 });
 
 /**
@@ -32,6 +38,9 @@ class VoidSketchApp {
             }
         };
         
+        // Store event listeners for cleanup
+        this.eventListeners = new Map();
+        
         // Initialize components
         this.initializeComponents();
         
@@ -43,6 +52,26 @@ class VoidSketchApp {
         
         // Set window title
         this.updateWindowTitle();
+        
+        // Handle window unload
+        window.addEventListener('unload', () => this.cleanup());
+    }
+    
+    cleanup() {
+        // Remove all registered event listeners
+        this.eventListeners.forEach((listener, event) => {
+            document.removeEventListener(event, listener);
+        });
+        
+        // Clear event listener map
+        this.eventListeners.clear();
+        
+        // Clean up components
+        this.pixelCanvas.cleanup();
+        this.timeline.cleanup();
+        this.effectsEngine.cleanup();
+        this.brushEngine.cleanup();
+        this.glitchTool.cleanup();
     }
     
     initializeComponents() {
@@ -89,58 +118,68 @@ class VoidSketchApp {
     }
     
     setupEventListeners() {
+        // Helper function to add tracked event listener
+        const addListener = (event, handler) => {
+            this.eventListeners.set(event, handler);
+            document.addEventListener(event, handler);
+        };
+
         // UI Event Listeners
-        document.addEventListener('ui-new-project', () => this.createNewProject());
-        document.addEventListener('ui-open-project', () => this.openProject());
-        document.addEventListener('ui-save-project', () => this.saveProject());
-        document.addEventListener('ui-save-project-as', () => this.saveProjectAs());
+        addListener('ui-new-project', () => this.createNewProject());
+        addListener('ui-open-project', () => this.openProject());
+        addListener('ui-save-project', () => this.saveProject());
+        addListener('ui-save-project-as', () => this.saveProjectAs());
         
-        document.addEventListener('ui-undo', () => this.pixelCanvas.undo());
-        document.addEventListener('ui-redo', () => this.pixelCanvas.redo());
+        addListener('ui-undo', () => this.pixelCanvas.undo());
+        addListener('ui-redo', () => this.pixelCanvas.redo());
         
-        document.addEventListener('ui-copy', () => this.copySelection());
-        document.addEventListener('ui-cut', () => this.cutSelection());
-        document.addEventListener('ui-paste', () => this.pasteSelection());
-        document.addEventListener('ui-select-all', () => this.selectAll());
-        document.addEventListener('ui-deselect', () => this.deselect());
+        addListener('ui-copy', () => this.copySelection());
+        addListener('ui-cut', () => this.cutSelection());
+        addListener('ui-paste', () => this.pasteSelection());
+        addListener('ui-select-all', () => this.selectAll());
+        addListener('ui-deselect', () => this.deselect());
         
-        document.addEventListener('ui-toggle-grid', () => this.pixelCanvas.toggleGrid());
-        document.addEventListener('ui-toggle-rulers', () => this.toggleRulers());
+        addListener('ui-toggle-grid', () => this.pixelCanvas.toggleGrid());
+        addListener('ui-toggle-rulers', () => this.toggleRulers());
         
-        document.addEventListener('ui-export-png', () => this.exportPNG());
-        document.addEventListener('ui-export-gif', () => this.exportGIF());
-        document.addEventListener('ui-export-sprite-sheet', () => this.exportSpriteSheet());
+        addListener('ui-export-png', () => this.exportPNG());
+        addListener('ui-export-gif', () => this.exportGIF());
+        addListener('ui-export-sprite-sheet', () => this.exportSpriteSheet());
         
-        document.addEventListener('ui-toggle-lore-layer', () => this.toggleLoreLayer());
-        document.addEventListener('ui-get-metadata', (event) => {
+        addListener('ui-toggle-lore-layer', () => this.toggleLoreLayer());
+        addListener('ui-get-metadata', (event) => {
             if (event.detail && typeof event.detail === 'function') {
                 event.detail(this.state.metadata);
             }
         });
-        document.addEventListener('ui-save-metadata', (event) => this.saveMetadata(event.detail));
-        document.addEventListener('ui-add-sigil', (event) => this.addSigil(event.detail));
-        document.addEventListener('ui-apply-glitch', (event) => this.applyGlitch(event.detail));
+        addListener('ui-save-metadata', (event) => this.saveMetadata(event.detail));
+        addListener('ui-add-sigil', (event) => this.addSigil(event.detail));
+        addListener('ui-apply-glitch', (event) => this.applyGlitch(event.detail));
         
-        document.addEventListener('ui-set-tool', (event) => {
+        addListener('ui-set-tool', (event) => {
             if (event.detail) {
                 this.brushEngine.setTool(event.detail);
             }
         });
         
         // Handle palette changes
-        document.addEventListener('palette-changed', () => {
+        addListener('palette-changed', () => {
             this.markAsModified();
         });
         
         // Handle theme changes
-        document.addEventListener('theme-changed', () => {
+        addListener('theme-changed', () => {
             this.updateEffectsForTheme();
         });
         
         // Track modifications
-        this.pixelCanvas.canvas.addEventListener('mouseup', () => {
-            this.markAsModified();
-        });
+        const modificationHandler = () => this.markAsModified();
+        this.pixelCanvas.canvas.addEventListener('mouseup', modificationHandler);
+        this.eventListeners.set('canvas-mouseup', modificationHandler);
+    }
+    
+    hasUnsavedChanges() {
+        return this.state.isModified;
     }
     
     updateWindowTitle() {
@@ -198,60 +237,112 @@ class VoidSketchApp {
     
     async openProject() {
         try {
+            // Check for unsaved changes first
+            if (this.state.isModified) {
+                const { response } = await this.uiManager.showConfirmDialog(
+                    'Unsaved Changes',
+                    'Do you want to save your changes before opening another project?',
+                    ['Save', "Don't Save", 'Cancel']
+                );
+                
+                if (response === 0) { // Save
+                    const saveResult = await this.saveProject();
+                    if (!saveResult.success) {
+                        return; // Don't proceed if save failed
+                    }
+                } else if (response === 2) { // Cancel
+                    return;
+                }
+                // If response is 1 (Don't Save), proceed with opening
+            }
+            
             // Show loading indicator
-            this.uiManager.showToast('Loading project...', 'info');
+            const progressToast = this.uiManager.showToast('Opening project...', 'info', 0);
             
             // Use Electron IPC to open a file dialog
             const result = await window.voidAPI.openProject();
             
             if (result.success && result.data) {
-                // Parse the project data
-                const projectData = result.data;
-                
-                // Load canvas size
-                if (projectData.canvasSize) {
-                    this.pixelCanvas.setCanvasSize(
-                        projectData.canvasSize.width,
-                        projectData.canvasSize.height
-                    );
+                try {
+                    // Parse the project data
+                    const projectData = result.data;
+                    
+                    // Validate project data
+                    if (!projectData || !projectData.frames || !Array.isArray(projectData.frames)) {
+                        throw new Error('Invalid project file format');
+                    }
+                    
+                    progressToast.updateMessage('Loading canvas size...');
+                    
+                    // Load canvas size
+                    if (projectData.canvasSize) {
+                        if (!projectData.canvasSize.width || !projectData.canvasSize.height ||
+                            projectData.canvasSize.width <= 0 || projectData.canvasSize.height <= 0) {
+                            throw new Error('Invalid canvas dimensions');
+                        }
+                        
+                        this.pixelCanvas.setCanvasSize(
+                            projectData.canvasSize.width,
+                            projectData.canvasSize.height
+                        );
+                    }
+                    
+                    progressToast.updateMessage('Loading frames...');
+                    
+                    // Load frames
+                    if (projectData.frames && Array.isArray(projectData.frames)) {
+                        await this.timeline.setFramesFromData(projectData.frames, (progress) => {
+                            progressToast.updateMessage(`Loading frames... ${Math.round(progress * 100)}%`);
+                        });
+                    }
+                    
+                    progressToast.updateMessage('Loading palette...');
+                    
+                    // Load palette
+                    if (projectData.palette) {
+                        this.paletteTool.setPalette(projectData.palette);
+                    }
+                    
+                    progressToast.updateMessage('Loading effects...');
+                    
+                    // Load effects
+                    if (projectData.effects) {
+                        this.effectsEngine.setEffectsSettings(projectData.effects);
+                    }
+                    
+                    progressToast.updateMessage('Loading metadata...');
+                    
+                    // Load metadata
+                    if (projectData.metadata) {
+                        this.state.metadata = projectData.metadata;
+                    }
+                    
+                    // Load lore layer
+                    if (projectData.loreLayer) {
+                        this.state.loreLayer = projectData.loreLayer;
+                    }
+                    
+                    // Update project state
+                    this.state.currentFilePath = result.filePath;
+                    this.state.projectName = this.getFileNameFromPath(result.filePath);
+                    this.clearModified();
+                    
+                    progressToast.close();
+                    this.uiManager.showToast('Project loaded successfully', 'success');
+                } catch (parseError) {
+                    throw new Error(`Failed to parse project file: ${parseError.message}`);
                 }
-                
-                // Load frames
-                if (projectData.frames && Array.isArray(projectData.frames)) {
-                    await this.timeline.setFramesFromData(projectData.frames);
-                }
-                
-                // Load palette
-                if (projectData.palette) {
-                    this.paletteTool.setPalette(projectData.palette);
-                }
-                
-                // Load effects
-                if (projectData.effects) {
-                    this.effectsEngine.setEffectsSettings(projectData.effects);
-                }
-                
-                // Load metadata
-                if (projectData.metadata) {
-                    this.state.metadata = projectData.metadata;
-                }
-                
-                // Load lore layer
-                if (projectData.loreLayer) {
-                    this.state.loreLayer = projectData.loreLayer;
-                }
-                
-                // Update project state
-                this.state.currentFilePath = result.filePath;
-                this.state.projectName = this.getFileNameFromPath(result.filePath);
-                this.clearModified();
-                
-                // Show success message
-                this.uiManager.showToast('Project loaded successfully', 'success');
+            } else {
+                throw new Error(result.error || 'No file selected');
             }
         } catch (error) {
             console.error('Error opening project:', error);
-            this.uiManager.showToast('Failed to open project: ' + error.message, 'error');
+            this.uiManager.showToast(`Failed to open project: ${error.message}`, 'error', 5000);
+            
+            // Log detailed error for debugging
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
         }
     }
     
@@ -263,33 +354,64 @@ class VoidSketchApp {
         
         try {
             // Show saving indicator
-            this.uiManager.showToast('Saving project...', 'info');
+            const progressToast = this.uiManager.showToast('Preparing project data...', 'info', 0);
+            
+            // Save current frame first
+            this.timeline.frames[this.timeline.currentFrameIndex].setImageData(
+                this.pixelCanvas.getCanvasImageData()
+            );
             
             // Prepare project data
             const projectData = this.prepareProjectData();
+            
+            if (!projectData || !projectData.frames || projectData.frames.length === 0) {
+                throw new Error('Invalid project data');
+            }
+            
+            progressToast.updateMessage('Saving project file...');
             
             // Use Electron IPC to save the file
             const result = await window.voidAPI.saveProject(projectData);
             
             if (result.success) {
+                progressToast.close();
                 this.clearModified();
                 this.uiManager.showToast('Project saved successfully', 'success');
+                return { success: true };
             } else {
-                throw new Error(result.error || 'Unknown error');
+                throw new Error(result.error || 'Failed to save project file');
             }
         } catch (error) {
             console.error('Error saving project:', error);
-            this.uiManager.showToast('Failed to save project: ' + error.message, 'error');
+            this.uiManager.showToast(`Failed to save project: ${error.message}`, 'error', 5000);
+            
+            // Log detailed error for debugging
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
+            
+            return { success: false, error: error.message };
         }
     }
     
     async saveProjectAs() {
         try {
             // Show saving indicator
-            this.uiManager.showToast('Saving project...', 'info');
+            const progressToast = this.uiManager.showToast('Preparing project data...', 'info', 0);
+            
+            // Save current frame first
+            this.timeline.frames[this.timeline.currentFrameIndex].setImageData(
+                this.pixelCanvas.getCanvasImageData()
+            );
             
             // Prepare project data
             const projectData = this.prepareProjectData();
+            
+            if (!projectData || !projectData.frames || projectData.frames.length === 0) {
+                throw new Error('Invalid project data');
+            }
+            
+            progressToast.updateMessage('Saving project file...');
             
             // Use Electron IPC to save the file with dialog
             const result = await window.voidAPI.saveProject(projectData);
@@ -301,13 +423,22 @@ class VoidSketchApp {
                 this.clearModified();
                 this.updateWindowTitle();
                 
+                progressToast.close();
                 this.uiManager.showToast('Project saved successfully', 'success');
+                return { success: true };
             } else {
-                throw new Error(result.error || 'Unknown error');
+                throw new Error(result.error || 'Failed to save project file');
             }
         } catch (error) {
             console.error('Error saving project:', error);
-            this.uiManager.showToast('Failed to save project: ' + error.message, 'error');
+            this.uiManager.showToast(`Failed to save project: ${error.message}`, 'error', 5000);
+            
+            // Log detailed error for debugging
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
+            
+            return { success: false, error: error.message };
         }
     }
     
@@ -346,20 +477,35 @@ class VoidSketchApp {
     
     async exportPNG() {
         try {
+            // Show loading indicator
+            const progressToast = this.uiManager.showToast('Preparing PNG export...', 'info', 0);
+            
             // Get canvas data URL
             const dataUrl = this.pixelCanvas.getCanvasData();
+            
+            if (!dataUrl || !dataUrl.startsWith('data:image/png;base64,')) {
+                throw new Error('Invalid PNG data generated');
+            }
+            
+            progressToast.updateMessage('Saving PNG file...');
             
             // Use Electron IPC to save the PNG
             const result = await window.voidAPI.exportPng(dataUrl);
             
             if (result.success) {
+                progressToast.close();
                 this.uiManager.showToast('PNG exported successfully', 'success');
             } else {
-                throw new Error(result.error || 'Unknown error');
+                throw new Error(result.error || 'Failed to save PNG file');
             }
         } catch (error) {
             console.error('Error exporting PNG:', error);
-            this.uiManager.showToast('Failed to export PNG: ' + error.message, 'error');
+            this.uiManager.showToast(`Failed to export PNG: ${error.message}`, 'error', 5000);
+            
+            // Log detailed error for debugging
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
         }
     }
     
@@ -481,47 +627,100 @@ class VoidSketchApp {
     
     async processGifExport(options) {
         try {
-            // Show loading indicator
-            this.uiManager.showToast('Generating GIF...', 'info');
+            // Show loading indicator with progress
+            const progressToast = this.uiManager.showToast('Preparing frames for GIF export...', 'info', 0);
             
             // Save current frame first to ensure it's included
             this.timeline.frames[this.timeline.currentFrameIndex].setImageData(
                 this.pixelCanvas.getCanvasImageData()
             );
             
-            // Create GIF with options
-            const gifData = await this.gifExporter.exportGif(options);
+            // Validate frames
+            if (this.timeline.frames.length === 0) {
+                throw new Error('No frames to export');
+            }
+            
+            // Update progress
+            progressToast.updateMessage('Generating GIF...');
+            
+            // Create GIF with options and progress callback
+            const gifData = await this.gifExporter.exportGif(options, (progress) => {
+                progressToast.updateMessage(`Generating GIF... ${Math.round(progress * 100)}%`);
+            });
+            
+            if (!gifData || gifData.length === 0) {
+                throw new Error('Failed to generate GIF data');
+            }
+            
+            // Update progress
+            progressToast.updateMessage('Saving GIF file...');
             
             // Use Electron IPC to save the GIF
             const result = await window.voidAPI.exportGif(gifData);
             
             if (result.success) {
+                // Close progress toast
+                progressToast.close();
                 this.uiManager.showToast('GIF exported successfully', 'success');
             } else {
-                throw new Error(result.error || 'Unknown error');
+                throw new Error(result.error || 'Failed to save GIF file');
             }
         } catch (error) {
             console.error('Error exporting GIF:', error);
-            this.uiManager.showToast('Failed to export GIF: ' + error.message, 'error');
+            this.uiManager.showToast(`Failed to export GIF: ${error.message}`, 'error', 5000);
+            
+            // Log detailed error for debugging
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
         }
     }
     
     async exportSpriteSheet() {
         try {
+            // Show loading indicator
+            const progressToast = this.uiManager.showToast('Preparing sprite sheet...', 'info', 0);
+            
+            // Validate frames
+            if (this.timeline.frames.length === 0) {
+                throw new Error('No frames available for sprite sheet export');
+            }
+            
+            // Save current frame first to ensure it's included
+            this.timeline.frames[this.timeline.currentFrameIndex].setImageData(
+                this.pixelCanvas.getCanvasImageData()
+            );
+            
+            progressToast.updateMessage('Generating sprite sheet...');
+            
             // Generate sprite sheet
-            const spriteSheetDataUrl = await this.gifExporter.exportSpriteSheet();
+            const spriteSheetDataUrl = await this.gifExporter.exportSpriteSheet((progress) => {
+                progressToast.updateMessage(`Generating sprite sheet... ${Math.round(progress * 100)}%`);
+            });
+            
+            if (!spriteSheetDataUrl || !spriteSheetDataUrl.startsWith('data:image/png;base64,')) {
+                throw new Error('Invalid sprite sheet data generated');
+            }
+            
+            progressToast.updateMessage('Saving sprite sheet...');
             
             // Use Electron IPC to save the sprite sheet
             const result = await window.voidAPI.exportPng(spriteSheetDataUrl);
             
             if (result.success) {
+                progressToast.close();
                 this.uiManager.showToast('Sprite sheet exported successfully', 'success');
             } else {
-                throw new Error(result.error || 'Unknown error');
+                throw new Error(result.error || 'Failed to save sprite sheet');
             }
         } catch (error) {
             console.error('Error exporting sprite sheet:', error);
-            this.uiManager.showToast('Failed to export sprite sheet: ' + error.message, 'error');
+            this.uiManager.showToast(`Failed to export sprite sheet: ${error.message}`, 'error', 5000);
+            
+            // Log detailed error for debugging
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
         }
     }
     

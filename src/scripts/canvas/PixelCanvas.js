@@ -68,6 +68,10 @@ class PixelCanvas {
     // Grid display
     this.showGrid = true;
 
+    // Selection and clipboard
+    this.selection = null; // {x, y, width, height}
+    this.clipboard = null; // {pixels, width, height}
+
     // Initialize the canvas
     this.initCanvas();
 
@@ -467,6 +471,22 @@ class PixelCanvas {
     if (this.showGrid) {
       this.drawGrid();
     }
+
+    // Draw selection rectangle if present
+    if (this.selection) {
+      this.uiCtx.save();
+      this.uiCtx.strokeStyle = '#FFD700';
+      this.uiCtx.lineWidth = 2;
+      this.uiCtx.setLineDash([4, 2]);
+      const { x, y, width, height } = this.selection;
+      this.uiCtx.strokeRect(
+        x * this.pixelSize * this.zoom,
+        y * this.pixelSize * this.zoom,
+        width * this.pixelSize * this.zoom,
+        height * this.pixelSize * this.zoom
+      );
+      this.uiCtx.restore();
+    }
   }
 
   /**
@@ -491,26 +511,6 @@ class PixelCanvas {
 
       // Draw horizontal lines
       for (let y = 0; y <= this.height; y++) {
-        const yPos = y * this.pixelSize * this.zoom;
-        this.uiCtx.moveTo(0, yPos);
-        this.uiCtx.lineTo(this.canvas.width, yPos);
-      }
-
-      // Draw all lines at once
-      this.uiCtx.stroke();
-    }
-  }
-
-  /**
-   * Set the effects settings
-   * @param {Object} effects - Effects settings
-   */
-  setEffects(effects) {
-    this.effects = {...this.effects, ...effects};
-  }
-
-  /**
-   * Animate the effects
    */
   animateEffects() {
     // Use a bound function to avoid creating a new function on each frame
