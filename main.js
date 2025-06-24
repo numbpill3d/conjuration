@@ -42,6 +42,38 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
   }
 
+  // Handle close event
+  mainWindow.on('close', async (e) => {
+    e.preventDefault(); // Prevent immediate closing
+    
+    // Check if there are unsaved changes
+    const result = await mainWindow.webContents.executeJavaScript('window.voidApp && window.voidApp.hasUnsavedChanges()');
+    
+    if (result) {
+      const { response } = await dialog.showMessageBox(mainWindow, {
+        type: 'question',
+        buttons: ['Save', "Don't Save", 'Cancel'],
+        title: 'Unsaved Changes',
+        message: 'Do you want to save your changes before closing?',
+        defaultId: 0,
+        cancelId: 2
+      });
+
+      if (response === 0) { // Save
+        // Trigger save
+        const saveResult = await mainWindow.webContents.executeJavaScript('window.voidApp.saveProject()');
+        if (saveResult.success) {
+          mainWindow.destroy();
+        }
+      } else if (response === 1) { // Don't Save
+        mainWindow.destroy();
+      }
+      // If response is 2 (Cancel), do nothing and keep the window open
+    } else {
+      mainWindow.destroy();
+    }
+  });
+
   // Window events
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -74,16 +106,22 @@ ipcMain.handle('save-project', async (event, projectData) => {
     filters: [{ name: 'VOIDSKETCH Files', extensions: ['void'] }]
   });
 
-  if (filePath) {
-    try {
-      fs.writeFileSync(filePath, JSON.stringify(projectData));
-      return { success: true, filePath };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+  if (!filePath) {
+    return { success: false, error: 'No file path selected' };
   }
-  
-  return { success: false };
+
+  try {
+    // Ensure the directory exists
+    const directory = path.dirname(filePath);
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory, { recursive: true });
+    }
+
+    fs.writeFileSync(filePath, JSON.stringify(projectData, null, 2));
+    return { success: true, filePath };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
 });
 
 ipcMain.handle('open-project', async () => {
@@ -115,7 +153,14 @@ ipcMain.handle('export-gif', async (event, gifData) => {
   if (filePath) {
     try {
       // Handle binary data from renderer
-      const buffer = Buffer.from(gifData);
+      const buffer = Buffer.from(gifData instanceof Uint8Array ? gifData : new Uint8Array(gifData));
+      
+      // Ensure the directory exists
+      const directory = path.dirname(filePath);
+      if (!fs.existsSync(directory)) {
+        fs.mkdirSync(directory, { recursive: true });
+      }
+      
       fs.writeFileSync(filePath, buffer);
       return { success: true, filePath };
     } catch (error) {
