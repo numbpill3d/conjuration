@@ -6,10 +6,10 @@
 const voidAPI = require('./lib/voidAPI');
  */
 
-const voidAPI = require('./lib/voidAPI');
+const voidAPI = require("./lib/voidAPI");
 
 // Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI Manager
   const uiManager = new UIManager();
 
@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeManager = new ThemeManager();
 
   // Add data-text attributes to section titles for glitch effect
-  document.querySelectorAll('.section-title').forEach(title => {
-    title.setAttribute('data-text', title.textContent);
+  document.querySelectorAll(".section-title").forEach((title) => {
+    title.setAttribute("data-text", title.textContent);
   });
 
   // Initialize Menu System
@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Canvas with temporary size (will be changed by user selection)
   const pixelCanvas = new PixelCanvas({
-    canvasId: 'pixel-canvas',
-    effectsCanvasId: 'effects-canvas',
-    uiCanvasId: 'ui-canvas',
+    canvasId: "pixel-canvas",
+    effectsCanvasId: "effects-canvas",
+    uiCanvasId: "ui-canvas",
     width: 64,
     height: 64,
-    pixelSize: 8
+    pixelSize: 8,
   });
 
   // Show canvas size selection dialog on startup
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   timeline.addFrame();
 
   // Show welcome message
-  uiManager.showToast('Welcome to Conjuration', 'success');
+  uiManager.showToast("Welcome to Conjuration", "success");
 
   /**
    * Set up all event listeners for the application
@@ -80,23 +80,28 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAnimationControls();
     setupZoomControls();
     setupMiscControls();
-    
+
     updateCanvasSizeDisplay();
-    uiManager.setActiveTool('brush-pencil');
-    uiManager.setActiveSymmetry('symmetry-none');
-    uiManager.setActivePalette('palette-monochrome');
+    uiManager.setActiveTool("brush-pencil");
+    uiManager.setActiveSymmetry("symmetry-none");
+    uiManager.setActivePalette("palette-monochrome");
   }
 
   function setupWindowControls() {
-    document.getElementById('minimize-button').addEventListener('click', () => voidAPI.minimizeWindow());
-    
-    document.getElementById('maximize-button').addEventListener('click', () => {
-      voidAPI.maximizeWindow().then(result => {
-        document.getElementById('maximize-button').textContent = result.isMaximized ? '□' : '[]';
+    document
+      .getElementById("minimize-button")
+      .addEventListener("click", () => voidAPI.minimizeWindow());
+
+    document.getElementById("maximize-button").addEventListener("click", () => {
+      voidAPI.maximizeWindow().then((result) => {
+        document.getElementById("maximize-button").textContent =
+          result.isMaximized ? "□" : "[]";
       });
     });
-    
-    document.getElementById('close-button').addEventListener('click', () => voidAPI.closeWindow());
+
+    document
+      .getElementById("close-button")
+      .addEventListener("click", () => voidAPI.closeWindow());
   }
 
   function setupMenuManager() {
@@ -104,73 +109,89 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setupFileMenu() {
-    document.getElementById('new-project').addEventListener('click', handleNewProject);
-    document.getElementById('open-project').addEventListener('click', handleOpenProject);
-    document.getElementById('save-project').addEventListener('click', handleSaveProject);
+    document
+      .getElementById("new-project")
+      .addEventListener("click", handleNewProject);
+    document
+      .getElementById("open-project")
+      .addEventListener("click", handleOpenProject);
+    document
+      .getElementById("save-project")
+      .addEventListener("click", handleSaveProject);
   }
 
   function setupEditMenu() {
-    document.getElementById('undo').addEventListener('click', handleUndo);
-    document.getElementById('redo').addEventListener('click', handleRedo);
-    document.getElementById('toggle-grid').addEventListener('click', handleToggleGrid);
-    document.getElementById('resize-canvas').addEventListener('click', handleResizeCanvas);
+    document.getElementById("undo").addEventListener("click", handleUndo);
+    document.getElementById("redo").addEventListener("click", handleRedo);
+    document
+      .getElementById("toggle-grid")
+      .addEventListener("click", handleToggleGrid);
+    document
+      .getElementById("resize-canvas")
+      .addEventListener("click", handleResizeCanvas);
   }
 
   function setupExportMenu() {
-    document.getElementById('export-png').addEventListener('click', handleExportPNG);
-    document.getElementById('export-gif').addEventListener('click', handleExportGIF);
+    document
+      .getElementById("export-png")
+      .addEventListener("click", handleExportPNG);
+    document
+      .getElementById("export-gif")
+      .addEventListener("click", handleExportGIF);
   }
 
   function setupThemeMenu() {
-    document.getElementById('theme-lain-dive').addEventListener('click', () => {
-      themeManager.setTheme('lain-dive');
+    document.getElementById("theme-lain-dive").addEventListener("click", () => {
+      themeManager.setTheme("lain-dive");
       menuSystem.closeAllMenus();
     });
 
-    document.getElementById('theme-morrowind-glyph').addEventListener('click', () => {
-      themeManager.setTheme('morrowind-glyph');
-      menuSystem.closeAllMenus();
-    });
+    document
+      .getElementById("theme-morrowind-glyph")
+      .addEventListener("click", () => {
+        themeManager.setTheme("morrowind-glyph");
+        menuSystem.closeAllMenus();
+      });
 
-    document.getElementById('theme-monolith').addEventListener('click', () => {
-      themeManager.setTheme('monolith');
+    document.getElementById("theme-monolith").addEventListener("click", () => {
+      themeManager.setTheme("monolith");
       menuSystem.closeAllMenus();
     });
   }
 
   function setupLoreMenu() {
-    document.getElementById('lore-option1').addEventListener('click', () => {
-      themeManager.setTheme('lain-dive');
+    document.getElementById("lore-option1").addEventListener("click", () => {
+      themeManager.setTheme("lain-dive");
       menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Lain Dive activated', 'success');
+      uiManager.showToast("Lore: Lain Dive activated", "success");
     });
 
-    document.getElementById('lore-option2').addEventListener('click', () => {
-      themeManager.setTheme('morrowind-glyph');
+    document.getElementById("lore-option2").addEventListener("click", () => {
+      themeManager.setTheme("morrowind-glyph");
       menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Morrowind Glyph activated', 'success');
+      uiManager.showToast("Lore: Morrowind Glyph activated", "success");
     });
 
-    document.getElementById('lore-option3').addEventListener('click', () => {
-      themeManager.setTheme('monolith');
+    document.getElementById("lore-option3").addEventListener("click", () => {
+      themeManager.setTheme("monolith");
       menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Monolith activated', 'success');
+      uiManager.showToast("Lore: Monolith activated", "success");
     });
   }
 
   function setupToolButtons() {
-    document.querySelectorAll('.tool-button').forEach(button => {
-      button.addEventListener('click', () => {
+    document.querySelectorAll(".tool-button").forEach((button) => {
+      button.addEventListener("click", () => {
         const toolId = button.id;
 
-        if (toolId.startsWith('brush-')) {
-          const brushType = toolId.replace('brush-', '');
+        if (toolId.startsWith("brush-")) {
+          const brushType = toolId.replace("brush-", "");
           brushEngine.setActiveBrush(brushType);
           uiManager.setActiveTool(toolId);
         }
 
-        if (toolId.startsWith('symmetry-')) {
-          const symmetryType = toolId.replace('symmetry-', '');
+        if (toolId.startsWith("symmetry-")) {
+          const symmetryType = toolId.replace("symmetry-", "");
           symmetryTools.setSymmetryMode(symmetryType);
           uiManager.setActiveSymmetry(toolId);
         }
@@ -179,10 +200,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setupPaletteOptions() {
-    document.querySelectorAll('.palette-option').forEach(option => {
-      option.addEventListener('click', () => {
+    document.querySelectorAll(".palette-option").forEach((option) => {
+      option.addEventListener("click", () => {
         const paletteId = option.id;
-        const paletteName = paletteId.replace('palette-', '');
+        const paletteName = paletteId.replace("palette-", "");
         paletteTool.setPalette(paletteName);
         uiManager.setActivePalette(paletteId);
       });
@@ -190,113 +211,136 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setupEffectControls() {
-    document.querySelectorAll('.effect-checkbox input').forEach(checkbox => {
-      checkbox.addEventListener('change', updateEffects);
+    document.querySelectorAll(".effect-checkbox input").forEach((checkbox) => {
+      checkbox.addEventListener("change", updateEffects);
     });
 
-    document.getElementById('effect-intensity').addEventListener('input', updateEffects);
+    document
+      .getElementById("effect-intensity")
+      .addEventListener("input", updateEffects);
   }
 
   function setupBrushControls() {
-    document.getElementById('brush-size').addEventListener('input', (e) => {
+    document.getElementById("brush-size").addEventListener("input", (e) => {
       const size = parseInt(e.target.value);
       brushEngine.setBrushSize(size);
-      document.getElementById('brush-size-value').textContent = size;
+      document.getElementById("brush-size-value").textContent = size;
     });
   }
 
   function setupTimelineControls() {
-    document.getElementById('add-frame').addEventListener('click', () => timeline.addFrame());
-    document.getElementById('duplicate-frame').addEventListener('click', () => timeline.duplicateCurrentFrame());
-    document.getElementById('delete-frame').addEventListener('click', handleDeleteFrame);
+    document
+      .getElementById("add-frame")
+      .addEventListener("click", () => timeline.addFrame());
+    document
+      .getElementById("duplicate-frame")
+      .addEventListener("click", () => timeline.duplicateCurrentFrame());
+    document
+      .getElementById("delete-frame")
+      .addEventListener("click", handleDeleteFrame);
   }
 
   function setupAnimationControls() {
-    document.getElementById('play-animation').addEventListener('click', () => timeline.playAnimation());
-    document.getElementById('stop-animation').addEventListener('click', () => timeline.stopAnimation());
-    
-    document.getElementById('loop-animation').addEventListener('click', (e) => {
+    document
+      .getElementById("play-animation")
+      .addEventListener("click", () => timeline.playAnimation());
+    document
+      .getElementById("stop-animation")
+      .addEventListener("click", () => timeline.stopAnimation());
+
+    document.getElementById("loop-animation").addEventListener("click", (e) => {
       const loopButton = e.currentTarget;
-      loopButton.classList.toggle('active');
-      timeline.setLooping(loopButton.classList.contains('active'));
+      loopButton.classList.toggle("active");
+      timeline.setLooping(loopButton.classList.contains("active"));
     });
-    
-    document.getElementById('onion-skin').addEventListener('change', (e) => {
+
+    document.getElementById("onion-skin").addEventListener("change", (e) => {
       timeline.setOnionSkinning(e.target.checked);
     });
   }
 
   function setupZoomControls() {
-    document.getElementById('zoom-in').addEventListener('click', () => {
+    document.getElementById("zoom-in").addEventListener("click", () => {
       pixelCanvas.zoomIn();
       updateZoomLevel();
     });
 
-    document.getElementById('zoom-out').addEventListener('click', () => {
+    document.getElementById("zoom-out").addEventListener("click", () => {
       pixelCanvas.zoomOut();
       updateZoomLevel();
     });
 
-    document.getElementById('zoom-in-menu').addEventListener('click', () => {
+    document.getElementById("zoom-in-menu").addEventListener("click", () => {
       pixelCanvas.zoomIn();
       updateZoomLevel();
       menuSystem.closeAllMenus();
     });
 
-    document.getElementById('zoom-out-menu').addEventListener('click', () => {
+    document.getElementById("zoom-out-menu").addEventListener("click", () => {
       pixelCanvas.zoomOut();
       updateZoomLevel();
       menuSystem.closeAllMenus();
     });
 
-    document.getElementById('zoom-reset').addEventListener('click', () => {
+    document.getElementById("zoom-reset").addEventListener("click", () => {
       pixelCanvas.resetZoom();
       updateZoomLevel();
       menuSystem.closeAllMenus();
     });
 
-    document.getElementById('canvas-wrapper').addEventListener('wheel', (e) => {
-      e.preventDefault();
-      pixelCanvas.zoomIn(e.deltaY < 0);
-      updateZoomLevel();
-    }, { passive: false });
+    document.getElementById("canvas-wrapper").addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+        pixelCanvas.zoomIn(e.deltaY < 0);
+        updateZoomLevel();
+      },
+      { passive: false },
+    );
   }
 
   function setupMiscControls() {
-    document.querySelectorAll('.menu-item').forEach(item => {
-      item.addEventListener('click', (e) => {
+    document.querySelectorAll(".menu-item").forEach((item) => {
+      item.addEventListener("click", (e) => {
         e.stopPropagation();
-        document.querySelectorAll('.menu-dropdown').forEach(m => m.style.display = 'none');
-        document.querySelectorAll('.menu-button').forEach(b => b.classList.remove('active'));
+        document
+          .querySelectorAll(".menu-dropdown")
+          .forEach((m) => (m.style.display = "none"));
+        document
+          .querySelectorAll(".menu-button")
+          .forEach((b) => b.classList.remove("active"));
       });
     });
   }
 
   function handleNewProject() {
     uiManager.showConfirmDialog(
-      'Create New Project',
-      'This will clear your current project. Are you sure?',
+      "Create New Project",
+      "This will clear your current project. Are you sure?",
       () => {
         pixelCanvas.clear();
         timeline.clear();
         timeline.addFrame();
         menuSystem.closeAllMenus();
-        uiManager.showToast('New project created', 'success');
-      }
+        uiManager.showToast("New project created", "success");
+      },
     );
   }
 
   function handleOpenProject() {
-    voidAPI.openProject().then(result => {
+    voidAPI.openProject().then((result) => {
       if (result.success) {
         try {
           const projectData = result.data;
           pixelCanvas.setDimensions(projectData.width, projectData.height);
           timeline.loadFromData(projectData.frames);
           menuSystem.closeAllMenus();
-          uiManager.showToast('Project loaded successfully', 'success');
+          uiManager.showToast("Project loaded successfully", "success");
         } catch (error) {
-          uiManager.showToast('Failed to load project: ' + error.message, 'error');
+          uiManager.showToast(
+            "Failed to load project: " + error.message,
+            "error",
+          );
         }
       }
     });
@@ -309,38 +353,38 @@ document.addEventListener('DOMContentLoaded', () => {
       frames: timeline.getFramesData(),
       palette: paletteTool.getCurrentPalette(),
       effects: {
-        grain: document.getElementById('effect-grain').checked,
-        static: document.getElementById('effect-static').checked,
-        glitch: document.getElementById('effect-glitch').checked,
-        crt: document.getElementById('effect-crt').checked,
-        intensity: document.getElementById('effect-intensity').value
-      }
+        grain: document.getElementById("effect-grain").checked,
+        static: document.getElementById("effect-static").checked,
+        glitch: document.getElementById("effect-glitch").checked,
+        crt: document.getElementById("effect-crt").checked,
+        intensity: document.getElementById("effect-intensity").value,
+      },
     };
 
-    voidAPI.saveProject(projectData).then(result => {
+    voidAPI.saveProject(projectData).then((result) => {
       if (result.success) {
         menuSystem.closeAllMenus();
-        uiManager.showToast('Project saved successfully', 'success');
+        uiManager.showToast("Project saved successfully", "success");
       } else {
-        uiManager.showToast('Failed to save project', 'error');
+        uiManager.showToast("Failed to save project", "error");
       }
     });
   }
 
   function handleUndo() {
     if (pixelCanvas.undo()) {
-      uiManager.showToast('Undo successful', 'info');
+      uiManager.showToast("Undo successful", "info");
     } else {
-      uiManager.showToast('Nothing to undo', 'info');
+      uiManager.showToast("Nothing to undo", "info");
     }
     menuSystem.closeAllMenus();
   }
 
   function handleRedo() {
     if (pixelCanvas.redo()) {
-      uiManager.showToast('Redo successful', 'info');
+      uiManager.showToast("Redo successful", "info");
     } else {
-      uiManager.showToast('Nothing to redo', 'info');
+      uiManager.showToast("Nothing to redo", "info");
     }
     menuSystem.closeAllMenus();
   }
@@ -348,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function handleToggleGrid() {
     pixelCanvas.toggleGrid();
     menuSystem.closeAllMenus();
-    uiManager.showToast('Grid toggled', 'info');
+    uiManager.showToast("Grid toggled", "info");
   }
 
   function handleResizeCanvas() {
@@ -381,146 +425,194 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
-    uiManager.showModal('Resize Canvas', content, () => menuSystem.closeAllMenus());
+    uiManager.showModal("Resize Canvas", content, () =>
+      menuSystem.closeAllMenus(),
+    );
 
-    document.querySelectorAll('.preset-size-button').forEach(button => {
-      button.addEventListener('click', () => {
+    document.querySelectorAll(".preset-size-button").forEach((button) => {
+      button.addEventListener("click", () => {
         const width = parseInt(button.dataset.width);
         const height = parseInt(button.dataset.height);
-        document.getElementById('canvas-width').value = width;
-        document.getElementById('canvas-height').value = height;
+        document.getElementById("canvas-width").value = width;
+        document.getElementById("canvas-height").value = height;
       });
     });
 
-    const modalFooter = document.createElement('div');
-    modalFooter.className = 'modal-footer';
+    const modalFooter = document.createElement("div");
+    modalFooter.className = "modal-footer";
 
-    const cancelButton = document.createElement('button');
-    cancelButton.className = 'modal-button';
-    cancelButton.textContent = 'Cancel';
-    cancelButton.addEventListener('click', () => uiManager.hideModal());
+    const cancelButton = document.createElement("button");
+    cancelButton.className = "modal-button";
+    cancelButton.textContent = "Cancel";
+    cancelButton.addEventListener("click", () => uiManager.hideModal());
 
-    const resizeButton = document.createElement('button');
-    resizeButton.className = 'modal-button primary';
-    resizeButton.textContent = 'Resize';
-    resizeButton.addEventListener('click', () => {
-      const width = parseInt(document.getElementById('canvas-width').value);
-      const height = parseInt(document.getElementById('canvas-height').value);
-      const preserveContent = document.getElementById('preserve-content').checked;
+    const resizeButton = document.createElement("button");
+    resizeButton.className = "modal-button primary";
+    resizeButton.textContent = "Resize";
+    resizeButton.addEventListener("click", () => {
+      const width = parseInt(document.getElementById("canvas-width").value);
+      const height = parseInt(document.getElementById("canvas-height").value);
+      const preserveContent =
+        document.getElementById("preserve-content").checked;
 
       if (width > 0 && height > 0 && width <= 1024 && height <= 1024) {
         pixelCanvas.resize(width, height, preserveContent);
         updateCanvasSizeDisplay();
         uiManager.hideModal();
-        uiManager.showToast(`Canvas resized to ${width}×${height}`, 'success');
+        uiManager.showToast(`Canvas resized to ${width}×${height}`, "success");
       } else {
-        uiManager.showToast('Invalid dimensions', 'error');
+        uiManager.showToast("Invalid dimensions", "error");
       }
     });
 
     modalFooter.appendChild(cancelButton);
     modalFooter.appendChild(resizeButton);
-    document.querySelector('.modal-dialog').appendChild(modalFooter);
+    document.querySelector(".modal-dialog").appendChild(modalFooter);
     menuSystem.closeAllMenus();
   }
 
   function handleExportPNG() {
     const pngDataUrl = pixelCanvas.exportToPNG();
     try {
-      voidAPI.exportPng(pngDataUrl).then(result => {
-        if (result.success) {
-          menuSystem.closeAllMenus();
-          uiManager.showToast('PNG exported successfully', 'success');
-        } else {
-          uiManager.showToast('Failed to export PNG', 'error');
-        }
-      }).catch(error => {
-voidAPI.exportPng(pngDataUrl).then(result => {
-      if (result.success) {
-        menuSystem.closeAllMenus();
-        uiManager.showToast('PNG exported successfully', 'success');
-      } else {
-        uiManager.showToast('Failed to export PNG', 'error');
-      }
-    }).catch(error => {
-      uiManager.showToast(`PNG export failed: ${error.message}`, 'error');
-    });
-        uiManager.showToast(`PNG export failed: ${error.message}`, 'error');
-      });
+      voidAPI
+        .exportPng(pngDataUrl)
+        .then((result) => {
+          if (result.success) {
+            menuSystem.closeAllMenus();
+            uiManager.showToast("PNG exported successfully", "success");
+          } else {
+            uiManager.showToast("Failed to export PNG", "error");
+          }
+        })
+        .catch((error) => {
+          voidAPI
+            .exportPng(pngDataUrl)
+            .then((result) => {
+              if (result.success) {
+                menuSystem.closeAllMenus();
+                uiManager.showToast("PNG exported successfully", "success");
+              } else {
+                uiManager.showToast("Failed to export PNG", "error");
+              }
+            })
+            .catch((error) => {
+              uiManager.showToast(
+                `PNG export failed: ${error.message}`,
+                "error",
+              );
+            });
+          uiManager.showToast(`PNG export failed: ${error.message}`, "error");
+        });
     } catch (error) {
-      uiManager.showToast(`PNG export error: ${error.message}`, 'error');
+      uiManager.showToast(`PNG export error: ${error.message}`, "error");
     }
   }
 
   function handleExportGIF() {
-    uiManager.showLoadingDialog('Generating GIF...');
-    const frameDelay = parseInt(document.getElementById('frame-delay').value);
-try {
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
+    uiManager.showLoadingDialog("Generating GIF...");
+    const frameDelay = parseInt(document.getElementById("frame-delay").value);
+    try {
+      gifExporter
+        .generateGif(frameDelay)
+        .then((gifData) => {
+          voidAPI
+            .exportGif(gifData)
+            .then((result) => {
+              uiManager.hideLoadingDialog();
+              if (result.success) {
+                menuSystem.closeAllMenus();
+                uiManager.showToast("GIF exported successfully", "success");
+              } else {
+                uiManager.showToast("Failed to export GIF", "error");
+              }
+            })
+            .catch((error) => {
+              uiManager.hideLoadingDialog();
+              uiManager.showToast(
+                `GIF export failed: ${error.message}`,
+                "error",
+              );
+            });
+        })
+        .catch((error) => {
           uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
-        }).catch(error => {
-          uiManager.hideLoadingDialog();
-          uiManager.showToast(`GIF export failed: ${error.message}`, 'error');
+          uiManager.showToast(
+            `GIF generation failed: ${error.message}`,
+            "error",
+          );
         });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast(`GIF generation failed: ${error.message}`, 'error');
-      });
     } catch (error) {
       uiManager.hideLoadingDialog();
-      uiManager.showToast(`GIF export error: ${error.message}`, 'error');
+      uiManager.showToast(`GIF export error: ${error.message}`, "error");
     }
-try {
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
+    try {
+      gifExporter
+        .generateGif(frameDelay)
+        .then((gifData) => {
+          voidAPI
+            .exportGif(gifData)
+            .then((result) => {
+              uiManager.hideLoadingDialog();
+              if (result.success) {
+                menuSystem.closeAllMenus();
+                uiManager.showToast("GIF exported successfully", "success");
+              } else {
+                uiManager.showToast("Failed to export GIF", "error");
+              }
+            })
+            .catch((error) => {
+              uiManager.hideLoadingDialog();
+              uiManager.showToast(
+                `GIF export failed: ${error.message}`,
+                "error",
+              );
+            });
+        })
+        .catch((error) => {
           uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
-        }).catch(error => {
-          uiManager.hideLoadingDialog();
-          uiManager.showToast(`GIF export failed: ${error.message}`, 'error');
+          uiManager.showToast(
+            `GIF generation failed: ${error.message}`,
+            "error",
+          );
         });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast(`GIF generation failed: ${error.message}`, 'error');
-      });
     } catch (error) {
       uiManager.hideLoadingDialog();
-      uiManager.showToast(`GIF export error: ${error.message}`, 'error');
+      uiManager.showToast(`GIF export error: ${error.message}`, "error");
     }
 
     try {
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
+      gifExporter
+        .generateGif(frameDelay)
+        .then((gifData) => {
+          voidAPI
+            .exportGif(gifData)
+            .then((result) => {
+              uiManager.hideLoadingDialog();
+              if (result.success) {
+                menuSystem.closeAllMenus();
+                uiManager.showToast("GIF exported successfully", "success");
+              } else {
+                uiManager.showToast("Failed to export GIF", "error");
+              }
+            })
+            .catch((error) => {
+              uiManager.hideLoadingDialog();
+              uiManager.showToast(
+                `GIF export failed: ${error.message}`,
+                "error",
+              );
+            });
+        })
+        .catch((error) => {
           uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
-        }).catch(error => {
-          uiManager.hideLoadingDialog();
-          uiManager.showToast(`GIF export failed: ${error.message}`, 'error');
+          uiManager.showToast(
+            `GIF generation failed: ${error.message}`,
+            "error",
+          );
         });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast(`GIF generation failed: ${error.message}`, 'error');
-      });
     } catch (error) {
       uiManager.hideLoadingDialog();
-      uiManager.showToast(`GIF export error: ${error.message}`, 'error');
+      uiManager.showToast(`GIF export error: ${error.message}`, "error");
     }
   }
 
@@ -528,7 +620,7 @@ try {
     if (timeline.getFrameCount() > 1) {
       timeline.deleteCurrentFrame();
     } else {
-      uiManager.showToast('Cannot delete the only frame', 'error');
+      uiManager.showToast("Cannot delete the only frame", "error");
     }
   }
 
@@ -537,13 +629,13 @@ try {
    */
   function updateEffects() {
     const effects = {
-      grain: document.getElementById('effect-grain').checked,
-      static: document.getElementById('effect-static').checked,
-      glitch: document.getElementById('effect-glitch').checked,
-      crt: document.getElementById('effect-crt').checked,
-      intensity: document.getElementById('effect-intensity').value / 100
+      grain: document.getElementById("effect-grain").checked,
+      static: document.getElementById("effect-static").checked,
+      glitch: document.getElementById("effect-glitch").checked,
+      crt: document.getElementById("effect-crt").checked,
+      intensity: document.getElementById("effect-intensity").value / 100,
     };
-  
+
     pixelCanvas.setEffects(effects);
   }
 
@@ -552,7 +644,7 @@ try {
    */
   function updateZoomLevel() {
     const zoomPercent = Math.round(pixelCanvas.getZoom() * 100);
-    document.getElementById('zoom-level').textContent = zoomPercent + '%';
+    document.getElementById("zoom-level").textContent = zoomPercent + "%";
   }
 
   /**
@@ -561,7 +653,7 @@ try {
   function updateCanvasSizeDisplay() {
     const width = pixelCanvas.width;
     const height = pixelCanvas.height;
-    document.getElementById('canvas-size').textContent = `${width}x${height}`;
+    document.getElementById("canvas-size").textContent = `${width}x${height}`;
   }
 
   /**
@@ -570,19 +662,39 @@ try {
   function showCanvasSizeSelectionDialog() {
     // Create canvas size options with silhouettes
     const canvasSizes = [
-      { width: 32, height: 32, name: '32×32', description: 'Tiny pixel art' },
-      { width: 64, height: 64, name: '64×64', description: 'Standard pixel art' },
-      { width: 88, height: 31, name: '88×31', description: 'Classic web button' },
-      { width: 120, height: 60, name: '120×60', description: 'Small banner' },
-      { width: 120, height: 80, name: '120×80', description: 'Small animation' },
-      { width: 128, height: 128, name: '128×128', description: 'Medium square' },
-      { width: 256, height: 256, name: '256×256', description: 'Large square' }
+      { width: 32, height: 32, name: "32×32", description: "Tiny pixel art" },
+      {
+        width: 64,
+        height: 64,
+        name: "64×64",
+        description: "Standard pixel art",
+      },
+      {
+        width: 88,
+        height: 31,
+        name: "88×31",
+        description: "Classic web button",
+      },
+      { width: 120, height: 60, name: "120×60", description: "Small banner" },
+      {
+        width: 120,
+        height: 80,
+        name: "120×80",
+        description: "Small animation",
+      },
+      {
+        width: 128,
+        height: 128,
+        name: "128×128",
+        description: "Medium square",
+      },
+      { width: 256, height: 256, name: "256×256", description: "Large square" },
     ];
 
     // Create HTML for size options with silhouettes
     let sizesHTML = '<div class="canvas-size-options">';
 
-    canvasSizes.forEach(size => {
+    canvasSizes.forEach((size) => {
       // Calculate silhouette dimensions to match aspect ratio
       let silhouetteWidth, silhouetteHeight;
 
@@ -607,7 +719,7 @@ try {
       `;
     });
 
-    sizesHTML += '</div>';
+    sizesHTML += "</div>";
 
     // Show the modal with size options and a title
     const modalContent = `
@@ -620,11 +732,11 @@ try {
       ${sizesHTML}
     `;
 
-    uiManager.showModal('Conjuration', modalContent, null, false);
+    uiManager.showModal("Conjuration", modalContent, null, false);
 
     // Add event listeners to size options
-    document.querySelectorAll('.canvas-size-option').forEach(option => {
-      option.addEventListener('click', () => {
+    document.querySelectorAll(".canvas-size-option").forEach((option) => {
+      option.addEventListener("click", () => {
         const width = parseInt(option.dataset.width);
         const height = parseInt(option.dataset.height);
 
@@ -636,14 +748,14 @@ try {
         uiManager.hideModal();
 
         // Show confirmation message
-        uiManager.showToast(`Canvas set to ${width}×${height}`, 'success');
+        uiManager.showToast(`Canvas set to ${width}×${height}`, "success");
       });
     });
 
     // Add CSS only once to prevent memory leaks
-    if (!document.getElementById('canvas-size-dialog-styles')) {
-      const style = document.createElement('style');
-      style.id = 'canvas-size-dialog-styles';
+    if (!document.getElementById("canvas-size-dialog-styles")) {
+      const style = document.createElement("style");
+      style.id = "canvas-size-dialog-styles";
       style.textContent = `
         .modal-dialog {
           width: 600px !important;
