@@ -3,10 +3,9 @@
  *
  * This is the main entry point for the application that initializes
  * all components and manages the application state.
-const voidAPI = require('./lib/voidAPI');
  */
 
-const voidAPI = require('./lib/voidAPI');
+// VoidAPI is available globally via preload script
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,6 +60,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show welcome message
   uiManager.showToast('Welcome to Conjuration', 'success');
 
+  // Global app state for unsaved changes tracking
+  window.voidApp = {
+    hasUnsavedChanges: () => {
+      // Check if there are any changes since last save
+      return pixelCanvas.historyIndex > 0 || timeline.getFrameCount() > 1;
+    },
+    saveProject: () => {
+      return new Promise((resolve) => {
+        handleSaveProject();
+        resolve({ success: true });
+      });
+    }
+  };
+
   /**
    * Set up all event listeners for the application
    */
@@ -100,7 +113,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setupMenuManager() {
-    // Already handled by MenuManager
+    // Set up menu button event listeners
+    document.getElementById('file-menu-button').addEventListener('click', () => {
+      menuSystem.toggleMenu('file-menu');
+    });
+    
+    document.getElementById('edit-menu-button').addEventListener('click', () => {
+      menuSystem.toggleMenu('edit-menu');
+    });
+    
+    document.getElementById('view-menu-button').addEventListener('click', () => {
+      menuSystem.toggleMenu('view-menu');
+    });
+    
+    document.getElementById('export-menu-button').addEventListener('click', () => {
+      menuSystem.toggleMenu('export-menu');
+    });
+    
+    document.getElementById('lore-menu-button').addEventListener('click', () => {
+      menuSystem.toggleMenu('lore-menu');
+    });
   }
 
   function setupFileMenu() {
@@ -139,22 +171,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setupLoreMenu() {
-    document.getElementById('lore-option1').addEventListener('click', () => {
-      themeManager.setTheme('lain-dive');
+    document.getElementById('toggle-lore-layer').addEventListener('click', () => {
       menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Lain Dive activated', 'success');
+      uiManager.showToast('Lore layer toggled', 'info');
     });
 
-    document.getElementById('lore-option2').addEventListener('click', () => {
-      themeManager.setTheme('morrowind-glyph');
+    document.getElementById('edit-metadata').addEventListener('click', () => {
       menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Morrowind Glyph activated', 'success');
+      uiManager.showToast('Metadata ritual initiated', 'success');
     });
 
-    document.getElementById('lore-option3').addEventListener('click', () => {
-      themeManager.setTheme('monolith');
+    document.getElementById('add-sigil').addEventListener('click', () => {
       menuSystem.closeAllMenus();
-      uiManager.showToast('Lore: Monolith activated', 'success');
+      uiManager.showToast('Hidden sigil added', 'success');
+    });
+
+    document.getElementById('glitch-inject').addEventListener('click', () => {
+      menuSystem.closeAllMenus();
+      uiManager.showToast('Glitch injected', 'success');
     });
   }
 
@@ -435,16 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
           uiManager.showToast('Failed to export PNG', 'error');
         }
       }).catch(error => {
-voidAPI.exportPng(pngDataUrl).then(result => {
-      if (result.success) {
-        menuSystem.closeAllMenus();
-        uiManager.showToast('PNG exported successfully', 'success');
-      } else {
-        uiManager.showToast('Failed to export PNG', 'error');
-      }
-    }).catch(error => {
-      uiManager.showToast(`PNG export failed: ${error.message}`, 'error');
-    });
         uiManager.showToast(`PNG export failed: ${error.message}`, 'error');
       });
     } catch (error) {
@@ -455,51 +479,7 @@ voidAPI.exportPng(pngDataUrl).then(result => {
   function handleExportGIF() {
     uiManager.showLoadingDialog('Generating GIF...');
     const frameDelay = parseInt(document.getElementById('frame-delay').value);
-try {
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
-          uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
-        }).catch(error => {
-          uiManager.hideLoadingDialog();
-          uiManager.showToast(`GIF export failed: ${error.message}`, 'error');
-        });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast(`GIF generation failed: ${error.message}`, 'error');
-      });
-    } catch (error) {
-      uiManager.hideLoadingDialog();
-      uiManager.showToast(`GIF export error: ${error.message}`, 'error');
-    }
-try {
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
-          uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
-        }).catch(error => {
-          uiManager.hideLoadingDialog();
-          uiManager.showToast(`GIF export failed: ${error.message}`, 'error');
-        });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast(`GIF generation failed: ${error.message}`, 'error');
-      });
-    } catch (error) {
-      uiManager.hideLoadingDialog();
-      uiManager.showToast(`GIF export error: ${error.message}`, 'error');
-    }
-
+    
     try {
       gifExporter.generateGif(frameDelay).then(gifData => {
         voidAPI.exportGif(gifData).then(result => {

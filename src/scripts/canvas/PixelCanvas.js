@@ -511,6 +511,17 @@ class PixelCanvas {
 
       // Draw horizontal lines
       for (let y = 0; y <= this.height; y++) {
+        const yPos = y * this.pixelSize * this.zoom;
+        this.uiCtx.moveTo(0, yPos);
+        this.uiCtx.lineTo(this.canvas.width, yPos);
+      }
+
+      // Stroke all lines at once
+      this.uiCtx.stroke();
+    }
+  }
+  /**
+   * Animate effects on the effects canvas
    */
   animateEffects() {
     // Use a bound function to avoid creating a new function on each frame
@@ -577,6 +588,14 @@ class PixelCanvas {
 
     // Request next frame
     this.effectsAnimationFrame = requestAnimationFrame(this._boundAnimateEffects);
+  }
+
+  /**
+   * Set effects configuration
+   * @param {Object} effects - Effects configuration object
+   */
+  setEffects(effects) {
+    this.effects = { ...this.effects, ...effects };
   }
 
   /**

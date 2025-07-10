@@ -1,19 +1,22 @@
-// gif.worker.js
-// This is a placeholder for the gif.js worker script
-// In a real implementation, you would include the actual gif.js worker code here
-// or use a library like gif.js which provides this file
+/**
+ * GIF Worker
+ * 
+ * Web worker for processing GIF frames
+ */
 
-// Simple implementation to avoid errors
+// Listen for messages from the main thread
 self.onmessage = function(e) {
-  // Process the frame data
-  const frame = e.data.frame;
-  const index = e.data.index;
+  var data = e.data;
+  var frame = data.frame;
+  var index = data.index;
   
-  // In a real implementation, this would encode the frame as part of a GIF
-  // For now, just send back a success message
-  self.postMessage({
-    type: 'progress',
-    index: index,
-    frame: frame
-  });
+  // Process the frame (in a real implementation, this would encode the frame)
+  // For now, just simulate processing time
+  setTimeout(function() {
+    // Send the processed frame back to the main thread
+    self.postMessage({
+      index: index,
+      data: 'Processed frame data would be here'
+    });
+  }, 100);
 };
