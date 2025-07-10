@@ -7,7 +7,11 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "package": "electron-packager . --overwrite --platform=darwin,win32,linux --arch=x64 --icon=src/assets/images/icon --prune=true --out=release-builds"
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "dist": "electron-builder --publish=never",
+    "pack": "electron-builder --dir"
   },
   "keywords": [
     "pixel art",
@@ -26,19 +30,49 @@
   },
   "dependencies": {
     "file-saver": "^2.0.5",
-    "gif.js": "^0.2.0",
-    "voidsketch": "file:"
+    "gif.js": "^0.2.0"
   },
   "build": {
-    "appId": "com.yourname.voidsketch",
-    "mac": {
-      "category": "public.app-category.graphics-design"
+    "appId": "com.voidsketch.conjuration",
+    "productName": "Conjuration",
+    "directories": {
+      "output": "dist"
     },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "node_modules/**/*"
+    ],
     "win": {
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Conjuration"
+    },
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "icon": "build/icon.icns",
+      "target": "dmg"
     },
     "linux": {
-      "target": "AppImage"
+      "target": "AppImage",
+      "icon": "build/icon.png",
+      "category": "Graphics"
     }
   }
 }

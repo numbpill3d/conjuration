@@ -688,6 +688,7 @@ class BrushEngine {
         const px = Math.floor(this.lastX + (x - this.lastX) * t);
         const py = Math.floor(this.lastY + (y - this.lastY) * t);
 
+        const offset = Math.floor(radius / 2);
         for (let j = -offset; j <= offset; j++) {
           for (let k = -offset; k <= offset; k++) {
             // Calculate distance from center
@@ -787,7 +788,7 @@ class BrushEngine {
         const py = Math.floor(this.lastY + (y - this.lastY) * t);
 
         // Apply pattern at each step with a smaller radius
-        const lineOffset = Math.max(1, Math.floor(offset / 2));
+        const lineOffset = Math.max(1, Math.floor(radius / 2));
 
         for (let j = -lineOffset; j <= lineOffset; j++) {
           for (let k = -lineOffset; k <= lineOffset; k++) {
@@ -798,8 +799,8 @@ class BrushEngine {
             if (distance > lineOffset) continue;
 
             // Get pattern value with proper centering
-            const patternX = (px + j + patternOffsetX + patternSize) % patternSize;
-            const patternY = (py + k + patternOffsetY + patternSize) % patternSize;
+            const patternX = (px + j + patternSize) % patternSize;
+            const patternY = (py + k + patternSize) % patternSize;
 
             // Draw the pixel based on pattern
             if (pattern[patternY][patternX]) {
