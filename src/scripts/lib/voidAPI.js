@@ -7,7 +7,7 @@
 // This module is deprecated - voidAPI is now available globally via preload.js
 // The actual implementation is in preload.js using contextBridge
 
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     // Placeholder - actual API is in preload.js
   };
