@@ -30,8 +30,9 @@
       <button type="button" id="view-menu-button" class="menu-button">VIEW</button>
       <button type="button" id="export-menu-button" class="menu-button">EXPORT</button>
       <button type="button" id="lore-menu-button" class="menu-button">LORE</button>
-      <div id="status-bar">
+      <div id="status-bar" role="status" aria-live="polite">
         <span id="status-message">READY</span>
+        <span id="status-indicator" class="status-indicator" aria-hidden="true"></span>
       </div>
     </div>
 
@@ -46,45 +47,45 @@
 
           <div class="tool-section">
             <div class="section-title">BRUSH</div>
-            <div class="tool-grid">
-              <button type="button" class="tool-button" id="brush-pencil" title="Pencil">
-                <span class="tool-icon">+</span>
+            <div class="tool-grid" role="toolbar" aria-label="Drawing tools">
+              <button type="button" class="tool-button" id="brush-pencil" title="Pencil" aria-label="Pencil tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">+</span>
               </button>
-              <button type="button" class="tool-button" id="brush-brush" title="Brush">
-                <span class="tool-icon">B</span>
+              <button type="button" class="tool-button" id="brush-brush" title="Brush" aria-label="Brush tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">B</span>
               </button>
-              <button type="button" class="tool-button" id="brush-spray" title="Spray">
-                <span class="tool-icon">S</span>
+              <button type="button" class="tool-button" id="brush-spray" title="Spray" aria-label="Spray tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">S</span>
               </button>
-              <button type="button" class="tool-button" id="brush-pixel" title="Pixel">
-                <span class="tool-icon">P</span>
+              <button type="button" class="tool-button" id="brush-pixel" title="Pixel" aria-label="Pixel tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">P</span>
               </button>
-              <button type="button" class="tool-button" id="brush-line" title="Line">
-                <span class="tool-icon">/</span>
+              <button type="button" class="tool-button" id="brush-line" title="Line" aria-label="Line tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">/</span>
               </button>
-              <button type="button" class="tool-button" id="brush-rect" title="Rectangle">
-                <span class="tool-icon">[]</span>
+              <button type="button" class="tool-button" id="brush-rect" title="Rectangle" aria-label="Rectangle tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">[]</span>
               </button>
-              <button type="button" class="tool-button" id="brush-ellipse" title="Ellipse">
-                <span class="tool-icon">O</span>
+              <button type="button" class="tool-button" id="brush-ellipse" title="Ellipse" aria-label="Ellipse tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">O</span>
               </button>
-              <button type="button" class="tool-button" id="brush-dither" title="Dither">
-                <span class="tool-icon">D</span>
+              <button type="button" class="tool-button" id="brush-dither" title="Dither" aria-label="Dither tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">D</span>
               </button>
-              <button type="button" class="tool-button" id="brush-pattern" title="Pattern">
-                <span class="tool-icon">@</span>
+              <button type="button" class="tool-button" id="brush-pattern" title="Pattern" aria-label="Pattern tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">@</span>
               </button>
-              <button type="button" class="tool-button" id="brush-glitch" title="Glitch">
-                <span class="tool-icon">%</span>
+              <button type="button" class="tool-button" id="brush-glitch" title="Glitch" aria-label="Glitch tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">%</span>
               </button>
-              <button type="button" class="tool-button" id="brush-static" title="Static">
-                <span class="tool-icon">#</span>
+              <button type="button" class="tool-button" id="brush-static" title="Static" aria-label="Static tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">#</span>
               </button>
-              <button type="button" class="tool-button" id="brush-eraser" title="Eraser">
-                <span class="tool-icon">X</span>
+              <button type="button" class="tool-button" id="brush-eraser" title="Eraser" aria-label="Eraser tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">X</span>
               </button>
-              <button type="button" class="tool-button" id="brush-fill" title="Fill">
-                <span class="tool-icon">■</span>
+              <button type="button" class="tool-button" id="brush-fill" title="Fill" aria-label="Fill tool" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">■</span>
               </button>
             </div>
 
@@ -99,43 +100,43 @@
 
           <div class="tool-section">
             <div class="section-title">SYMMETRY</div>
-            <div class="tool-grid">
-              <button type="button" class="tool-button" id="symmetry-none" title="No Symmetry">
-                <span class="tool-icon">1</span>
+            <div class="tool-grid" role="toolbar" aria-label="Symmetry tools">
+              <button type="button" class="tool-button" id="symmetry-none" title="No Symmetry" aria-label="No symmetry" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">1</span>
               </button>
-              <button type="button" class="tool-button" id="symmetry-horizontal" title="Horizontal Mirror">
-                <span class="tool-icon">-</span>
+              <button type="button" class="tool-button" id="symmetry-horizontal" title="Horizontal Mirror" aria-label="Horizontal mirror symmetry" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">-</span>
               </button>
-              <button type="button" class="tool-button" id="symmetry-vertical" title="Vertical Mirror">
-                <span class="tool-icon">|</span>
+              <button type="button" class="tool-button" id="symmetry-vertical" title="Vertical Mirror" aria-label="Vertical mirror symmetry" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">|</span>
               </button>
-              <button type="button" class="tool-button" id="symmetry-quad" title="Quadrant">
-                <span class="tool-icon">+</span>
+              <button type="button" class="tool-button" id="symmetry-quad" title="Quadrant" aria-label="Quadrant symmetry" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">+</span>
               </button>
-              <button type="button" class="tool-button" id="symmetry-octal" title="Octal">
-                <span class="tool-icon">*</span>
+              <button type="button" class="tool-button" id="symmetry-octal" title="Octal" aria-label="Octal symmetry" role="button" tabindex="0">
+                <span class="tool-icon" aria-hidden="true">*</span>
               </button>
             </div>
           </div>
 
           <div class="tool-section">
             <div class="section-title">PALETTE</div>
-            <div class="palette-selector">
-              <div class="palette-option" id="palette-monochrome">
-                <span class="palette-preview monochrome"></span>
-                <span class="palette-name">MONO</span>
+            <div class="palette-selector" role="radiogroup" aria-label="Color palette selection">
+              <div class="palette-option" id="palette-monochrome" role="radio" aria-checked="true" tabindex="0" aria-label="Monochrome palette">
+                <span class="palette-preview monochrome" aria-hidden="true"></span>
+                <span class="palette-name" aria-hidden="true">MONO</span>
               </div>
-              <div class="palette-option" id="palette-lain">
-                <span class="palette-preview lain"></span>
-                <span class="palette-name">LAIN</span>
+              <div class="palette-option" id="palette-lain" role="radio" aria-checked="false" tabindex="0" aria-label="Lain palette">
+                <span class="palette-preview lain" aria-hidden="true"></span>
+                <span class="palette-name" aria-hidden="true">LAIN</span>
               </div>
-              <div class="palette-option" id="palette-red">
-                <span class="palette-preview red"></span>
-                <span class="palette-name">RED</span>
+              <div class="palette-option" id="palette-red" role="radio" aria-checked="false" tabindex="0" aria-label="Red palette">
+                <span class="palette-preview red" aria-hidden="true"></span>
+                <span class="palette-name" aria-hidden="true">RED</span>
               </div>
-              <div class="palette-option" id="palette-green">
-                <span class="palette-preview green"></span>
-                <span class="palette-name">GREEN</span>
+              <div class="palette-option" id="palette-green" role="radio" aria-checked="false" tabindex="0" aria-label="Green palette">
+                <span class="palette-preview green" aria-hidden="true"></span>
+                <span class="palette-name" aria-hidden="true">GREEN</span>
               </div>
             </div>
           </div>

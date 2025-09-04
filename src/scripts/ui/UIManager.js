@@ -14,6 +14,10 @@ class UIManager {
 
     // Set up event listeners
     document.addEventListener('click', this.handleDocumentClick.bind(this));
+    document.addEventListener('keydown', this.handleKeydown.bind(this));
+    
+    // Set up keyboard navigation for tool buttons
+    this.setupKeyboardNavigation();
   }
 
   /**
@@ -25,6 +29,51 @@ class UIManager {
     if (e.target === this.modalContainer) {
       this.hideModal();
     }
+  }
+
+  /**
+   * Handle keyboard events for accessibility
+   * @param {KeyboardEvent} e - Keyboard event
+   */
+  handleKeydown(e) {
+    // Handle Escape key to close modals
+    if (e.key === 'Escape') {
+      this.hideModal();
+    }
+    
+    // Handle Enter and Space for tool buttons
+    if (e.key === 'Enter' || e.key === ' ') {
+      const focusedElement = document.activeElement;
+      if (focusedElement && focusedElement.classList.contains('tool-button')) {
+        e.preventDefault();
+        focusedElement.click();
+      }
+    }
+  }
+
+  /**
+   * Set up keyboard navigation for interactive elements
+   */
+  setupKeyboardNavigation() {
+    // Add keyboard support for palette options
+    document.querySelectorAll('.palette-option').forEach(option => {
+      option.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          option.click();
+        }
+      });
+    });
+
+    // Add keyboard support for tool buttons
+    document.querySelectorAll('.tool-button').forEach(button => {
+      button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          button.click();
+        }
+      });
+    });
   }
 
   /**
@@ -355,8 +404,81 @@ class UIManager {
   /**
    * Update the status message
    * @param {string} message - Message to display
+   * @param {string} type - Status type: 'success', 'error', 'warning', 'info', 'loading'
    */
-  updateStatus(message) {
-    document.getElementById('status-message').textContent = message;
+  updateStatus(message, type = 'success') {
+    const statusMessage = document.getElementById('status-message');
+    const statusIndicator = document.getElementById('status-indicator');
+    
+    if (statusMessage) {
+      statusMessage.textContent = message;
+    }
+    
+    if (statusIndicator) {
+      // Remove all status classes
+      statusIndicator.classList.remove('error', 'warning', 'loading');
+      
+      // Add the appropriate class
+      if (type !== 'success') {
+        statusIndicator.classList.add(type);
+      }
+    }
+  }
+
+  /**
+   * Show a loading state on an element
+   * @param {string} elementId - ID of the element to show loading state on
+   */
+  showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.add('loading');
+    }
+  }
+
+  /**
+   * Hide loading state on an element
+   * @param {string} elementId - ID of the element to hide loading state on
+   */
+  hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.remove('loading');
+    }
+  }
+
+  /**
+   * Show error state on an element
+   * @param {string} elementId - ID of the element to show error state on
+   * @param {string} message - Error message to display
+   */
+  showError(elementId, message) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.add('error');
+      
+      // Add error message if it doesn't exist
+      if (!element.querySelector('.error-message')) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        element.appendChild(errorDiv);
+      }
+    }
+  }
+
+  /**
+   * Clear error state on an element
+   * @param {string} elementId - ID of the element to clear error state on
+   */
+  clearError(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.remove('error');
+      const errorMessage = element.querySelector('.error-message');
+      if (errorMessage) {
+        errorMessage.remove();
+      }
+    }
   }
 }

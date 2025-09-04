@@ -84,6 +84,30 @@
   overflow: hidden;
   text-shadow: var(--text-glow);
   transition: all 0.2s ease;
+  outline: none;
+}
+
+.tool-button:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
+.tool-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
+.tool-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--panel-bg);
+}
+
+.tool-button:disabled:hover {
+  background-color: var(--panel-bg);
+  transform: none;
 }
 
 /* Add subtle scanline effect to buttons */
@@ -139,13 +163,32 @@
   border: 1px solid var(--panel-border);
   background-color: var(--button-bg);
   cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
 .palette-option:hover {
   background-color: var(--button-hover);
 }
 
+.palette-option:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
+.palette-option:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
 .palette-option.active {
+  border-color: var(--accent-color);
+  background-color: rgba(138, 43, 226, 0.2);
+}
+
+.palette-option[aria-checked="true"] {
   border-color: var(--accent-color);
   background-color: rgba(138, 43, 226, 0.2);
 }
@@ -211,6 +254,12 @@ input[type="range"] {
   -webkit-appearance: none;
   height: 5px;
   border-radius: 2px;
+  outline: none;
+}
+
+input[type="range"]:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -220,6 +269,12 @@ input[type="range"]::-webkit-slider-thumb {
   background-color: var(--accent-color);
   border-radius: 50%;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px var(--accent-color);
 }
 
 /* Brush Size Control */

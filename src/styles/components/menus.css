@@ -43,6 +43,19 @@
   z-index: 2;
   text-shadow: var(--text-glow);
   transition: all 0.2s ease;
+  outline: none;
+}
+
+.menu-button:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
+.menu-button:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+  box-shadow: 0 0 8px var(--accent-color);
 }
 
 .menu-button:hover {
@@ -132,6 +145,19 @@
   z-index: 2;
   text-shadow: var(--text-glow);
   transition: all 0.15s ease;
+  outline: none;
+}
+
+.menu-item:focus {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+  box-shadow: 0 0 8px var(--accent-color);
+}
+
+.menu-item:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+  box-shadow: 0 0 8px var(--accent-color);
 }
 
 .menu-item:hover {

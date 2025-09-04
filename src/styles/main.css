@@ -10,6 +10,8 @@
   --highlight-color: #ffffff;
   --error-color: #ff3333;
   --success-color: #33ff99;
+  --warning-color: #ffaa00;
+  --info-color: #00aaff;
 
   /* UI Elements */
   --panel-bg: #0a0a0a;
@@ -154,6 +156,154 @@ body::before {
   width: 100vw;
   overflow: hidden;
   position: relative;
+  min-width: 800px;
+  min-height: 600px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  :root {
+    --panel-width: 180px;
+  }
+  
+  .tool-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --panel-width: 160px;
+    --title-bar-height: 25px;
+    --menu-bar-height: 25px;
+  }
+  
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .effect-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .palette-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  #app-content {
+    flex-direction: column;
+  }
+  
+  .side-panel {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--panel-border);
+  }
+  
+  #timeline-panel {
+    order: -1;
+  }
+}
+
+/* Loading States */
+.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--accent-color);
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error States */
+.error {
+  border-color: var(--error-color) !important;
+  box-shadow: 0 0 8px var(--error-color) !important;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 12px;
+  margin-top: 5px;
+  text-shadow: 0 0 5px var(--error-color);
+}
+
+/* Success States */
+.success {
+  border-color: var(--success-color) !important;
+  box-shadow: 0 0 8px var(--success-color) !important;
+}
+
+/* Warning States */
+.warning {
+  border-color: var(--warning-color) !important;
+  box-shadow: 0 0 8px var(--warning-color) !important;
+}
+
+/* Info States */
+.info {
+  border-color: var(--info-color) !important;
+  box-shadow: 0 0 8px var(--info-color) !important;
+}
+
+/* Status Bar */
+#status-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  padding: 0 10px;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--success-color);
+  box-shadow: 0 0 5px var(--success-color);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.status-indicator.error {
+  background-color: var(--error-color);
+  box-shadow: 0 0 5px var(--error-color);
+}
+
+.status-indicator.warning {
+  background-color: var(--warning-color);
+  box-shadow: 0 0 5px var(--warning-color);
+}
+
+.status-indicator.loading {
+  background-color: var(--info-color);
+  box-shadow: 0 0 5px var(--info-color);
+  animation: spin 1s linear infinite;
 }
 
 /* Title Bar */
