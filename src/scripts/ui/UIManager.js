@@ -8,12 +8,16 @@ class UIManager {
    * Create a new UIManager
    */
   constructor() {
-    this.modalContainer = document.getElementById('modal-container');
-    this.modalContent = document.getElementById('modal-content');
-    this.toastContainer = document.getElementById('toast-container');
+    this.modalContainer = document.getElementById("modal-container");
+    this.modalContent = document.getElementById("modal-content");
+    this.toastContainer = document.getElementById("toast-container");
 
     // Set up event listeners
-    document.addEventListener('click', this.handleDocumentClick.bind(this));
+    document.addEventListener("click", this.handleDocumentClick.bind(this));
+    document.addEventListener("keydown", this.handleKeydown.bind(this));
+
+    // Set up keyboard navigation for tool buttons
+    this.setupKeyboardNavigation();
   }
 
   /**
@@ -28,21 +32,66 @@ class UIManager {
   }
 
   /**
+   * Handle keyboard events for accessibility
+   * @param {KeyboardEvent} e - Keyboard event
+   */
+  handleKeydown(e) {
+    // Handle Escape key to close modals
+    if (e.key === "Escape") {
+      this.hideModal();
+    }
+
+    // Handle Enter and Space for tool buttons
+    if (e.key === "Enter" || e.key === " ") {
+      const focusedElement = document.activeElement;
+      if (focusedElement && focusedElement.classList.contains("tool-button")) {
+        e.preventDefault();
+        focusedElement.click();
+      }
+    }
+  }
+
+  /**
+   * Set up keyboard navigation for interactive elements
+   */
+  setupKeyboardNavigation() {
+    // Add keyboard support for palette options
+    document.querySelectorAll(".palette-option").forEach((option) => {
+      option.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          option.click();
+        }
+      });
+    });
+
+    // Add keyboard support for tool buttons
+    document.querySelectorAll(".tool-button").forEach((button) => {
+      button.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          button.click();
+        }
+      });
+    });
+  }
+
+  /**
    * Set the active tool in the UI
    * @param {string} toolId - ID of the tool element
    */
   setActiveTool(toolId) {
     // Remove active class from all tool buttons
-    document.querySelectorAll('.tool-button').forEach(button => {
-      if (button.id.startsWith('brush-')) {
-        button.classList.remove('active');
+    document.querySelectorAll(".tool-button").forEach((button) => {
+      if (button.id.startsWith("brush-")) {
+        button.classList.remove("active");
       }
     });
 
     // Add active class to the selected tool
     const toolButton = document.getElementById(toolId);
     if (toolButton) {
-      toolButton.classList.add('active');
+      toolButton.classList.add("active");
     }
   }
 
@@ -52,16 +101,16 @@ class UIManager {
    */
   setActiveSymmetry(symmetryId) {
     // Remove active class from all symmetry buttons
-    document.querySelectorAll('.tool-button').forEach(button => {
-      if (button.id.startsWith('symmetry-')) {
-        button.classList.remove('active');
+    document.querySelectorAll(".tool-button").forEach((button) => {
+      if (button.id.startsWith("symmetry-")) {
+        button.classList.remove("active");
       }
     });
 
     // Add active class to the selected symmetry
     const symmetryButton = document.getElementById(symmetryId);
     if (symmetryButton) {
-      symmetryButton.classList.add('active');
+      symmetryButton.classList.add("active");
     }
   }
 
@@ -71,14 +120,14 @@ class UIManager {
    */
   setActivePalette(paletteId) {
     // Remove active class from all palette options
-    document.querySelectorAll('.palette-option').forEach(option => {
-      option.classList.remove('active');
+    document.querySelectorAll(".palette-option").forEach((option) => {
+      option.classList.remove("active");
     });
 
     // Add active class to the selected palette
     const paletteOption = document.getElementById(paletteId);
     if (paletteOption) {
-      paletteOption.classList.add('active');
+      paletteOption.classList.add("active");
     }
   }
 
@@ -95,7 +144,7 @@ class UIManager {
       <div class="modal-dialog">
         <div class="modal-header">
           <div class="modal-title">${title}</div>
-          ${showCloseButton ? '<button class="modal-close" id="modal-close-button">×</button>' : ''}
+          ${showCloseButton ? '<button class="modal-close" id="modal-close-button">×</button>' : ""}
         </div>
         <div class="modal-body">
           ${content}
@@ -107,12 +156,12 @@ class UIManager {
     this.modalContent.innerHTML = modalHTML;
 
     // Show modal
-    this.modalContainer.classList.remove('hidden');
+    this.modalContainer.classList.remove("hidden");
 
     // Add close button event listener if it exists
-    const closeButton = document.getElementById('modal-close-button');
+    const closeButton = document.getElementById("modal-close-button");
     if (closeButton) {
-      closeButton.addEventListener('click', () => {
+      closeButton.addEventListener("click", () => {
         this.hideModal();
         if (onClose) onClose();
       });
@@ -123,7 +172,7 @@ class UIManager {
    * Hide the modal dialog
    */
   hideModal() {
-    this.modalContainer.classList.add('hidden');
+    this.modalContainer.classList.add("hidden");
   }
 
   /**
@@ -149,12 +198,12 @@ class UIManager {
     this.showModal(title, dialogHTML);
 
     // Add button event listeners
-    document.getElementById('confirm-button').addEventListener('click', () => {
+    document.getElementById("confirm-button").addEventListener("click", () => {
       this.hideModal();
       if (onConfirm) onConfirm();
     });
 
-    document.getElementById('cancel-button').addEventListener('click', () => {
+    document.getElementById("cancel-button").addEventListener("click", () => {
       this.hideModal();
       if (onCancel) onCancel();
     });
@@ -174,7 +223,7 @@ class UIManager {
     `;
 
     // Show the modal without close button
-    this.showModal('Loading', loadingHTML, null, false);
+    this.showModal("Loading", loadingHTML, null, false);
   }
 
   /**
@@ -190,9 +239,9 @@ class UIManager {
    * @param {string} type - Type of toast ('success', 'error', 'info')
    * @param {number} duration - Duration in milliseconds
    */
-  showToast(message, type = 'info', duration = 3000) {
+  showToast(message, type = "info", duration = 3000) {
     // Create toast element
-    const toast = document.createElement('div');
+    const toast = document.createElement("div");
     toast.className = `toast ${type}`;
     toast.textContent = message;
 
@@ -201,7 +250,7 @@ class UIManager {
 
     // Remove after duration
     setTimeout(() => {
-      toast.classList.add('fade-out');
+      toast.classList.add("fade-out");
       setTimeout(() => {
         this.toastContainer.removeChild(toast);
       }, 300);
@@ -216,7 +265,13 @@ class UIManager {
    * @param {Function} onConfirm - Callback function when confirmed
    * @param {Function} onCancel - Callback function when canceled
    */
-  showPromptDialog(title, message, defaultValue = '', onConfirm, onCancel = null) {
+  showPromptDialog(
+    title,
+    message,
+    defaultValue = "",
+    onConfirm,
+    onCancel = null,
+  ) {
     // Create dialog HTML
     const dialogHTML = `
       <div class="prompt-dialog">
@@ -236,25 +291,25 @@ class UIManager {
 
     // Focus the input
     setTimeout(() => {
-      document.getElementById('prompt-input').focus();
+      document.getElementById("prompt-input").focus();
     }, 0);
 
     // Add button event listeners
-    document.getElementById('confirm-button').addEventListener('click', () => {
-      const value = document.getElementById('prompt-input').value;
+    document.getElementById("confirm-button").addEventListener("click", () => {
+      const value = document.getElementById("prompt-input").value;
       this.hideModal();
       if (onConfirm) onConfirm(value);
     });
 
-    document.getElementById('cancel-button').addEventListener('click', () => {
+    document.getElementById("cancel-button").addEventListener("click", () => {
       this.hideModal();
       if (onCancel) onCancel();
     });
 
     // Add enter key event listener
-    document.getElementById('prompt-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const value = document.getElementById('prompt-input').value;
+    document.getElementById("prompt-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const value = document.getElementById("prompt-input").value;
         this.hideModal();
         if (onConfirm) onConfirm(value);
       }
@@ -270,30 +325,30 @@ class UIManager {
    */
   showFormDialog(title, fields, onSubmit, onCancel = null) {
     // Create fields HTML
-    let fieldsHTML = '';
+    let fieldsHTML = "";
 
-    fields.forEach(field => {
-      let inputHTML = '';
+    fields.forEach((field) => {
+      let inputHTML = "";
 
       switch (field.type) {
-        case 'text':
-        case 'number':
-        case 'email':
-        case 'password':
-          inputHTML = `<input type="${field.type}" id="${field.id}" class="form-input" value="${field.value || ''}" ${field.placeholder ? `placeholder="${field.placeholder}"` : ''}>`;
+        case "text":
+        case "number":
+        case "email":
+        case "password":
+          inputHTML = `<input type="${field.type}" id="${field.id}" class="form-input" value="${field.value || ""}" ${field.placeholder ? `placeholder="${field.placeholder}"` : ""}>`;
           break;
-        case 'checkbox':
-          inputHTML = `<input type="checkbox" id="${field.id}" ${field.checked ? 'checked' : ''}>`;
+        case "checkbox":
+          inputHTML = `<input type="checkbox" id="${field.id}" ${field.checked ? "checked" : ""}>`;
           break;
-        case 'select':
+        case "select":
           inputHTML = `
             <select id="${field.id}" class="form-input">
-              ${field.options.map(option => `<option value="${option.value}" ${option.value === field.value ? 'selected' : ''}>${option.label}</option>`).join('')}
+              ${field.options.map((option) => `<option value="${option.value}" ${option.value === field.value ? "selected" : ""}>${option.label}</option>`).join("")}
             </select>
           `;
           break;
-        case 'textarea':
-          inputHTML = `<textarea id="${field.id}" class="form-input" ${field.placeholder ? `placeholder="${field.placeholder}"` : ''}>${field.value || ''}</textarea>`;
+        case "textarea":
+          inputHTML = `<textarea id="${field.id}" class="form-input" ${field.placeholder ? `placeholder="${field.placeholder}"` : ""}>${field.value || ""}</textarea>`;
           break;
       }
 
@@ -322,17 +377,17 @@ class UIManager {
     this.showModal(title, dialogHTML);
 
     // Add form submit event listener
-    document.getElementById('modal-form').addEventListener('submit', (e) => {
+    document.getElementById("modal-form").addEventListener("submit", (e) => {
       e.preventDefault();
 
       // Collect form values
       const formData = {};
 
-      fields.forEach(field => {
+      fields.forEach((field) => {
         const element = document.getElementById(field.id);
 
         switch (field.type) {
-          case 'checkbox':
+          case "checkbox":
             formData[field.id] = element.checked;
             break;
           default:
@@ -346,7 +401,7 @@ class UIManager {
     });
 
     // Add cancel button event listener
-    document.getElementById('cancel-button').addEventListener('click', () => {
+    document.getElementById("cancel-button").addEventListener("click", () => {
       this.hideModal();
       if (onCancel) onCancel();
     });
@@ -355,8 +410,81 @@ class UIManager {
   /**
    * Update the status message
    * @param {string} message - Message to display
+   * @param {string} type - Status type: 'success', 'error', 'warning', 'info', 'loading'
    */
-  updateStatus(message) {
-    document.getElementById('status-message').textContent = message;
+  updateStatus(message, type = "success") {
+    const statusMessage = document.getElementById("status-message");
+    const statusIndicator = document.getElementById("status-indicator");
+
+    if (statusMessage) {
+      statusMessage.textContent = message;
+    }
+
+    if (statusIndicator) {
+      // Remove all status classes
+      statusIndicator.classList.remove("error", "warning", "loading");
+
+      // Add the appropriate class
+      if (type !== "success") {
+        statusIndicator.classList.add(type);
+      }
+    }
+  }
+
+  /**
+   * Show a loading state on an element
+   * @param {string} elementId - ID of the element to show loading state on
+   */
+  showLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.add("loading");
+    }
+  }
+
+  /**
+   * Hide loading state on an element
+   * @param {string} elementId - ID of the element to hide loading state on
+   */
+  hideLoading(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.remove("loading");
+    }
+  }
+
+  /**
+   * Show error state on an element
+   * @param {string} elementId - ID of the element to show error state on
+   * @param {string} message - Error message to display
+   */
+  showError(elementId, message) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.add("error");
+
+      // Add error message if it doesn't exist
+      if (!element.querySelector(".error-message")) {
+        const errorDiv = document.createElement("div");
+        errorDiv.className = "error-message";
+        errorDiv.textContent = message;
+        element.appendChild(errorDiv);
+      }
+    }
+  }
+
+  /**
+   * Clear error state on an element
+   * @param {string} elementId - ID of the element to clear error state on
+   */
+  clearError(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.classList.remove("error");
+      const errorMessage = element.querySelector(".error-message");
+      if (errorMessage) {
+        errorMessage.remove();
+      }
+    }
   }
 }
