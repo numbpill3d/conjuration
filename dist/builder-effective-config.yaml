@@ -1,0 +1,36 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.conjuration.app
+productName: Conjuration
+files:
+  - filter:
+      - main.js
+      - preload.js
+      - src/**/*
+      - build/**/*
+      - node_modules/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  icon: build/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Conjuration
+mac:
+  category: public.app-category.graphics-design
+  icon: build/icon.icns
+  target: dmg
+linux:
+  target: AppImage
+  icon: build/icon.png
+  category: Graphics;RasterGraphics
+electronVersion: 22.3.27

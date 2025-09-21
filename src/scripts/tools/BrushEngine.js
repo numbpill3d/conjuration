@@ -8,8 +8,9 @@ class BrushEngine {
    * Create a new BrushEngine
    * @param {PixelCanvas} canvas - The PixelCanvas instance
    */
-  constructor(canvas) {
+  constructor(canvas, glitchTool) {
     this.canvas = canvas;
+     this.glitchTool = glitchTool || null;
     this.activeBrush = 'pencil';
     this.brushSize = 1;
     this.primaryColor = '#ffffff';
@@ -68,7 +69,7 @@ class BrushEngine {
         this.drawWithPencil(x, y, color);
         break;
       case 'brush':
-        this.drawWithBrush(x, y, color);
+        this.drawWithBrush(x, y, color, this.brushSize, 1.0);
         break;
       case 'eraser':
         this.drawWithEraser(x, y);
@@ -126,7 +127,7 @@ class BrushEngine {
         this.drawWithPencil(x, y, color);
         break;
       case 'brush':
-        this.drawWithBrush(x, y, color);
+        this.drawWithBrush(x, y, color, this.brushSize, 1.0);
         break;
       case 'eraser':
         this.drawWithEraser(x, y);
@@ -465,7 +466,11 @@ class BrushEngine {
     // Draw a basic pixel
     this.canvas.drawPixel(x, y, color);
 
-    // Add random glitch effects - reduced probability and effect size
+    // Use the integrated GlitchTool for enhanced effects, scaled by brush size
+     if (this.glitchTool) {
+       this.glitchTool.setIntensity(this.brushSize / 10);
+       this.glitchTool.applyRandomGlitch();
+     }
     if (Math.random() < 0.15) {
       // Randomly shift a row but only in a limited area around the cursor
       const rowY = y;
@@ -837,4 +842,177 @@ class BrushEngine {
     // Convert back to hex
     return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
   }
+   /**
+    * Apply blur brush (average neighboring pixels)
+    * @param {number} x - X coordinate
+    * @param {number} y - Y coordinate
+    * @param {string} color - Color in hex format
+    */
+   applyBlurBrush(x, y, color) {
+     const radius = this.brushSize;
+     for (let i = -radius; i <= radius; i++) {
+       for (let j = -radius; j <= radius; j++) {
+         const nx = x + i;
+         const ny = y + j;
+         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
+           const neighbors = [];
+           const count = 0;
+           for (let di = -1; di <= 1; di++) {
+             for (let dj = -1; dj <= 1; dj++) {
+               const nnx = nx + di;
+               const nny = ny + dj;
+               if (nnx >= 0 && nnx < this.canvas.width && nny >= 0 && nny < this.canvas.height) {
+                 neighbors.push(this.canvas.getPixel(nnx, nny));
+                 count++;
+               }
+             }
+           }
+           // Average the neighbors
+           let totalR = 0, totalG = 0, totalB = 0;
+           neighbors.forEach(c => {
+             const r = parseInt(c.slice(1, 3), 16);
+             const g = parseInt(c.slice(3, 5), 16);
+             const b = parseInt(c.slice(5, 7), 16);
+             totalR += r;
+             totalG += g;
+             totalB += b;
+           });
+           const avgR = Math.round(totalR / count);
+           const avgG = Math.round(totalG / count);
+           const avgB = Math.round(totalB / count);
+           const avgColor = `#${avgR.toString(16).padStart(2, '0')}${avgG.toString(16).padStart(2, '0')}${avgB.toString(16).padStart(2, '0')}`;
+           this.canvas.drawPixel(nx, ny, avgColor);
+         }
+       }
+     }
+   }
+
+   /**
+    * Apply smudge brush (mix with neighbors)
+    * @param {number} x - X coordinate
+    * @param {number} y - Y coordinate
+    * @param {string} color - Color in hex format
+    */
+   applySmudgeBrush(x, y, color) {
+     const radius = this.brushSize;
+     for (let i = -radius; i <= radius; i++) {
+       for (let j = -radius; j <= radius; j++) {
+         const nx = x + i;
+         const ny = y + j;
+         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
+           const currentColor = this.canvas.getPixel(nx, ny);
+           const mixRatio = 0.5; // 50% mix
+           const r1 = parseInt(currentColor.slice(1, 3), 16);
+           const g1 = parseInt(currentColor.slice(3, 5), 16);
+           const b1 = parseInt(currentColor.slice(5, 7), 16);
+           const r2 = parseInt(color.slice(1, 3), 16);
+           const g2 = parseInt(color.slice(3, 5), 16);
+           const b2 = parseInt(color.slice(5, 7), 16);
+           const mixedR = Math.round(r1 * mixRatio + r2 * (1 - mixRatio));
+           const mixedG = Math.round(g1 * mixRatio + g2 * (1 - mixRatio));
+           const mixedB = Math.round(b1 * mixRatio + b2 * (1 - mixRatio));
+           const mixedColor = `#${mixedR.toString(16).padStart(2, '0')}${mixedG.toString(16).padStart(2, '0')}${mixedB.toString(16).padStart(2, '0')}`;
+           this.canvas.drawPixel(nx, ny, mixedColor);
+         }
+       }
+     }
+   }
+
+   /**
+    * Apply gradient fill brush
+    * @param {number} x - X coordinate
+    * @param {number} y - Y coordinate
+    * @param {string} color - Color in hex format
+    */
+   applyGradientBrush(x, y, color) {
+     const radius = this.brushSize;
+     for (let i = -radius; i <= radius; i++) {
+       for (let j = -radius; j <= radius; j++) {
+         const nx = x + i;
+         const ny = y + j;
+         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
+           // Simple linear gradient from center
+           const dx = i / radius;
+           const dy = j / radius;
+           const gradientFactor = Math.max(dx, dy);
+           const r1 = parseInt(color.slice(1, 3), 16);
+           const g1 = parseInt(color.slice(3, 5), 16);
+           const b1 = parseInt(color.slice(5, 7), 16);
+           const r2 = 0, g2 = 0, b2 = 0; // Fade to black
+           const gradR = Math.round(r1 * (1 - gradientFactor));
+           const gradG = Math.round(g1 * (1 - gradientFactor));
+           const gradB = Math.round(b1 * (1 - gradientFactor));
+           const gradColor = `#${gradR.toString(16).padStart(2, '0')}${gradG.toString(16).padStart(2, '0')}${gradB.toString(16).padStart(2, '0')}`;
+           this.canvas.drawPixel(nx, ny, gradColor);
+         }
+       }
+     }
+   }
+
+   /**
+    * Apply textured brush (simple checker pattern)
+    * @param {number} x - X coordinate
+    * @param {number} y - Y coordinate
+    * @param {string} color - Color in hex format
+    */
+   applyTexturedBrush(x, y, color) {
+     const radius = this.brushSize;
+     for (let i = -radius; i <= radius; i++) {
+       for (let j = -radius; j <= radius; j++) {
+         const nx = x + i;
+         const ny = y + j;
+         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
+           // Checker texture
+           if ((i + j) % 2 === 0) {
+             this.canvas.drawPixel(nx, ny, color);
+           }
+         }
+       }
+     }
+   }
+
+   /**
+    * Set brush preset
+    * @param {string} presetName - Preset name
+    */
+   setBrushPreset(presetName) {
+     const presets = {
+       'soft': { type: 'brush', size: 5 },
+       'hard': { type: 'pencil', size: 1 },
+       'spray': { type: 'spray', size: 8 },
+       'blur': { type: 'blur', size: 3 },
+       'smudge': { type: 'smudge', size: 3 },
+       'gradient': { type: 'gradient', size: 4 },
+       'textured': { type: 'textured', size: 4 }
+     };
+     if (presets[presetName]) {
+       this.activeBrush = presets[presetName].type;
+       this.brushSize = presets[presetName].size;
+       const brushSizeSlider = document.getElementById('brush-size');
+       if (brushSizeSlider) brushSizeSlider.value = this.brushSize;
+       const brushSizeValue = document.getElementById('brush-size-value');
+       if (brushSizeValue) brushSizeValue.textContent = this.brushSize;
+     }
+   }
+
+   /**
+    * Save current brush as preset
+    * @param {string} name - Preset name
+    */
+   saveBrushPreset(name) {
+     const presets = JSON.parse(localStorage.getItem('brushPresets') || '{}');
+     presets[name] = {
+       type: this.activeBrush,
+       size: this.brushSize
+     };
+     localStorage.setItem('brushPresets', JSON.stringify(presets));
+   }
+
+   /**
+    * Load brush presets from localStorage
+    * @returns {Object} Presets object
+    */
+   loadBrushPresets() {
+     return JSON.parse(localStorage.getItem('brushPresets') || '{}');
+   }
 }

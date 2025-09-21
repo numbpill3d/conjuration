@@ -1,8 +1,8 @@
 {
-  "name": "voidsketch",
-  "productName": "VOIDSKETCH",
+  "name": "conjuration",
+  "productName": "Conjuration",
   "version": "0.1.0",
-  "description": "A pixel art editor for making creepy, grainy, monochrome, low-res masterpieces",
+  "description": "Conjuration: A pixel art editor for creating eerie, glitchy, low-res digital rituals inspired by retro aesthetics and occult themes",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -16,12 +16,13 @@
   "keywords": [
     "pixel art",
     "animation",
-    "glitch",
-    "uno moralez",
-    "lain",
-    "morrowind"
+    "glitch art",
+    "retro aesthetics",
+    "serial experiments lain",
+    "morrowind",
+    "occult digital art"
   ],
-  "author": "Your Name",
+  "author": "Conjuration Team",
   "license": "MIT",
   "devDependencies": {
     "electron": "^22.0.0",
@@ -33,7 +34,7 @@
     "gif.js": "^0.2.0"
   },
   "build": {
-    "appId": "com.voidsketch.conjuration",
+    "appId": "com.conjuration.app",
     "productName": "Conjuration",
     "directories": {
       "output": "dist"
@@ -42,6 +43,7 @@
       "main.js",
       "preload.js",
       "src/**/*",
+      "build/**/*",
       "node_modules/**/*"
     ],
     "win": {
@@ -72,7 +74,7 @@
     "linux": {
       "target": "AppImage",
       "icon": "build/icon.png",
-      "category": "Graphics"
+      "category": "Graphics;RasterGraphics"
     }
   }
 }

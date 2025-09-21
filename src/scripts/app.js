@@ -36,8 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show canvas size selection dialog on startup
   showCanvasSizeSelectionDialog();
 
+  // Initialize Glitch Tool for enhanced glitch effects
+  const glitchTool = new GlitchTool(pixelCanvas);
+
   // Initialize Brush Engine
-  const brushEngine = new BrushEngine(pixelCanvas);
+  const brushEngine = new BrushEngine(pixelCanvas, glitchTool);
 
   // Initialize Symmetry Tools
   const symmetryTools = new SymmetryTools(pixelCanvas);
@@ -93,6 +96,113 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAnimationControls();
     setupZoomControls();
     setupMiscControls();
+   /**
+    * Set up keyboard shortcuts
+    */
+   function setupKeyboardShortcuts() {
+     document.addEventListener('keydown', (e) => {
+       // Undo/Redo
+       if (e.ctrlKey || e.metaKey) {
+         if (e.key === 'z') {
+           e.preventDefault();
+           if (e.shiftKey) {
+             pixelCanvas.redo();
+           } else {
+             pixelCanvas.undo();
+           }
+         }
+       }
+
+       // Zoom
+       if (e.key === '0') {
+         pixelCanvas.resetZoom();
+         updateZoomLevel();
+       } else if (e.key === '+' || e.key === '=') {
+         e.preventDefault();
+         pixelCanvas.zoomIn();
+         updateZoomLevel();
+       } else if (e.key === '-') {
+         e.preventDefault();
+         pixelCanvas.zoomOut();
+         updateZoomLevel();
+       }
+
+       // Brush tools
+       if (e.key === '1') {
+         brushEngine.setActiveBrush('pencil');
+         uiManager.setActiveTool('brush-pencil');
+       } else if (e.key === '2') {
+         brushEngine.setActiveBrush('brush');
+         uiManager.setActiveTool('brush-brush');
+       } else if (e.key === '3') {
+         brushEngine.setActiveBrush('spray');
+         uiManager.setActiveTool('brush-spray');
+       } else if (e.key === '4') {
+         brushEngine.setActiveBrush('eraser');
+         uiManager.setActiveTool('brush-eraser');
+       } else if (e.key === '5') {
+         brushEngine.setActiveBrush('fill');
+         uiManager.setActiveTool('brush-fill');
+       } else if (e.key === '6') {
+         brushEngine.setActiveBrush('line');
+         uiManager.setActiveTool('brush-line');
+       } else if (e.key === '7') {
+         brushEngine.setActiveBrush('rect');
+         uiManager.setActiveTool('brush-rect');
+       } else if (e.key === '8') {
+         brushEngine.setActiveBrush('ellipse');
+         uiManager.setActiveTool('brush-ellipse');
+       } else if (e.key === '9') {
+         brushEngine.setActiveBrush('glitch');
+         uiManager.setActiveTool('brush-glitch');
+       }
+
+       // Symmetry
+       if (e.key === 'h') {
+         symmetryTools.setSymmetryMode('horizontal');
+         uiManager.setActiveSymmetry('symmetry-horizontal');
+       } else if (e.key === 'v') {
+         symmetryTools.setSymmetryMode('vertical');
+         uiManager.setActiveSymmetry('symmetry-vertical');
+       } else if (e.key === 'q') {
+         symmetryTools.setSymmetryMode('quad');
+         uiManager.setActiveSymmetry('symmetry-quad');
+       } else if (e.key === 'o') {
+         symmetryTools.setSymmetryMode('octal');
+         uiManager.setActiveSymmetry('symmetry-octal');
+       }
+
+       // Timeline
+       if (e.key === 'n') {
+         timeline.addFrame();
+       } else if (e.key === 'd') {
+         timeline.duplicateCurrentFrame();
+       } else if (e.key === 'x') {
+         timeline.deleteCurrentFrame();
+       } else if (e.key === 'space') {
+         e.preventDefault();
+         if (timeline.isPlaying) {
+           timeline.stopAnimation();
+         } else {
+           timeline.playAnimation();
+         }
+       }
+
+       // Toggle grid
+       if (e.key === 'g') {
+         pixelCanvas.toggleGrid();
+       }
+
+       // Toggle onion skin
+       if (e.key === 's') {
+         const onionSkinCheckbox = document.getElementById('onion-skin');
+         if (onionSkinCheckbox) {
+           onionSkinCheckbox.checked = !onionSkinCheckbox.checked;
+           timeline.setOnionSkinning(onionSkinCheckbox.checked);
+         }
+       }
+     });
+   }
     
     updateCanvasSizeDisplay();
     uiManager.setActiveTool('brush-pencil');

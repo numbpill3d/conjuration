@@ -34,7 +34,9 @@ class PixelCanvas {
     this.zoom = 1;
 
     // Pixel data
-    this.pixels = new Array(this.width * this.height).fill('#000000');
+    this.layers = [];
+     this.currentLayerIndex = 0;
+     this.addLayer(); // Initial layer
 
     // Undo/Redo history
     this.history = [];
@@ -79,6 +81,86 @@ class PixelCanvas {
     this.setupEventListeners();
 
     // Start the effects animation loop
+   /**
+    * Add a new layer
+    * @param {string} name - Layer name (optional)
+    * @param {number} opacity - Layer opacity (0-1, optional)
+    * @returns {number} Index of the new layer
+    */
+   addLayer(name = 'Layer', opacity = 1.0) {
+     const newLayer = {
+       name: name,
+       opacity: Math.max(0, Math.min(1, opacity)),
+       pixels: new Array(this.width * this.height).fill('#000000'),
+       visible: true
+     };
+     this.layers.push(newLayer);
+     this.currentLayerIndex = this.layers.length - 1;
+     this.saveToHistory();
+     return this.currentLayerIndex;
+   }
+
+   /**
+    * Delete the current layer
+    */
+   deleteLayer() {
+     if (this.layers.length > 1) {
+       this.layers.splice(this.currentLayerIndex, 1);
+       if (this.currentLayerIndex >= this.layers.length) {
+         this.currentLayerIndex = this.layers.length - 1;
+       }
+       this.saveToHistory();
+     }
+   }
+
+   /**
+    * Set the current layer
+    * @param {number} index - Layer index
+    */
+   setCurrentLayer(index) {
+     if (index >= 0 && index < this.layers.length) {
+       this.currentLayerIndex = index;
+     }
+   }
+
+   /**
+    * Set layer opacity
+    * @param {number} index - Layer index
+    * @param {number} opacity - Opacity (0-1)
+    */
+   setLayerOpacity(index, opacity) {
+     if (index >= 0 && index < this.layers.length) {
+       this.layers[index].opacity = Math.max(0, Math.min(1, opacity));
+     }
+   }
+
+   /**
+    * Toggle layer visibility
+    * @param {number} index - Layer index
+    */
+   toggleLayerVisibility(index) {
+     if (index >= 0 && index < this.layers.length) {
+       this.layers[index].visible = !this.layers[index].visible;
+     }
+   }
+
+   /**
+    * Get current layer pixels
+    * @returns {Array} Current layer pixel data
+    */
+   getCurrentLayerPixels() {
+     return this.layers[this.currentLayerIndex].pixels;
+   }
+
+   /**
+    * Set current layer pixels
+    * @param {Array} pixels - Pixel data
+    */
+   setCurrentLayerPixels(pixels) {
+     if (pixels.length === this.width * this.height) {
+       this.layers[this.currentLayerIndex].pixels = [...pixels];
+     }
+   }
     this.animateEffects();
   }
 
@@ -225,7 +307,7 @@ class PixelCanvas {
   drawPixel(x, y, color) {
     if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
       const index = y * this.width + x;
-      this.pixels[index] = color;
+      this.layers[this.currentLayerIndex].pixels[index] = color;
     }
   }
 
@@ -402,7 +484,7 @@ class PixelCanvas {
   getPixel(x, y) {
     if (x >= 0 && x < this.width && y >= 0 && y < this.height) {
       const index = y * this.width + x;
-      return this.pixels[index];
+      return this.layers[this.currentLayerIndex].pixels[index];
     }
     return null;
   }
@@ -811,7 +893,9 @@ class PixelCanvas {
   setDimensions(width, height) {
     this.width = width;
     this.height = height;
-    this.pixels = new Array(this.width * this.height).fill('#000000');
+    this.layers = [];
+     this.currentLayerIndex = 0;
+     this.addLayer(); // Initial layer
     this.initCanvas();
   }
 
@@ -893,7 +977,18 @@ class PixelCanvas {
    * @returns {Array} Pixel data
    */
   getPixelData() {
-    return [...this.pixels];
+    // Return composite pixel data from all visible layers (top layer overrides)
+     const compositePixels = new Array(this.width * this.height).fill('#000000');
+     for (let i = this.layers.length - 1; i >= 0; i--) { // Render from top to bottom
+       const layer = this.layers[i];
+       if (!layer.visible) continue;
+       for (let j = 0; j < layer.pixels.length; j++) {
+         if (layer.pixels[j] !== '#000000') {
+           compositePixels[j] = layer.pixels[j];
+         }
+       }
+     }
+     return compositePixels;
   }
 
   /**
