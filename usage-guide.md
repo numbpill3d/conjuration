@@ -14,12 +14,14 @@ VOIDSKETCH is an offline-first pixel art editor designed for creating creepy, gr
 ### Setup
 
 1. Clone the repository or extract the downloaded archive:
+
    ```
    git clone https://github.com/yourusername/voidsketch.git
    cd voidsketch
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
@@ -125,6 +127,7 @@ The VOIDSKETCH interface consists of:
 ### Working with Themes
 
 Switch between themes via the View menu:
+
 - View → Lain Dive Theme
 - View → Morrowind Glyph Theme
 - View → Monolith Theme
@@ -157,6 +160,7 @@ Switch between themes via the View menu:
 ## Project Files
 
 VOIDSKETCH uses a custom .void file format that contains:
+
 - Canvas size information
 - All animation frames
 - Palette and effect settings
@@ -172,6 +176,7 @@ VOIDSKETCH uses a custom .void file format that contains:
 ## Credits
 
 VOIDSKETCH was inspired by:
+
 - The pixel art of Uno Moralez
 - The interface aesthetics of Serial Experiments Lain
 - The UI design of The Elder Scrolls III: Morrowind

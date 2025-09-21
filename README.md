@@ -5,6 +5,7 @@ A pixel art editor for creating creepy, grainy, monochrome, low-res masterpieces
 ## Features
 
 ### Drawing Tools
+
 - **Pencil**: Basic pixel-perfect drawing
 - **Brush**: Soft brush with opacity falloff
 - **Spray**: Airbrush-style tool
@@ -20,6 +21,7 @@ A pixel art editor for creating creepy, grainy, monochrome, low-res masterpieces
 - **Fill**: Flood fill areas with color
 
 ### Symmetry Tools
+
 - **None**: Normal drawing
 - **Horizontal**: Mirror horizontally
 - **Vertical**: Mirror vertically
@@ -27,12 +29,14 @@ A pixel art editor for creating creepy, grainy, monochrome, low-res masterpieces
 - **Octal**: 8-way symmetry
 
 ### Color Palettes
+
 - **Monochrome**: Classic black and white
 - **Lain**: Purple hues inspired by Serial Experiments Lain
 - **Red**: Red monochrome palette
 - **Green**: Green monochrome palette
 
 ### Visual Effects
+
 - **Grain**: Add film grain effect
 - **Static**: TV static overlay
 - **Glitch**: Digital glitch effects
@@ -43,6 +47,7 @@ A pixel art editor for creating creepy, grainy, monochrome, low-res masterpieces
 - **Pixelate**: Pixelation effect
 
 ### Animation
+
 - **Timeline**: Frame-by-frame animation
 - **Onion Skinning**: See previous/next frames
 - **Playback Controls**: Play, stop, loop
@@ -50,6 +55,7 @@ A pixel art editor for creating creepy, grainy, monochrome, low-res masterpieces
 - **GIF Export**: Export animations as GIF files
 
 ### Themes
+
 - **Lain Dive**: Purple cyberpunk aesthetic
 - **Morrowind Glyph**: Warm sepia tones
 - **Monolith**: High contrast black and white
@@ -65,16 +71,19 @@ A pixel art editor for creating creepy, grainy, monochrome, low-res masterpieces
 ## Usage
 
 ### Starting the Application
+
 ```bash
 npm start
 ```
 
 ### Building for Distribution
+
 ```bash
 npm run build
 ```
 
 ### Packaging for Multiple Platforms
+
 ```bash
 npm run package
 ```
@@ -82,11 +91,13 @@ npm run package
 ## Controls
 
 ### Drawing
+
 - **Left Click**: Draw with primary color (white)
 - **Right Click**: Draw with secondary color (black)
 - **Mouse Wheel**: Zoom in/out on canvas
 
 ### Keyboard Shortcuts
+
 - **Ctrl+N**: New project
 - **Ctrl+O**: Open project
 - **Ctrl+S**: Save project
@@ -96,6 +107,7 @@ npm run package
 - **Ctrl+G**: Toggle grid
 
 ### Tool Shortcuts
+
 - **B**: Pencil tool
 - **E**: Eraser tool
 - **F**: Fill tool
@@ -108,13 +120,16 @@ npm run package
 ## File Formats
 
 ### Project Files (.void)
+
 Save and load complete projects including:
+
 - Canvas dimensions
 - All animation frames
 - Current palette
 - Effect settings
 
 ### Export Formats
+
 - **PNG**: Export current frame as PNG image
 - **GIF**: Export animation as animated GIF
 - **Sprite Sheet**: Export all frames as a sprite sheet
@@ -122,18 +137,21 @@ Save and load complete projects including:
 ## Technical Details
 
 ### Built With
+
 - **Electron**: Cross-platform desktop app framework
 - **HTML5 Canvas**: For pixel-perfect rendering
 - **JavaScript**: Core application logic
 - **CSS3**: Theming and visual effects
 
 ### Architecture
+
 - **Main Process**: Electron main process (main.js)
 - **Renderer Process**: UI and canvas rendering
 - **IPC Communication**: Secure communication between processes
 - **Modular Design**: Separate classes for different functionality
 
 ### Performance
+
 - **Efficient Rendering**: Optimized canvas operations
 - **Memory Management**: Proper cleanup and garbage collection
 - **History System**: Undo/redo with memory limits
@@ -142,6 +160,7 @@ Save and load complete projects including:
 ## Development
 
 ### Project Structure
+
 ```
 conjuration/
 ├── main.js                 # Electron main process
@@ -163,12 +182,14 @@ conjuration/
 ```
 
 ### Adding New Tools
+
 1. Create a new tool class in `src/scripts/tools/`
 2. Add the tool button to the HTML
 3. Register the tool in the brush engine
 4. Add keyboard shortcut if desired
 
 ### Adding New Themes
+
 1. Create a new CSS file in `src/styles/themes/`
 2. Define CSS custom properties for colors
 3. Add theme option to the view menu
@@ -197,18 +218,22 @@ MIT License - see LICENSE file for details
 ### Common Issues
 
 **App won't start**
+
 - Make sure all dependencies are installed: `npm install`
 - Check that Node.js and npm are properly installed
 
 **Canvas not responding**
+
 - Try refreshing the app (Ctrl+R in development)
 - Check browser console for JavaScript errors
 
 **Export not working**
+
 - Ensure you have write permissions to the export directory
 - Try exporting to a different location
 
 **Performance issues**
+
 - Reduce canvas size for better performance
 - Disable visual effects if needed
 - Close other applications to free up memory
@@ -216,6 +241,7 @@ MIT License - see LICENSE file for details
 ### Getting Help
 
 If you encounter issues:
+
 1. Check the console for error messages
 2. Try restarting the application
 3. Create an issue on the project repository
@@ -223,4 +249,4 @@ If you encounter issues:
 
 ---
 
-*"Present day, present time... and you don't seem to understand."*
+_"Present day, present time... and you don't seem to understand."_
