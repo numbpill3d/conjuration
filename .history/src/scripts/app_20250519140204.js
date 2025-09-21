@@ -6,7 +6,7 @@
  */
 
 // Wait for DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI Manager
   const uiManager = new UIManager();
 
@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Canvas
   const pixelCanvas = new PixelCanvas({
-    canvasId: 'pixel-canvas',
-    effectsCanvasId: 'effects-canvas',
-    uiCanvasId: 'ui-canvas',
+    canvasId: "pixel-canvas",
+    effectsCanvasId: "effects-canvas",
+    uiCanvasId: "ui-canvas",
     width: 64,
     height: 64,
-    pixelSize: 8
+    pixelSize: 8,
   });
 
   // Initialize Brush Engine
@@ -51,132 +51,145 @@ document.addEventListener('DOMContentLoaded', () => {
   timeline.addFrame();
 
   // Show welcome message
-  uiManager.showToast('Welcome to VOIDSKETCH', 'success');
+  uiManager.showToast("Welcome to VOIDSKETCH", "success");
 
   /**
    * Set up all event listeners for the application
    */
   function setupEventListeners() {
     // Window control buttons
-    document.getElementById('minimize-button').addEventListener('click', () => {
+    document.getElementById("minimize-button").addEventListener("click", () => {
       voidAPI.minimizeWindow();
     });
 
-    document.getElementById('maximize-button').addEventListener('click', () => {
-      voidAPI.maximizeWindow().then(result => {
+    document.getElementById("maximize-button").addEventListener("click", () => {
+      voidAPI.maximizeWindow().then((result) => {
         // Update button text based on window state
-        document.getElementById('maximize-button').textContent =
-          result.isMaximized ? '□' : '[]';
+        document.getElementById("maximize-button").textContent =
+          result.isMaximized ? "□" : "[]";
       });
     });
 
-    document.getElementById('close-button').addEventListener('click', () => {
+    document.getElementById("close-button").addEventListener("click", () => {
       voidAPI.closeWindow();
     });
 
     // Menu buttons
-    document.getElementById('file-menu-button').addEventListener('click', () => {
-      menuSystem.toggleMenu('file-menu');
-    });
+    document
+      .getElementById("file-menu-button")
+      .addEventListener("click", () => {
+        menuSystem.toggleMenu("file-menu");
+      });
 
-    document.getElementById('edit-menu-button').addEventListener('click', () => {
-      menuSystem.toggleMenu('edit-menu');
-    });
+    document
+      .getElementById("edit-menu-button")
+      .addEventListener("click", () => {
+        menuSystem.toggleMenu("edit-menu");
+      });
 
-    document.getElementById('view-menu-button').addEventListener('click', () => {
-      menuSystem.toggleMenu('view-menu');
-    });
+    document
+      .getElementById("view-menu-button")
+      .addEventListener("click", () => {
+        menuSystem.toggleMenu("view-menu");
+      });
 
-    document.getElementById('export-menu-button').addEventListener('click', () => {
-      menuSystem.toggleMenu('export-menu');
-    });
+    document
+      .getElementById("export-menu-button")
+      .addEventListener("click", () => {
+        menuSystem.toggleMenu("export-menu");
+      });
 
-    document.getElementById('lore-menu-button').addEventListener('click', () => {
-      menuSystem.toggleMenu('lore-menu');
-    });
+    document
+      .getElementById("lore-menu-button")
+      .addEventListener("click", () => {
+        menuSystem.toggleMenu("lore-menu");
+      });
 
     // File menu items
-    document.getElementById('new-project').addEventListener('click', () => {
+    document.getElementById("new-project").addEventListener("click", () => {
       uiManager.showConfirmDialog(
-        'Create New Project',
-        'This will clear your current project. Are you sure?',
+        "Create New Project",
+        "This will clear your current project. Are you sure?",
         () => {
           pixelCanvas.clear();
           timeline.clear();
           timeline.addFrame();
           menuSystem.closeAllMenus();
-          uiManager.showToast('New project created', 'success');
-        }
+          uiManager.showToast("New project created", "success");
+        },
       );
     });
 
-    document.getElementById('open-project').addEventListener('click', () => {
-      voidAPI.openProject().then(result => {
+    document.getElementById("open-project").addEventListener("click", () => {
+      voidAPI.openProject().then((result) => {
         if (result.success) {
           try {
             const projectData = result.data;
             pixelCanvas.setDimensions(projectData.width, projectData.height);
             timeline.loadFromData(projectData.frames);
             menuSystem.closeAllMenus();
-            uiManager.showToast('Project loaded successfully', 'success');
+            uiManager.showToast("Project loaded successfully", "success");
           } catch (error) {
-            uiManager.showToast('Failed to load project: ' + error.message, 'error');
+            uiManager.showToast(
+              "Failed to load project: " + error.message,
+              "error",
+            );
           }
         }
       });
     });
 
-    document.getElementById('save-project').addEventListener('click', () => {
+    document.getElementById("save-project").addEventListener("click", () => {
       const projectData = {
         width: pixelCanvas.width,
         height: pixelCanvas.height,
         frames: timeline.getFramesData(),
         palette: paletteTool.getCurrentPalette(),
         effects: {
-          grain: document.getElementById('effect-grain').checked,
-          static: document.getElementById('effect-static').checked,
-          glitch: document.getElementById('effect-glitch').checked,
-          crt: document.getElementById('effect-crt').checked,
-          intensity: document.getElementById('effect-intensity').value
-        }
+          grain: document.getElementById("effect-grain").checked,
+          static: document.getElementById("effect-static").checked,
+          glitch: document.getElementById("effect-glitch").checked,
+          crt: document.getElementById("effect-crt").checked,
+          intensity: document.getElementById("effect-intensity").value,
+        },
       };
 
-      voidAPI.saveProject(projectData).then(result => {
+      voidAPI.saveProject(projectData).then((result) => {
         if (result.success) {
           menuSystem.closeAllMenus();
-          uiManager.showToast('Project saved successfully', 'success');
+          uiManager.showToast("Project saved successfully", "success");
         } else {
-          uiManager.showToast('Failed to save project', 'error');
+          uiManager.showToast("Failed to save project", "error");
         }
       });
     });
 
     // Edit menu items
-    document.getElementById('undo').addEventListener('click', () => {
+    document.getElementById("undo").addEventListener("click", () => {
       if (pixelCanvas.undo()) {
-        uiManager.showToast('Undo successful', 'info');
+        uiManager.showToast("Undo successful", "info");
       } else {
-        uiManager.showToast('Nothing to undo', 'info');
+        uiManager.showToast("Nothing to undo", "info");
       }
       menuSystem.closeAllMenus();
     });
 
-    document.getElementById('redo').addEventListener('click', () => {
+    document.getElementById("redo").addEventListener("click", () => {
       if (pixelCanvas.redo()) {
-        uiManager.showToast('Redo successful', 'info');
+        uiManager.showToast("Redo successful", "info");
       } else {
-        uiManager.showToast('Nothing to redo', 'info');
+        uiManager.showToast("Nothing to redo", "info");
       }
       menuSystem.closeAllMenus();
     });
 
-    document.getElementById('toggle-grid').addEventListener('click', () => {
+    document.getElementById("toggle-grid").addEventListener("click", () => {
       pixelCanvas.toggleGrid();
       menuSystem.closeAllMenus();
-      uiManager.showToast('Grid toggled', 'info');
+      uiManager.showToast("Grid toggled", "info");
     });
 
-    document.getElementById('resize-canvas').addEventListener('click', () => {
+    document.getElementById("resize-canvas").addEventListener("click", () => {
       // Show canvas resize dialog
       const content = `
         <div class="form-group">
@@ -207,124 +220,136 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       `;
 
-      uiManager.showModal('Resize Canvas', content, () => {
+      uiManager.showModal("Resize Canvas", content, () => {
         menuSystem.closeAllMenus();
       });
 
       // Add event listeners to preset buttons
-      document.querySelectorAll('.preset-size-button').forEach(button => {
-        button.addEventListener('click', () => {
+      document.querySelectorAll(".preset-size-button").forEach((button) => {
+        button.addEventListener("click", () => {
           const width = parseInt(button.dataset.width);
           const height = parseInt(button.dataset.height);
-          document.getElementById('canvas-width').value = width;
-          document.getElementById('canvas-height').value = height;
+          document.getElementById("canvas-width").value = width;
+          document.getElementById("canvas-height").value = height;
         });
       });
 
       // Add resize button to modal footer
-      const modalFooter = document.createElement('div');
-      modalFooter.className = 'modal-footer';
+      const modalFooter = document.createElement("div");
+      modalFooter.className = "modal-footer";
 
-      const cancelButton = document.createElement('button');
-      cancelButton.className = 'modal-button';
-      cancelButton.textContent = 'Cancel';
-      cancelButton.addEventListener('click', () => {
+      const cancelButton = document.createElement("button");
+      cancelButton.className = "modal-button";
+      cancelButton.textContent = "Cancel";
+      cancelButton.addEventListener("click", () => {
         uiManager.hideModal();
       });
 
-      const resizeButton = document.createElement('button');
-      resizeButton.className = 'modal-button primary';
-      resizeButton.textContent = 'Resize';
-      resizeButton.addEventListener('click', () => {
-        const width = parseInt(document.getElementById('canvas-width').value);
-        const height = parseInt(document.getElementById('canvas-height').value);
-        const preserveContent = document.getElementById('preserve-content').checked;
+      const resizeButton = document.createElement("button");
+      resizeButton.className = "modal-button primary";
+      resizeButton.textContent = "Resize";
+      resizeButton.addEventListener("click", () => {
+        const width = parseInt(document.getElementById("canvas-width").value);
+        const height = parseInt(document.getElementById("canvas-height").value);
+        const preserveContent =
+          document.getElementById("preserve-content").checked;
 
         if (width > 0 && height > 0 && width <= 1024 && height <= 1024) {
           pixelCanvas.resize(width, height, preserveContent);
           updateCanvasSizeDisplay();
           uiManager.hideModal();
-          uiManager.showToast(`Canvas resized to ${width}×${height}`, 'success');
+          uiManager.showToast(
+            `Canvas resized to ${width}×${height}`,
+            "success",
+          );
         } else {
-          uiManager.showToast('Invalid dimensions', 'error');
+          uiManager.showToast("Invalid dimensions", "error");
         }
       });
 
       modalFooter.appendChild(cancelButton);
       modalFooter.appendChild(resizeButton);
 
-      document.querySelector('.modal-dialog').appendChild(modalFooter);
+      document.querySelector(".modal-dialog").appendChild(modalFooter);
 
       menuSystem.closeAllMenus();
     });
 
     // Export menu items
-    document.getElementById('export-png').addEventListener('click', () => {
+    document.getElementById("export-png").addEventListener("click", () => {
       const pngDataUrl = pixelCanvas.exportToPNG();
-      voidAPI.exportPng(pngDataUrl).then(result => {
+      voidAPI.exportPng(pngDataUrl).then((result) => {
         if (result.success) {
           menuSystem.closeAllMenus();
-          uiManager.showToast('PNG exported successfully', 'success');
+          uiManager.showToast("PNG exported successfully", "success");
         } else {
-          uiManager.showToast('Failed to export PNG', 'error');
+          uiManager.showToast("Failed to export PNG", "error");
         }
       });
     });
 
-    document.getElementById('export-gif').addEventListener('click', () => {
-      uiManager.showLoadingDialog('Generating GIF...');
+    document.getElementById("export-gif").addEventListener("click", () => {
+      uiManager.showLoadingDialog("Generating GIF...");
 
       // Get frame delay from input
-      const frameDelay = parseInt(document.getElementById('frame-delay').value);
+      const frameDelay = parseInt(document.getElementById("frame-delay").value);
 
       // Generate GIF
-      gifExporter.generateGif(frameDelay).then(gifData => {
-        voidAPI.exportGif(gifData).then(result => {
+      gifExporter
+        .generateGif(frameDelay)
+        .then((gifData) => {
+          voidAPI.exportGif(gifData).then((result) => {
+            uiManager.hideLoadingDialog();
+            if (result.success) {
+              menuSystem.closeAllMenus();
+              uiManager.showToast("GIF exported successfully", "success");
+            } else {
+              uiManager.showToast("Failed to export GIF", "error");
+            }
+          });
+        })
+        .catch((error) => {
           uiManager.hideLoadingDialog();
-          if (result.success) {
-            menuSystem.closeAllMenus();
-            uiManager.showToast('GIF exported successfully', 'success');
-          } else {
-            uiManager.showToast('Failed to export GIF', 'error');
-          }
+          uiManager.showToast(
+            "Failed to generate GIF: " + error.message,
+            "error",
+          );
         });
-      }).catch(error => {
-        uiManager.hideLoadingDialog();
-        uiManager.showToast('Failed to generate GIF: ' + error.message, 'error');
-      });
     });
 
     // Theme selection
-    document.getElementById('theme-lain-dive').addEventListener('click', () => {
-      themeManager.setTheme('lain-dive');
+    document.getElementById("theme-lain-dive").addEventListener("click", () => {
+      themeManager.setTheme("lain-dive");
       menuSystem.closeAllMenus();
     });
 
-    document.getElementById('theme-morrowind-glyph').addEventListener('click', () => {
-      themeManager.setTheme('morrowind-glyph');
-      menuSystem.closeAllMenus();
-    });
+    document
+      .getElementById("theme-morrowind-glyph")
+      .addEventListener("click", () => {
+        themeManager.setTheme("morrowind-glyph");
+        menuSystem.closeAllMenus();
+      });
 
-    document.getElementById('theme-monolith').addEventListener('click', () => {
-      themeManager.setTheme('monolith');
+    document.getElementById("theme-monolith").addEventListener("click", () => {
+      themeManager.setTheme("monolith");
       menuSystem.closeAllMenus();
     });
 
     // Tool buttons
-    document.querySelectorAll('.tool-button').forEach(button => {
-      button.addEventListener('click', () => {
+    document.querySelectorAll(".tool-button").forEach((button) => {
+      button.addEventListener("click", () => {
         const toolId = button.id;
 
         // Handle brush tools
-        if (toolId.startsWith('brush-')) {
-          const brushType = toolId.replace('brush-', '');
+        if (toolId.startsWith("brush-")) {
+          const brushType = toolId.replace("brush-", "");
           brushEngine.setActiveBrush(brushType);
           uiManager.setActiveTool(toolId);
         }
 
         // Handle symmetry tools
-        if (toolId.startsWith('symmetry-')) {
-          const symmetryType = toolId.replace('symmetry-', '');
+        if (toolId.startsWith("symmetry-")) {
+          const symmetryType = toolId.replace("symmetry-", "");
           symmetryTools.setSymmetryMode(symmetryType);
           uiManager.setActiveSymmetry(toolId);
         }
@@ -332,71 +357,73 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Palette options
-    document.querySelectorAll('.palette-option').forEach(option => {
-      option.addEventListener('click', () => {
+    document.querySelectorAll(".palette-option").forEach((option) => {
+      option.addEventListener("click", () => {
         const paletteId = option.id;
-        const paletteName = paletteId.replace('palette-', '');
+        const paletteName = paletteId.replace("palette-", "");
         paletteTool.setPalette(paletteName);
         uiManager.setActivePalette(paletteId);
       });
     });
 
     // Effect checkboxes
-    document.querySelectorAll('.effect-checkbox input').forEach(checkbox => {
-      checkbox.addEventListener('change', () => {
+    document.querySelectorAll(".effect-checkbox input").forEach((checkbox) => {
+      checkbox.addEventListener("change", () => {
         updateEffects();
       });
     });
 
     // Effect intensity slider
-    document.getElementById('effect-intensity').addEventListener('input', () => {
-      updateEffects();
-    });
+    document
+      .getElementById("effect-intensity")
+      .addEventListener("input", () => {
+        updateEffects();
+      });
 
     // Timeline controls
-    document.getElementById('add-frame').addEventListener('click', () => {
+    document.getElementById("add-frame").addEventListener("click", () => {
       timeline.addFrame();
     });
 
-    document.getElementById('duplicate-frame').addEventListener('click', () => {
+    document.getElementById("duplicate-frame").addEventListener("click", () => {
       timeline.duplicateCurrentFrame();
     });
 
-    document.getElementById('delete-frame').addEventListener('click', () => {
+    document.getElementById("delete-frame").addEventListener("click", () => {
       if (timeline.getFrameCount() > 1) {
         timeline.deleteCurrentFrame();
       } else {
-        uiManager.showToast('Cannot delete the only frame', 'error');
+        uiManager.showToast("Cannot delete the only frame", "error");
       }
     });
 
     // Animation controls
-    document.getElementById('play-animation').addEventListener('click', () => {
+    document.getElementById("play-animation").addEventListener("click", () => {
       timeline.playAnimation();
     });
 
-    document.getElementById('stop-animation').addEventListener('click', () => {
+    document.getElementById("stop-animation").addEventListener("click", () => {
       timeline.stopAnimation();
     });
 
-    document.getElementById('loop-animation').addEventListener('click', (e) => {
+    document.getElementById("loop-animation").addEventListener("click", (e) => {
       const loopButton = e.currentTarget;
-      loopButton.classList.toggle('active');
-      timeline.setLooping(loopButton.classList.contains('active'));
+      loopButton.classList.toggle("active");
+      timeline.setLooping(loopButton.classList.contains("active"));
     });
 
     // Onion skin toggle
-    document.getElementById('onion-skin').addEventListener('change', (e) => {
+    document.getElementById("onion-skin").addEventListener("change", (e) => {
       timeline.setOnionSkinning(e.target.checked);
     });
 
     // Zoom controls
-    document.getElementById('zoom-in').addEventListener('click', () => {
+    document.getElementById("zoom-in").addEventListener("click", () => {
       pixelCanvas.zoomIn();
       updateZoomLevel();
     });
 
-    document.getElementById('zoom-out').addEventListener('click', () => {
+    document.getElementById("zoom-out").addEventListener("click", () => {
       pixelCanvas.zoomOut();
       updateZoomLevel();
     });
@@ -405,9 +432,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCanvasSizeDisplay();
 
     // Initialize with default tool
-    uiManager.setActiveTool('brush-pencil');
-    uiManager.setActiveSymmetry('symmetry-none');
-    uiManager.setActivePalette('palette-monochrome');
+    uiManager.setActiveTool("brush-pencil");
+    uiManager.setActiveSymmetry("symmetry-none");
+    uiManager.setActivePalette("palette-monochrome");
   }
 
   /**
@@ -415,11 +442,11 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function updateEffects() {
     const effects = {
-      grain: document.getElementById('effect-grain').checked,
-      static: document.getElementById('effect-static').checked,
-      glitch: document.getElementById('effect-glitch').checked,
-      crt: document.getElementById('effect-crt').checked,
-      intensity: document.getElementById('effect-intensity').value / 100
+      grain: document.getElementById("effect-grain").checked,
+      static: document.getElementById("effect-static").checked,
+      glitch: document.getElementById("effect-glitch").checked,
+      crt: document.getElementById("effect-crt").checked,
+      intensity: document.getElementById("effect-intensity").value / 100,
     };
 
     pixelCanvas.setEffects(effects);
@@ -430,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   function updateZoomLevel() {
     const zoomPercent = Math.round(pixelCanvas.getZoom() * 100);
-    document.getElementById('zoom-level').textContent = zoomPercent + '%';
+    document.getElementById("zoom-level").textContent = zoomPercent + "%";
   }
 
   /**
@@ -439,6 +466,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateCanvasSizeDisplay() {
     const width = pixelCanvas.width;
     const height = pixelCanvas.height;
-    document.getElementById('canvas-size').textContent = `${width}x${height}`;
+    document.getElementById("canvas-size").textContent = `${width}x${height}`;
   }
 });

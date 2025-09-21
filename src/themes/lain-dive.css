@@ -1,20 +1,20 @@
 /* Lain Dive Theme - Serial Experiments Lain Inspired */
 
 .theme-lain-dive {
-  --primary-color: #6A1B9A;
-  --secondary-color: #9C27B0;
-  --accent-color: #E1BEE7;
+  --primary-color: #6a1b9a;
+  --secondary-color: #9c27b0;
+  --accent-color: #e1bee7;
   --background-color: #000000;
-  --background-light: #1A1A1A;
-  --text-color: #E1BEE7;
-  --text-dark: #B39DDB;
-  --border-color: #4A148C;
-  --highlight-color: #AA00FF;
+  --background-light: #1a1a1a;
+  --text-color: #e1bee7;
+  --text-dark: #b39ddb;
+  --border-color: #4a148c;
+  --highlight-color: #aa00ff;
 }
 
 /* Body with subtle scanlines */
 .theme-lain-dive body:before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -42,13 +42,18 @@
 }
 
 .theme-lain-dive .panel-title:after {
-  content: '_';
+  content: "_";
   animation: blink 1s step-end infinite;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* Canvas styling */
@@ -58,7 +63,7 @@
 
 /* Custom CRT effect */
 .theme-lain-dive #canvas-container:before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;

@@ -8,14 +8,14 @@
   --highlight-color: #ffffff;
   --error-color: #ffffff;
   --success-color: #ffffff;
-  
+
   --panel-bg: #0a0a0a;
   --panel-border: #333333;
   --button-bg: #1a1a1a;
   --button-hover: #2a2a2a;
   --button-active: #ffffff;
-  
-  font-family: 'Courier New', monospace;
+
+  font-family: "Courier New", monospace;
 }
 
 .theme-monolith #title-bar {

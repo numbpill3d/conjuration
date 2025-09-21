@@ -10,11 +10,11 @@ class BrushEngine {
    */
   constructor(canvas, glitchTool) {
     this.canvas = canvas;
-     this.glitchTool = glitchTool || null;
-    this.activeBrush = 'pencil';
+    this.glitchTool = glitchTool || null;
+    this.activeBrush = "pencil";
     this.brushSize = 1;
-    this.primaryColor = '#ffffff';
-    this.secondaryColor = '#000000';
+    this.primaryColor = "#ffffff";
+    this.secondaryColor = "#000000";
     this.isDrawing = false;
     this.startX = 0;
     this.startY = 0;
@@ -32,12 +32,12 @@ class BrushEngine {
     const canvas = this.canvas.canvas;
 
     // Mouse events
-    canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
-    document.addEventListener('mousemove', this.handleMouseMove.bind(this));
-    document.addEventListener('mouseup', this.handleMouseUp.bind(this));
+    canvas.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    document.addEventListener("mousemove", this.handleMouseMove.bind(this));
+    document.addEventListener("mouseup", this.handleMouseUp.bind(this));
 
     // Prevent context menu on right-click
-    canvas.addEventListener('contextmenu', (e) => {
+    canvas.addEventListener("contextmenu", (e) => {
       e.preventDefault();
     });
   }
@@ -51,8 +51,12 @@ class BrushEngine {
 
     // Get pixel coordinates
     const rect = this.canvas.canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (this.canvas.pixelSize * this.canvas.zoom));
-    const y = Math.floor((e.clientY - rect.top) / (this.canvas.pixelSize * this.canvas.zoom));
+    const x = Math.floor(
+      (e.clientX - rect.left) / (this.canvas.pixelSize * this.canvas.zoom),
+    );
+    const y = Math.floor(
+      (e.clientY - rect.top) / (this.canvas.pixelSize * this.canvas.zoom),
+    );
 
     // Store start position
     this.startX = x;
@@ -65,39 +69,39 @@ class BrushEngine {
 
     // Handle different brush types
     switch (this.activeBrush) {
-      case 'pencil':
+      case "pencil":
         this.drawWithPencil(x, y, color);
         break;
-      case 'brush':
+      case "brush":
         this.drawWithBrush(x, y, color, this.brushSize, 1.0);
         break;
-      case 'eraser':
+      case "eraser":
         this.drawWithEraser(x, y);
         break;
-      case 'fill':
+      case "fill":
         this.fillArea(x, y, color);
         break;
-      case 'line':
-      case 'rect':
-      case 'ellipse':
+      case "line":
+      case "rect":
+      case "ellipse":
         // These are handled in mouseMove and mouseUp
         break;
-      case 'glitch':
+      case "glitch":
         this.applyGlitchBrush(x, y, color);
         break;
-      case 'static':
+      case "static":
         this.applyStaticBrush(x, y, color);
         break;
-      case 'spray':
+      case "spray":
         this.applySprayBrush(x, y, color);
         break;
-      case 'pixel':
+      case "pixel":
         this.drawPixelBrush(x, y, color);
         break;
-      case 'dither':
+      case "dither":
         this.applyDitherBrush(x, y, color);
         break;
-      case 'pattern':
+      case "pattern":
         this.applyPatternBrush(x, y, color);
         break;
     }
@@ -115,48 +119,52 @@ class BrushEngine {
 
     // Get pixel coordinates
     const rect = this.canvas.canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (this.canvas.pixelSize * this.canvas.zoom));
-    const y = Math.floor((e.clientY - rect.top) / (this.canvas.pixelSize * this.canvas.zoom));
+    const x = Math.floor(
+      (e.clientX - rect.left) / (this.canvas.pixelSize * this.canvas.zoom),
+    );
+    const y = Math.floor(
+      (e.clientY - rect.top) / (this.canvas.pixelSize * this.canvas.zoom),
+    );
 
     // Get color based on mouse button
     const color = e.buttons === 2 ? this.secondaryColor : this.primaryColor;
 
     // Handle different brush types
     switch (this.activeBrush) {
-      case 'pencil':
+      case "pencil":
         this.drawWithPencil(x, y, color);
         break;
-      case 'brush':
+      case "brush":
         this.drawWithBrush(x, y, color, this.brushSize, 1.0);
         break;
-      case 'eraser':
+      case "eraser":
         this.drawWithEraser(x, y);
         break;
-      case 'line':
+      case "line":
         this.previewLine(this.startX, this.startY, x, y, color);
         break;
-      case 'rect':
+      case "rect":
         this.previewRect(this.startX, this.startY, x, y, color);
         break;
-      case 'ellipse':
+      case "ellipse":
         this.previewEllipse(this.startX, this.startY, x, y, color);
         break;
-      case 'glitch':
+      case "glitch":
         this.applyGlitchBrush(x, y, color);
         break;
-      case 'static':
+      case "static":
         this.applyStaticBrush(x, y, color);
         break;
-      case 'spray':
+      case "spray":
         this.applySprayBrush(x, y, color);
         break;
-      case 'pixel':
+      case "pixel":
         this.drawPixelBrush(x, y, color);
         break;
-      case 'dither':
+      case "dither":
         this.applyDitherBrush(x, y, color);
         break;
-      case 'pattern':
+      case "pattern":
         this.applyPatternBrush(x, y, color);
         break;
     }
@@ -178,21 +186,25 @@ class BrushEngine {
 
     // Get pixel coordinates
     const rect = this.canvas.canvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (this.canvas.pixelSize * this.canvas.zoom));
-    const y = Math.floor((e.clientY - rect.top) / (this.canvas.pixelSize * this.canvas.zoom));
+    const x = Math.floor(
+      (e.clientX - rect.left) / (this.canvas.pixelSize * this.canvas.zoom),
+    );
+    const y = Math.floor(
+      (e.clientY - rect.top) / (this.canvas.pixelSize * this.canvas.zoom),
+    );
 
     // Get color based on mouse button
     const color = e.buttons === 2 ? this.secondaryColor : this.primaryColor;
 
     // Handle different brush types
     switch (this.activeBrush) {
-      case 'line':
+      case "line":
         this.drawLine(this.startX, this.startY, x, y, color);
         break;
-      case 'rect':
+      case "rect":
         this.drawRect(this.startX, this.startY, x, y, color);
         break;
-      case 'ellipse':
+      case "ellipse":
         this.drawEllipse(this.startX, this.startY, x, y, color);
         break;
     }
@@ -212,34 +224,34 @@ class BrushEngine {
 
     // Set default brush size based on brush type
     switch (brushType) {
-      case 'pencil':
-      case 'eraser':
+      case "pencil":
+      case "eraser":
         this.brushSize = 1;
         break;
-      case 'spray':
+      case "spray":
         this.brushSize = 5;
         break;
-      case 'brush':
+      case "brush":
         this.brushSize = 3;
         break;
-      case 'pixel':
+      case "pixel":
         this.brushSize = 1;
         break;
-      case 'dither':
+      case "dither":
         this.brushSize = 3;
         break;
-      case 'pattern':
+      case "pattern":
         this.brushSize = 4;
         break;
     }
 
     // Update brush size slider if it exists
-    const brushSizeSlider = document.getElementById('brush-size');
+    const brushSizeSlider = document.getElementById("brush-size");
     if (brushSizeSlider) {
       brushSizeSlider.value = this.brushSize;
 
       // Update the displayed value
-      const brushSizeValue = document.getElementById('brush-size-value');
+      const brushSizeValue = document.getElementById("brush-size-value");
       if (brushSizeValue) {
         brushSizeValue.textContent = this.brushSize;
       }
@@ -304,20 +316,20 @@ class BrushEngine {
   drawWithEraser(x, y) {
     if (this.brushSize === 1) {
       // Single pixel
-      this.canvas.drawPixel(x, y, '#000000');
+      this.canvas.drawPixel(x, y, "#000000");
     } else {
       // Draw a square of pixels
       const offset = Math.floor(this.brushSize / 2);
       for (let i = -offset; i <= offset; i++) {
         for (let j = -offset; j <= offset; j++) {
-          this.canvas.drawPixel(x + i, y + j, '#000000');
+          this.canvas.drawPixel(x + i, y + j, "#000000");
         }
       }
     }
 
     // Draw a line from last position to current position
     if (this.lastX !== x || this.lastY !== y) {
-      this.canvas.drawLine(this.lastX, this.lastY, x, y, '#000000');
+      this.canvas.drawLine(this.lastX, this.lastY, x, y, "#000000");
     }
   }
 
@@ -467,10 +479,10 @@ class BrushEngine {
     this.canvas.drawPixel(x, y, color);
 
     // Use the integrated GlitchTool for enhanced effects, scaled by brush size
-     if (this.glitchTool) {
-       this.glitchTool.setIntensity(this.brushSize / 10);
-       this.glitchTool.applyRandomGlitch();
-     }
+    if (this.glitchTool) {
+      this.glitchTool.setIntensity(this.brushSize / 10);
+      this.glitchTool.applyRandomGlitch();
+    }
     if (Math.random() < 0.15) {
       // Randomly shift a row but only in a limited area around the cursor
       const rowY = y;
@@ -483,7 +495,10 @@ class BrushEngine {
       const endX = Math.min(this.canvas.width - 1, x + range);
 
       for (let i = startX; i <= endX; i++) {
-        const srcX = Math.max(0, Math.min(this.canvas.width - 1, (i - shiftAmount)));
+        const srcX = Math.max(
+          0,
+          Math.min(this.canvas.width - 1, i - shiftAmount),
+        );
         const srcColor = this.canvas.getPixel(srcX, rowY);
         if (srcColor) {
           this.canvas.drawPixel(i, rowY, srcColor);
@@ -497,8 +512,10 @@ class BrushEngine {
       const noiseCount = 3 + this.brushSize;
       for (let i = 0; i < noiseCount; i++) {
         // Smaller noise area
-        const noiseX = x + Math.floor((Math.random() - 0.5) * (5 + this.brushSize));
-        const noiseY = y + Math.floor((Math.random() - 0.5) * (5 + this.brushSize));
+        const noiseX =
+          x + Math.floor((Math.random() - 0.5) * (5 + this.brushSize));
+        const noiseY =
+          y + Math.floor((Math.random() - 0.5) * (5 + this.brushSize));
         this.canvas.drawPixel(noiseX, noiseY, color);
       }
     }
@@ -513,18 +530,18 @@ class BrushEngine {
   applyStaticBrush(x, y, color) {
     // Draw random noise in a circular area
     const radius = this.brushSize;
-    
+
     for (let i = -radius; i <= radius; i++) {
       for (let j = -radius; j <= radius; j++) {
         // Calculate distance from center
         const distance = Math.sqrt(i * i + j * j);
-        
+
         // Skip pixels outside the radius
         if (distance > radius) continue;
-        
+
         // Probability decreases with distance from center
         const probability = 0.7 * (1 - distance / radius);
-        
+
         if (Math.random() < probability) {
           this.canvas.drawPixel(x + i, y + j, color);
         }
@@ -551,10 +568,10 @@ class BrushEngine {
         if (distance > radius) continue;
 
         // Calculate opacity based on distance from center
-        const opacity = 1 - (distance / radius);
+        const opacity = 1 - distance / radius;
 
         // Get the current pixel color
-        const currentColor = this.canvas.getPixel(x + i, y + j) || '#000000';
+        const currentColor = this.canvas.getPixel(x + i, y + j) || "#000000";
 
         // Blend the colors
         const blendedColor = this.blendColors(currentColor, color, opacity);
@@ -566,7 +583,10 @@ class BrushEngine {
 
     // Draw a line from last position to current position
     if (this.lastX !== x || this.lastY !== y) {
-      const steps = Math.max(Math.abs(x - this.lastX), Math.abs(y - this.lastY));
+      const steps = Math.max(
+        Math.abs(x - this.lastX),
+        Math.abs(y - this.lastY),
+      );
 
       for (let i = 0; i <= steps; i++) {
         const t = steps === 0 ? 0 : i / steps;
@@ -583,10 +603,11 @@ class BrushEngine {
             if (distance > radius) continue;
 
             // Calculate opacity based on distance from center
-            const opacity = 1 - (distance / radius);
+            const opacity = 1 - distance / radius;
 
             // Get the current pixel color
-            const currentColor = this.canvas.getPixel(px + j, py + k) || '#000000';
+            const currentColor =
+              this.canvas.getPixel(px + j, py + k) || "#000000";
 
             // Blend the colors
             const blendedColor = this.blendColors(currentColor, color, opacity);
@@ -619,7 +640,7 @@ class BrushEngine {
         if (distance > radius) continue;
 
         // Calculate probability based on distance from center
-        const probability = density * (1 - (distance / radius));
+        const probability = density * (1 - distance / radius);
 
         // Draw the pixel with probability
         if (Math.random() < probability) {
@@ -654,11 +675,11 @@ class BrushEngine {
   applyDitherBrush(x, y, color) {
     // Apply a dithering pattern
     const radius = this.brushSize;
-    
+
     // 2x2 Bayer matrix pattern
     const pattern = [
       [0, 2],
-      [3, 1]
+      [3, 1],
     ];
     const patternSize = pattern.length;
 
@@ -666,17 +687,17 @@ class BrushEngine {
       for (let j = -radius; j <= radius; j++) {
         // Calculate distance from center
         const distance = Math.sqrt(i * i + j * j);
-        
+
         // Skip pixels outside the radius
         if (distance > radius) continue;
-        
+
         // Get pattern coordinates
         const patternX = (x + i) % patternSize;
         const patternY = (y + j) % patternSize;
         const px = patternX < 0 ? patternSize + patternX : patternX;
         const py = patternY < 0 ? patternSize + patternY : patternY;
         const patternValue = pattern[py][px];
-        
+
         // Draw the pixel based on pattern
         if (patternValue > 1) {
           this.canvas.drawPixel(x + i, y + j, color);
@@ -686,7 +707,10 @@ class BrushEngine {
 
     // Draw a line of dithered pixels from last position to current position
     if (this.lastX !== x || this.lastY !== y) {
-      const steps = Math.max(Math.abs(x - this.lastX), Math.abs(y - this.lastY));
+      const steps = Math.max(
+        Math.abs(x - this.lastX),
+        Math.abs(y - this.lastY),
+      );
 
       for (let i = 0; i <= steps; i++) {
         const t = steps === 0 ? 0 : i / steps;
@@ -729,26 +753,26 @@ class BrushEngine {
       // Checkerboard
       [
         [1, 0],
-        [0, 1]
+        [0, 1],
       ],
       // Diagonal lines
       [
         [1, 0, 0],
         [0, 1, 0],
-        [0, 0, 1]
+        [0, 0, 1],
       ],
       // Dots
       [
         [0, 0, 0],
         [0, 1, 0],
-        [0, 0, 0]
+        [0, 0, 0],
       ],
       // Cross
       [
         [0, 1, 0],
         [1, 1, 1],
-        [0, 1, 0]
-      ]
+        [0, 1, 0],
+      ],
     ];
 
     // Select a pattern based on brush size
@@ -785,7 +809,10 @@ class BrushEngine {
 
     // Draw a line of patterned pixels from last position to current position
     if (this.lastX !== x || this.lastY !== y) {
-      const steps = Math.max(Math.abs(x - this.lastX), Math.abs(y - this.lastY));
+      const steps = Math.max(
+        Math.abs(x - this.lastX),
+        Math.abs(y - this.lastY),
+      );
 
       for (let i = 0; i <= steps; i++) {
         const t = steps === 0 ? 0 : i / steps;
@@ -840,179 +867,209 @@ class BrushEngine {
     const b = Math.round(b1 * (1 - opacity) + b2 * opacity);
 
     // Convert back to hex
-    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+    return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
   }
-   /**
-    * Apply blur brush (average neighboring pixels)
-    * @param {number} x - X coordinate
-    * @param {number} y - Y coordinate
-    * @param {string} color - Color in hex format
-    */
-   applyBlurBrush(x, y, color) {
-     const radius = this.brushSize;
-     for (let i = -radius; i <= radius; i++) {
-       for (let j = -radius; j <= radius; j++) {
-         const nx = x + i;
-         const ny = y + j;
-         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
-           const neighbors = [];
-           const count = 0;
-           for (let di = -1; di <= 1; di++) {
-             for (let dj = -1; dj <= 1; dj++) {
-               const nnx = nx + di;
-               const nny = ny + dj;
-               if (nnx >= 0 && nnx < this.canvas.width && nny >= 0 && nny < this.canvas.height) {
-                 neighbors.push(this.canvas.getPixel(nnx, nny));
-                 count++;
-               }
-             }
-           }
-           // Average the neighbors
-           let totalR = 0, totalG = 0, totalB = 0;
-           neighbors.forEach(c => {
-             const r = parseInt(c.slice(1, 3), 16);
-             const g = parseInt(c.slice(3, 5), 16);
-             const b = parseInt(c.slice(5, 7), 16);
-             totalR += r;
-             totalG += g;
-             totalB += b;
-           });
-           const avgR = Math.round(totalR / count);
-           const avgG = Math.round(totalG / count);
-           const avgB = Math.round(totalB / count);
-           const avgColor = `#${avgR.toString(16).padStart(2, '0')}${avgG.toString(16).padStart(2, '0')}${avgB.toString(16).padStart(2, '0')}`;
-           this.canvas.drawPixel(nx, ny, avgColor);
-         }
-       }
-     }
-   }
 
-   /**
-    * Apply smudge brush (mix with neighbors)
-    * @param {number} x - X coordinate
-    * @param {number} y - Y coordinate
-    * @param {string} color - Color in hex format
-    */
-   applySmudgeBrush(x, y, color) {
-     const radius = this.brushSize;
-     for (let i = -radius; i <= radius; i++) {
-       for (let j = -radius; j <= radius; j++) {
-         const nx = x + i;
-         const ny = y + j;
-         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
-           const currentColor = this.canvas.getPixel(nx, ny);
-           const mixRatio = 0.5; // 50% mix
-           const r1 = parseInt(currentColor.slice(1, 3), 16);
-           const g1 = parseInt(currentColor.slice(3, 5), 16);
-           const b1 = parseInt(currentColor.slice(5, 7), 16);
-           const r2 = parseInt(color.slice(1, 3), 16);
-           const g2 = parseInt(color.slice(3, 5), 16);
-           const b2 = parseInt(color.slice(5, 7), 16);
-           const mixedR = Math.round(r1 * mixRatio + r2 * (1 - mixRatio));
-           const mixedG = Math.round(g1 * mixRatio + g2 * (1 - mixRatio));
-           const mixedB = Math.round(b1 * mixRatio + b2 * (1 - mixRatio));
-           const mixedColor = `#${mixedR.toString(16).padStart(2, '0')}${mixedG.toString(16).padStart(2, '0')}${mixedB.toString(16).padStart(2, '0')}`;
-           this.canvas.drawPixel(nx, ny, mixedColor);
-         }
-       }
-     }
-   }
+  /**
+   * Apply blur brush (average neighboring pixels)
+   * @param {number} x - X coordinate
+   * @param {number} y - Y coordinate
+   * @param {string} color - Color in hex format
+   */
+  applyBlurBrush(x, y, color) {
+    const radius = this.brushSize;
+    for (let i = -radius; i <= radius; i++) {
+      for (let j = -radius; j <= radius; j++) {
+        const nx = x + i;
+        const ny = y + j;
+        if (
+          nx >= 0 &&
+          nx < this.canvas.width &&
+          ny >= 0 &&
+          ny < this.canvas.height
+        ) {
+          const neighbors = [];
+          const count = 0;
+          for (let di = -1; di <= 1; di++) {
+            for (let dj = -1; dj <= 1; dj++) {
+              const nnx = nx + di;
+              const nny = ny + dj;
+              if (
+                nnx >= 0 &&
+                nnx < this.canvas.width &&
+                nny >= 0 &&
+                nny < this.canvas.height
+              ) {
+                neighbors.push(this.canvas.getPixel(nnx, nny));
+                count++;
+              }
+            }
+          }
+          // Average the neighbors
+          let totalR = 0;
+          let totalG = 0;
+          let totalB = 0;
+          neighbors.forEach((c) => {
+            const r = parseInt(c.slice(1, 3), 16);
+            const g = parseInt(c.slice(3, 5), 16);
+            const b = parseInt(c.slice(5, 7), 16);
+            totalR += r;
+            totalG += g;
+            totalB += b;
+          });
+          const avgR = Math.round(totalR / count);
+          const avgG = Math.round(totalG / count);
+          const avgB = Math.round(totalB / count);
+          const avgColor = `#${avgR.toString(16).padStart(2, "0")}${avgG.toString(16).padStart(2, "0")}${avgB.toString(16).padStart(2, "0")}`;
+          this.canvas.drawPixel(nx, ny, avgColor);
+        }
+      }
+    }
+  }
 
-   /**
-    * Apply gradient fill brush
-    * @param {number} x - X coordinate
-    * @param {number} y - Y coordinate
-    * @param {string} color - Color in hex format
-    */
-   applyGradientBrush(x, y, color) {
-     const radius = this.brushSize;
-     for (let i = -radius; i <= radius; i++) {
-       for (let j = -radius; j <= radius; j++) {
-         const nx = x + i;
-         const ny = y + j;
-         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
-           // Simple linear gradient from center
-           const dx = i / radius;
-           const dy = j / radius;
-           const gradientFactor = Math.max(dx, dy);
-           const r1 = parseInt(color.slice(1, 3), 16);
-           const g1 = parseInt(color.slice(3, 5), 16);
-           const b1 = parseInt(color.slice(5, 7), 16);
-           const r2 = 0, g2 = 0, b2 = 0; // Fade to black
-           const gradR = Math.round(r1 * (1 - gradientFactor));
-           const gradG = Math.round(g1 * (1 - gradientFactor));
-           const gradB = Math.round(b1 * (1 - gradientFactor));
-           const gradColor = `#${gradR.toString(16).padStart(2, '0')}${gradG.toString(16).padStart(2, '0')}${gradB.toString(16).padStart(2, '0')}`;
-           this.canvas.drawPixel(nx, ny, gradColor);
-         }
-       }
-     }
-   }
+  /**
+   * Apply smudge brush (mix with neighbors)
+   * @param {number} x - X coordinate
+   * @param {number} y - Y coordinate
+   * @param {string} color - Color in hex format
+   */
+  applySmudgeBrush(x, y, color) {
+    const radius = this.brushSize;
+    for (let i = -radius; i <= radius; i++) {
+      for (let j = -radius; j <= radius; j++) {
+        const nx = x + i;
+        const ny = y + j;
+        if (
+          nx >= 0 &&
+          nx < this.canvas.width &&
+          ny >= 0 &&
+          ny < this.canvas.height
+        ) {
+          const currentColor = this.canvas.getPixel(nx, ny);
+          const mixRatio = 0.5; // 50% mix
+          const r1 = parseInt(currentColor.slice(1, 3), 16);
+          const g1 = parseInt(currentColor.slice(3, 5), 16);
+          const b1 = parseInt(currentColor.slice(5, 7), 16);
+          const r2 = parseInt(color.slice(1, 3), 16);
+          const g2 = parseInt(color.slice(3, 5), 16);
+          const b2 = parseInt(color.slice(5, 7), 16);
+          const mixedR = Math.round(r1 * mixRatio + r2 * (1 - mixRatio));
+          const mixedG = Math.round(g1 * mixRatio + g2 * (1 - mixRatio));
+          const mixedB = Math.round(b1 * mixRatio + b2 * (1 - mixRatio));
+          const mixedColor = `#${mixedR.toString(16).padStart(2, "0")}${mixedG.toString(16).padStart(2, "0")}${mixedB.toString(16).padStart(2, "0")}`;
+          this.canvas.drawPixel(nx, ny, mixedColor);
+        }
+      }
+    }
+  }
 
-   /**
-    * Apply textured brush (simple checker pattern)
-    * @param {number} x - X coordinate
-    * @param {number} y - Y coordinate
-    * @param {string} color - Color in hex format
-    */
-   applyTexturedBrush(x, y, color) {
-     const radius = this.brushSize;
-     for (let i = -radius; i <= radius; i++) {
-       for (let j = -radius; j <= radius; j++) {
-         const nx = x + i;
-         const ny = y + j;
-         if (nx >= 0 && nx < this.canvas.width && ny >= 0 && ny < this.canvas.height) {
-           // Checker texture
-           if ((i + j) % 2 === 0) {
-             this.canvas.drawPixel(nx, ny, color);
-           }
-         }
-       }
-     }
-   }
+  /**
+   * Apply gradient fill brush
+   * @param {number} x - X coordinate
+   * @param {number} y - Y coordinate
+   * @param {string} color - Color in hex format
+   */
+  applyGradientBrush(x, y, color) {
+    const radius = this.brushSize;
+    for (let i = -radius; i <= radius; i++) {
+      for (let j = -radius; j <= radius; j++) {
+        const nx = x + i;
+        const ny = y + j;
+        if (
+          nx >= 0 &&
+          nx < this.canvas.width &&
+          ny >= 0 &&
+          ny < this.canvas.height
+        ) {
+          // Simple linear gradient from center
+          const dx = i / radius;
+          const dy = j / radius;
+          const gradientFactor = Math.max(dx, dy);
+          const r1 = parseInt(color.slice(1, 3), 16);
+          const g1 = parseInt(color.slice(3, 5), 16);
+          const b1 = parseInt(color.slice(5, 7), 16);
+          const r2 = 0;
+          const g2 = 0;
+          const b2 = 0; // Fade to black
+          const gradR = Math.round(r1 * (1 - gradientFactor));
+          const gradG = Math.round(g1 * (1 - gradientFactor));
+          const gradB = Math.round(b1 * (1 - gradientFactor));
+          const gradColor = `#${gradR.toString(16).padStart(2, "0")}${gradG.toString(16).padStart(2, "0")}${gradB.toString(16).padStart(2, "0")}`;
+          this.canvas.drawPixel(nx, ny, gradColor);
+        }
+      }
+    }
+  }
 
-   /**
-    * Set brush preset
-    * @param {string} presetName - Preset name
-    */
-   setBrushPreset(presetName) {
-     const presets = {
-       'soft': { type: 'brush', size: 5 },
-       'hard': { type: 'pencil', size: 1 },
-       'spray': { type: 'spray', size: 8 },
-       'blur': { type: 'blur', size: 3 },
-       'smudge': { type: 'smudge', size: 3 },
-       'gradient': { type: 'gradient', size: 4 },
-       'textured': { type: 'textured', size: 4 }
-     };
-     if (presets[presetName]) {
-       this.activeBrush = presets[presetName].type;
-       this.brushSize = presets[presetName].size;
-       const brushSizeSlider = document.getElementById('brush-size');
-       if (brushSizeSlider) brushSizeSlider.value = this.brushSize;
-       const brushSizeValue = document.getElementById('brush-size-value');
-       if (brushSizeValue) brushSizeValue.textContent = this.brushSize;
-     }
-   }
+  /**
+   * Apply textured brush (simple checker pattern)
+   * @param {number} x - X coordinate
+   * @param {number} y - Y coordinate
+   * @param {string} color - Color in hex format
+   */
+  applyTexturedBrush(x, y, color) {
+    const radius = this.brushSize;
+    for (let i = -radius; i <= radius; i++) {
+      for (let j = -radius; j <= radius; j++) {
+        const nx = x + i;
+        const ny = y + j;
+        if (
+          nx >= 0 &&
+          nx < this.canvas.width &&
+          ny >= 0 &&
+          ny < this.canvas.height
+        ) {
+          // Checker texture
+          if ((i + j) % 2 === 0) {
+            this.canvas.drawPixel(nx, ny, color);
+          }
+        }
+      }
+    }
+  }
 
-   /**
-    * Save current brush as preset
-    * @param {string} name - Preset name
-    */
-   saveBrushPreset(name) {
-     const presets = JSON.parse(localStorage.getItem('brushPresets') || '{}');
-     presets[name] = {
-       type: this.activeBrush,
-       size: this.brushSize
-     };
-     localStorage.setItem('brushPresets', JSON.stringify(presets));
-   }
+  /**
+   * Set brush preset
+   * @param {string} presetName - Preset name
+   */
+  setBrushPreset(presetName) {
+    const presets = {
+      soft: { type: "brush", size: 5 },
+      hard: { type: "pencil", size: 1 },
+      spray: { type: "spray", size: 8 },
+      blur: { type: "blur", size: 3 },
+      smudge: { type: "smudge", size: 3 },
+      gradient: { type: "gradient", size: 4 },
+      textured: { type: "textured", size: 4 },
+    };
+    if (presets[presetName]) {
+      this.activeBrush = presets[presetName].type;
+      this.brushSize = presets[presetName].size;
+      const brushSizeSlider = document.getElementById("brush-size");
+      if (brushSizeSlider) brushSizeSlider.value = this.brushSize;
+      const brushSizeValue = document.getElementById("brush-size-value");
+      if (brushSizeValue) brushSizeValue.textContent = this.brushSize;
+    }
+  }
 
-   /**
-    * Load brush presets from localStorage
-    * @returns {Object} Presets object
-    */
-   loadBrushPresets() {
-     return JSON.parse(localStorage.getItem('brushPresets') || '{}');
-   }
+  /**
+   * Save current brush as preset
+   * @param {string} name - Preset name
+   */
+  saveBrushPreset(name) {
+    const presets = JSON.parse(localStorage.getItem("brushPresets") || "{}");
+    presets[name] = {
+      type: this.activeBrush,
+      size: this.brushSize,
+    };
+    localStorage.setItem("brushPresets", JSON.stringify(presets));
+  }
+
+  /**
+   * Load brush presets from localStorage
+   * @returns {Object} Presets object
+   */
+  loadBrushPresets() {
+    return JSON.parse(localStorage.getItem("brushPresets") || "{}");
+  }
 }
